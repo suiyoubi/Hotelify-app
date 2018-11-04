@@ -1,0 +1,33 @@
+<body id="LoginForm">
+<div class="container" ng-controller="loginController">
+    <h1 class="form-heading">login Form</h1>
+    <div class="login-form">
+        <div class="main-div">
+            <div class="panel">
+                <h2>Hotelify</h2>
+                <p>Start your journey right away.</p>
+            </div>
+            <form id="Login">
+
+                <div class="form-group">
+
+
+                    <input type="username" class="form-control" id="inputUsername" placeholder="Username" ng-model="username">
+
+                </div>
+
+                <div class="form-group">
+
+                    <input type="password" class="form-control" id="inputPassword" placeholder="Password" ng-model="password">
+
+                </div>
+                <div class="forgot">
+                    <a href="reset.html">Forgot password?</a>
+                </div>
+                <button type="submit" class="btn btn-primary" ng-click="submitThis()">Login</button>
+
+            </form>
+        </div>
+    </div>
+</div>
+</body>
