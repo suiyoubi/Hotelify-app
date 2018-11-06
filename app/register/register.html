@@ -1,0 +1,41 @@
+<body id="LoginForm">
+<div class="container" ng-controller="RegisterCtrl">
+  <h1 class="form-heading">login Form</h1>
+  <div class="login-form">
+    <div class="main-div">
+      <div class="panel">
+        <h2>Hotelify</h2>
+        <p>Few steps before your journey.</p>
+      </div>
+      <form id="Login">
+
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Username" ng-model="username">
+        </div>
+
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Email" ng-model="email">
+        </div>
+
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Last Name" ng-model="lastName">
+        </div>
+
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="First Name" ng-model="firstName">
+        </div>
+
+        <div class="form-group">
+          <input type="password" class="form-control" placeholder="Password" ng-model="password">
+        </div>
+
+        <div class="form-group">
+          <input type="password" class="form-control" placeholder="Repeat Password" ng-model="repeatPassword">
+        </div>
+
+        <button type="submit" class="btn btn-primary" ng-click="registerCustomer()">Register</button>
+
+      </form>
+    </div>
+  </div>
+</div>

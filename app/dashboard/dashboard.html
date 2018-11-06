@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hotelify - Dashboard</title>
+</head>
+<body>
+
+<div ng-controller="dsController" ng-cloak="" class="navBardemoBasicUsage" ng-app="MyApp">
+  <div data-ng-init="retrieveUserInfo()"></div>
+  <md-content class="md-padding">
+    <md-nav-bar md-no-ink-bar="disableInkBar" md-selected-nav-item="currentNavItem"
+                nav-bar-aria-label="navigation links">
+      <md-nav-item md-nav-click="goto('mainPage')" name="hotelify" disabled="1">
+        Hotelify
+      </md-nav-item>
+      <md-nav-item md-nav-click="goto('page1')" name="Quick Book">
+        Quick Book
+      </md-nav-item>
+      <md-nav-item md-nav-click="goto('page2')" name="Browse">
+        Browse
+      </md-nav-item>
+      <md-nav-item md-nav-click="goto('page3')" name="Account Info">
+        Account Info
+      </md-nav-item>
+      <md-nav-item md-nav-click="goto('page4')" name="Add hotel" disabled="">
+        Add hotel
+      </md-nav-item>
+      <!-- these require actual routing with ui-router or ng-route, so they
+      won't work in the demo
+      <md-nav-item md-nav-href="#page4" name="page5">Page Four</md-nav-item>
+      <md-nav-item md-nav-sref="app.page5" name="page4">Page Five</md-nav-item>
+      You can also add options for the <code>ui-sref-opts</code> attribute.
+      <md-nav-item md-nav-sref="page6" sref-opts="{reload:true, notify:true}">
+        Page Six
+      </md-nav-item>
+      -->
+    </md-nav-bar>
+
+    <div ng-controller="dsController" layout="column" ng-cloak="" class="md-inline-form inputdemoBasicUsage"
+         ng-app="MyApp">
+
+      <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="">
+        <div>
+          <md-content>
+            <b>User Info</b>
+            <br><br>
+          </md-content>
+
+          <md-input-container>
+            <label>Username</label>
+            <input ng-readonly="true" ng-model="user.username">
+          </md-input-container>
+
+          <md-input-container>
+            <label>Email</label>
+            <input ng-model="user.email" type="email">
+          </md-input-container>
+        </div>
+      </md-content>
+
+      <md-content layout-padding="">
+        <div>
+          <form name="userForm">
+
+
+            <div layout-gt-sm="row">
+              <md-input-container class="md-block" flex-gt-sm="">
+                <label>First name</label>
+                <input ng-model="user.firstName">
+              </md-input-container>
+
+              <md-input-container class="md-block" flex-gt-sm="">
+                <label>Last name</label>
+                <input ng-model="user.lastName">
+              </md-input-container>
+            </div>
+
+            <md-input-container class="md-block">
+              <label>Street</label>
+              <input ng-model="user.address.street">
+            </md-input-container>
+
+            <div layout-gt-sm="row">
+              <md-input-container class="md-block" flex-gt-sm="">
+                <label>City</label>
+                <input ng-model="user.address.city">
+              </md-input-container>
+
+              <!--<md-input-container class="md-block" flex-gt-sm="">-->
+              <!--<label>State</label>-->
+              <!--<md-select ng-model="user.state">-->
+              <!--<md-option ng-repeat="state in states" value="{{state.abbrev}}">-->
+              <!--{{state.abbrev}}-->
+              <!--</md-option>-->
+              <!--</md-select>-->
+              <!--</md-input-container>-->
+
+              <md-input-container class="md-block" flex-gt-sm="">
+                <label>Province</label>
+                <input ng-model="user.address.province">
+              </md-input-container>
+
+              <md-input-container class="md-block" flex-gt-sm="">
+                <label>Postal Code</label>
+                <input ng-model="user.address.postalCode">
+              </md-input-container>
+
+              <md-input-container class="md-block" flex-gt-sm="">
+                <label>Country</label>
+                <input ng-model="user.address.nation">
+              </md-input-container>
+            </div>
+          </form>
+        </div>
+      </md-content>
+
+    </div>
+
+    <span>{{status}}</span>
+    <div class="ext-content">
+      External content for `<span>{{currentNavItem}}</span>`.
+    </div>
+
+
+    <div class="userInfo">
+      <div align="left" style="border:1px solid red">User Info {{userInfoData}}}</div>
+    </div>
+    <div class="bookHistory"></div>
+
+  </md-content>
+</div>
+
+<!--
+Copyright 2018 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that can be foundin the LICENSE file at http://material.angularjs.org/HEAD/license.
+-->
+</body>
+</html>

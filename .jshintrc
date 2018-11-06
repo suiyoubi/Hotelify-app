@@ -1,8 +1,9 @@
 {
   "strict": "global",
+  "esversion": 6,
   "globals": {
     // AngularJS
-    "angular": false,
+    "angular": true,
 
     // AngularJS mocks
     "module": false,

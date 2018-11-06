@@ -6,6 +6,9 @@
   "repository": "https://github.com/angular/angular-seed",
   "license": "MIT",
   "dependencies": {
+    "@angular/animations": "^7.0.2",
+    "@angular/cdk": "^7.0.2",
+    "@angular/material": "^7.0.2",
     "angular": "^1.7.5",
     "angular-loader": "^1.7.5",
     "angular-route": "^1.7.5",

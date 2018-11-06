@@ -10,21 +10,40 @@ angular.module('myApp.login', ['ngRoute'])
 }])
 
 .controller('loginController', function($scope, $location, $rootScope, $http) {
-  $scope.submitThis = function() {
-    let username = $scope.username;
-    let password = $scope.password;
-    let url = $rootScope.url;
 
-    console.log(username + ':' + password);
-    $http.get(url+'/customers')
-        .then(function(res) {
-          console.log(res);
-        }, function(res) {
-          console.log('rinima'+res);
-        });
+  $scope.jumpToRegister = () => {
+      $location.path('/register');
+  };
 
-    if(username == 'admin' && password == 'admin') {
-      $location.path('/view2');
+  $scope.checkboxModel = 'customer';
+
+  $scope.loginAuth = () => {
+
+    const { username, password, checkboxModel } = $scope;
+    const { url, popUp } = $rootScope;
+
+    if(!username || !password) {
+      popUp('Please input both username and password');
+      return;
     }
+
+    const loginUrl = url + '/' + checkboxModel + 's/login';
+
+    console.log(loginUrl);
+
+    const authData = {username, password};
+
+    $http.post(loginUrl, authData)
+        .then((res) => {
+          // TODO: handle customer/admin
+          console.error(res);
+
+          $location.path('/dashboard');
+
+          $rootScope.userType = res.data.userType;
+          $rootScope.username = username;
+        }, (res) => {
+          popUp('Your credential is incorrect, please try again.');
+        });
   };
 });
