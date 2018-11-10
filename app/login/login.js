@@ -37,11 +37,9 @@ angular.module('myApp.login', ['ngRoute'])
         .then((res) => {
           // TODO: handle customer/admin
           console.error(res);
-
-          $location.path('/dashboard');
-
           $rootScope.userType = res.data.userType;
           $rootScope.username = username;
+          $location.path('/dashboard');
         }, (res) => {
           popUp('Your credential is incorrect, please try again.');
         });

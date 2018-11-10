@@ -8,6 +8,10 @@ var app = angular.module('myApp', [
   'myApp.register',
   'myApp.dashboard',
   'myApp.version',
+  'myApp.browse',
+  'myApp.quickBook',
+  'myApp.accountInfo',
+  'myApp.reviews',
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
@@ -16,12 +20,12 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
 }]).
 run(function($rootScope, $mdDialog) {
   $rootScope.url = 'http://localhost:8080';
-  $rootScope.popUp = function(content = "Something went wrong...", confirmMessage = 'Okay') {
+  $rootScope.popUp = function(content = "Something went wrong...", title = 'Oops', confirmMessage = 'Okay') {
     $mdDialog.show(
       $mdDialog.alert()
         .parent(angular.element(document.querySelector('#popupContainer')))
         .clickOutsideToClose(true)
-        .title("Oops")
+        .title(title)
         .textContent(content)
         .ariaLabel('Alert Dialog Demo')
         .ok(confirmMessage)

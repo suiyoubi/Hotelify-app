@@ -8,39 +8,53 @@ angular.module('myApp.dashboard', [
     $routeProvider.when('/dashboard', {
       templateUrl: 'dashboard/dashboard.html',
       controller: 'dsController'
+    }).when('/page4', {
+      templateUrl: 'dashboard/component/1.html',
+      controller: 'dsController'
     });
   }])
-  .controller('dsController', function ($scope, $http, $rootScope, $location) {
-    const {username, popUp} = $rootScope;
+  .controller('navController', function ($scope, $location, $rootScope) {
 
-    $scope.currentNavItem = 'page1';
-
-    $scope.retrieveUserInfo = function () {
-
-      const {url} = $rootScope;
-
-      const userInfoUrl = url + '/customers/' + username;
-
-      $http.get(userInfoUrl).then((res) => {
-        console.error(res);
-
-        $scope.user = res.data;
-      }, (res) => {
-        popUp('Looks like you hacked into this page, please go back and log in');
-        $location.path('/login');
-      });
-    };
+    $scope.currentNavItem = $rootScope.nextNavItem;
+    if($rootScope.userType == 'customer') {
+      $scope.navItems = [
+        {value: "hotelify", label: "Hotelify"},
+        {value: "quick-book", label: "Quick Book"},
+        {value: "browse-hotels", label: "Browse"},
+        {value: "reviews", label: "Reviews"},
+        {value: "account-info", label: "Account Info"},
+        {value: "book-history", label: "Book History"},
+        {value: "logout", label: "logout"},
+      ];
+    } else if($rootScope.userType == 'administrator') {
+      $scope.navItems = [
+        {value: "hotelify", label: "Hotelify"},
+        {value: 'addHotel', label: 'add hotel'},
+        {value: 'hotelManagement', label: 'hotel management'},
+        {value: "logout", label: "logout"},
+      ];
+    } else {
+      $location.path('/login');
+    }
 
     $scope.goto = function (page) {
-      $scope.status = "Goto " + page;
+
+      $rootScope.nextNavItem = page;
+      //if(page == 'hotelify') $location.path('/dashboard');
+      if(page == 'browse-hotels') $location.path('/browse');
+      if(page == 'account-info') $location.path('/account-info');
+      if(page == 'quick-book') $location.path('/quick-book');
+      if(page == 'logout') $location.path('/login');
+      if(page == 'reviews') $location.path('/reviews');
     };
   })
-  .config(function ($mdThemingProvider) {
+   .controller('dsController', function ($scope, $http, $rootScope, $location) {
 
-    // Configure a dark theme with primary foreground yellow
-
-    $mdThemingProvider.theme('docs-dark', 'default')
-      .primaryPalette('yellow')
-      .dark();
-
-  });
+     // if($rootScope.userType=='customer') {
+     //   $location.path('/quick-book');
+     // } else if($rootScope.userType == 'administrator') {
+     //   $location.path('/account-info');
+     // } else {
+     //   $location.path('login');
+     // }
+   });

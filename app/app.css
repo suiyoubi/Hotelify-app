@@ -156,3 +156,16 @@ input:checked + .slider:before {
   margin: 20px;
   background-color: #ff0001;
 }
+
+.st-sort-ascent:before{
+  content: '\25B2';
+}
+
+.st-sort-descent:before{
+  content: '\25BC';
+}
+
+.datepickerdemoCalendar {
+  /** Demo styles for mdCalendar. */ }
+.datepickerdemoCalendar label {
+  font-size: x-small; }

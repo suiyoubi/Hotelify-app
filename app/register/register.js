@@ -38,20 +38,12 @@ angular.module('myApp.register', ['ngRoute'])
     const registerUtl = url + '/customers';
 
     $http.post(registerUtl, user).then((res) => {
-      $scope.showConfirm = function(ev) {
-        const confirm = $mdDialog.confirm()
-          .title('Succeess')
-          .textContent(`You have already created your hotelify account as ${username}`)
-          .targetEvent(ev)
-          .ok('Excellent');
+      popUp('Successfully created the account!', 'Nice');
 
-        $mdDialog.show(confirm).then(function() {
-          $location.path('/login');
-        });
-      };
+      $location.path('/login');
     }, (err) => {
+      // TODO: handle different err response
       popUp('Registeration failed. Try again later');
     });
   };
-
 });
