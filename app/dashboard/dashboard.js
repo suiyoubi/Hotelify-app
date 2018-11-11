@@ -46,6 +46,7 @@ angular.module('myApp.dashboard', [
       if(page == 'quick-book') $location.path('/quick-book');
       if(page == 'logout') $location.path('/login');
       if(page == 'reviews') $location.path('/reviews');
+      if(page == 'addHotel') $location.path('/add_hotel');
     };
   })
    .controller('dsController', function ($scope, $http, $rootScope, $location) {
