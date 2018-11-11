@@ -33,9 +33,25 @@ angular.module('myApp.browse', [
   .controller('anotherController', function ($scope, $mdDialog, hotel) {
 
     var roomType = ["single", "double", "总统套房"];
+    var tags = ["free breakfast", "good service", "sea view"];
     $scope.selected = [];
     this.startDate = new Date();
     this.endDate = new Date();
+
+    $scope.roomType = roomType;
+    $scope.hotelInfo = hotel;
+    $scope.tags = tags;
+
+    $scope.makeReservation = function(selected, startDate, endDate){
+      console.log(selected);
+      console.log(startDate,endDate);
+    };
+
+    $scope.cancel = function() {
+      console.log('cancel');
+      $mdDialog.cancel();
+    };
+
     $scope.toggle = function (item, list) {
       var idx = list.indexOf(item);
       if (idx > -1) {
@@ -65,18 +81,5 @@ angular.module('myApp.browse', [
       } else if ($scope.selected.length === 0 || $scope.selected.length > 0) {
         $scope.selected = $scope.roomType.slice(0);
       }
-    };
-
-    $scope.roomType = roomType;
-    $scope.hotelInfo = hotel;
-
-    $scope.makeReservation = function(selected, startDate, endDate){
-      console.log(selected);
-      console.log(startDate,endDate);
-    };
-
-    $scope.cancel = function() {
-      console.log('cancel');
-      $mdDialog.cancel();
     };
   });
