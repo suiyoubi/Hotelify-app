@@ -25,14 +25,28 @@ angular.module('myApp.accountInfo', [
 
     $scope.retrieveUserInfo = function () {
 
+      // get user info
       $http.get(userInfoUrl).then((res) => {
         console.log(res);
 
         $scope.user = res.data;
+      // if user have address, get it
+      if($scope.user.address_id!=null){
+        var getAddressUrl = $scope.addressUrl + "/" + $scope.user.address_id;
+        $http.get(getAddressUrl).then((res) => {
+          console.log(res.data);
+        $scope.address = res.data;
+
+      }, (res) => {
+          popUp('Looks like you hacked into this page, please go back and log in');
+          $location.path('/login');
+        });
+      }
       }, (res) => {
         popUp('Looks like you hacked into this page, please go back and log in');
         $location.path('/login');
       });
+
     };
 
     $scope.updateUserInfo = () => {
