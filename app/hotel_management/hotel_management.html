@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<!--navigation bar-->
+<div ng-controller="navController" ng-cloak="" class="navBardemoBasicUsage" ng-app="MyApp">
+  <md-nav-bar md-no-ink-bar="disableInkBar" md-selected-nav-item="currentNavItem"
+              nav-bar-aria-label="navigation links">
+    <md-nav-item ng-repeat="item in navItems" md-nav-click="goto(item.value)" name="{{item.value}}">
+      {{item.label}}
+    </md-nav-item>
+  </md-nav-bar>
+</div>
+
+<div ng-controller="hotelManagementController">
+
+  <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="">
+    <b> Search for hotel:</b>
+    <div class="form-group" layout-gt-sm="row">
+      <input type="text" placeholder="brand name" ng-model="searchObj.brandName">
+      <input type="text" placeholder="branch name" ng-model="searchObj.branchName">
+      <button ng-click="searchHotel()">Search</button>
+    </div>
+  </md-content>
+
+  <div class="row">
+    <div class='col-sm-12'>
+      <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+          <th>Brand Name</th>
+          <th>Branch Name</th>
+          <th>street</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="employee in hotels">
+          <td>{{employee.brand_name}}</td>
+          <td>{{employee.branch_name}}</td>
+          <td>{{employee.street}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>>
+</div>
+>
+
+
+<button ng-click="addrow()">add row</button>
+HOTEL MANAGEMENT
+</body>
+</html>

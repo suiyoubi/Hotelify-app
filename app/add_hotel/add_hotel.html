@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<!--navigation bar-->
+<div ng-controller="navController" ng-cloak="" class="navBardemoBasicUsage" ng-app="MyApp">
+  <md-nav-bar md-no-ink-bar="disableInkBar" md-selected-nav-item="currentNavItem"
+              nav-bar-aria-label="navigation links">
+    <md-nav-item ng-repeat="item in navItems" md-nav-click="goto(item.value)" name="{{item.value}}">
+      {{item.label}}
+    </md-nav-item>
+  </md-nav-bar>
+</div>
+
+<div ng-controller="addHotelController" layout="column" ng-cloak="" class="md-inline-form inputdemoBasicUsage"
+     ng-app="MyApp">
+
+  <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="">
+    <div>
+      <md-content>
+        <b>Basic Info</b>
+        <br><br>
+      </md-content>
+
+      <md-input-container>
+        <label>Hotel Name</label>
+        <input ng-model="hotel.branchName">
+      </md-input-container>
+
+      <md-input-container>
+        <label>Brand Name</label>
+        <input ng-model="hotel.brandName" type="email">
+      </md-input-container>
+
+      <md-input-container class="md-block">
+        <label>Description</label>
+        <textarea ng-model="hotel.description" md-maxlength="150" rows="5" md-select-on-focus=""></textarea>
+      </md-input-container>
+    </div>
+  </md-content>
+
+  <md-content layout-padding="">
+    <div>
+      <md-content>
+        <b>Address Info</b>
+        <br><br>
+      </md-content>
+
+        <md-input-container class="md-block">
+          <label>Street</label>
+          <input ng-model="hotel.address.street">
+        </md-input-container>
+
+        <div layout-gt-sm="row" >
+          <md-input-container class="md-block" flex-gt-sm="">
+            <label>City</label>
+            <input ng-model="hotel.address.city">
+          </md-input-container>
+
+          <md-input-container class="md-block" flex-gt-sm="">
+            <label>Province</label>
+            <input ng-model="hotel.address.province">
+          </md-input-container>
+
+          <md-input-container class="md-block" flex-gt-sm="">
+            <label>Postal Code</label>
+            <input ng-model="hotel.address.postalCode">
+          </md-input-container>
+
+          <md-input-container class="md-block" flex-gt-sm="">
+            <label>Country</label>
+            <input ng-model="hotel.address.nation">
+          </md-input-container>
+        </div>
+    </div>
+  </md-content>
+
+  <md-content layout-padding="">
+    <div>
+      <md-content>
+        <b>Address Info</b>
+        <br><br>
+      </md-content>
+    </div>
+  </md-content>
+
+  <button type="button" ng-click="addRoom(row)" class="btn btn-sm btn-success">
+    <i class="glyphicon glyphicon-plus">
+    </i> Add a Room Type
+  </button>
+  <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped">
+    <thead>
+    <tr>
+      <th>Room Type</th>
+      <th>Occupancy</th>
+      <th>Number of Rooms</th>
+      <th>Price</th>
+      <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="row in roomTypes">
+      <td>{{row.typeName}}</td>
+      <td>{{row.occupancy}}</td>
+      <td>{{row.number}}</td>
+      <td>{{row.price}}</td>
+      <td>{{row.description}}</td>
+      <td>
+        <button type="button" ng-click="removeItem(row)" class="btn btn-sm btn-danger">
+          <i class="glyphicon glyphicon-remove-circle">
+          </i>
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <button type="button" ng-click="addHotel()" class="btn btn-sm btn-success">
+    <i class="glyphicon glyphicon-plus">
+    </i> Add the Hotel
+  </button>
+</div>
+
+
+<script type="text/ng-template" id="dialog2.tmpl.html"><md-dialog aria-label="Room Type">
+<form ng-cloak>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>Add a Room Type</h2>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content>
+
+    <md-content layout-gt-sm="row" layout-padding="">
+      <div>
+        <md-content>
+          <b>Basic Info</b>
+          <br><br>
+        </md-content>
+
+        <md-input-container>
+          <label>Type Name</label>
+          <input ng-model="roomType.typeName">
+        </md-input-container>
+
+        <md-input-container>
+          <label>Occupancy</label>
+          <input ng-model="roomType.occupancy">
+        </md-input-container>
+
+        <md-input-container>
+          <label>Number of Rooms</label>
+          <input ng-model="roomType.number">
+        </md-input-container>
+
+        <md-input-container>
+          <label>Price</label>
+          <input ng-model="roomType.price">
+        </md-input-container>
+
+        <md-input-container class="md-block">
+          <label>Description</label>
+          <textarea ng-model="roomType.description" md-maxlength="150" rows="5" md-select-on-focus=""></textarea>
+        </md-input-container>
+      </div>
+    </md-content>
+
+  </md-dialog-content>
+
+  <md-dialog-actions layout="row">
+    <span flex></span>
+    <md-button ng-click="cancel()">
+      Back
+    </md-button>
+    <md-button ng-click="addIt()">
+      Add it
+    </md-button>
+  </md-dialog-actions>
+</form>
+</md-dialog>
+</script>
+
+</body>
+</html>

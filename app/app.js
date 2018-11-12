@@ -4,6 +4,7 @@
 var app = angular.module('myApp', [
   'ngMaterial',
   'ngRoute',
+  "ngTable",
   'myApp.login',
   'myApp.register',
   'myApp.dashboard',
@@ -12,6 +13,8 @@ var app = angular.module('myApp', [
   'myApp.quickBook',
   'myApp.accountInfo',
   'myApp.reviews',
+  'myApp.addHotel',
+  'myApp.hotelManagement',
   'myApp.history',
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
