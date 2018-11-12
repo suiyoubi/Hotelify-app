@@ -10,7 +10,8 @@ angular.module('myApp.browse', [
       controller: 'browseController'
     });
   }])
-  .controller('browseController', function ($scope, $mdDialog) {
+  .controller('browseController', function ($scope, $mdDialog, $http) {
+    //$http.get
     $scope.rowCollection = [
       {branchName: 'haus hotel', brandName: 'haohao', address: 'fake add 1'},
       {branchName: 'kanglong hotel', brandName: 'haohao', address: 'fake add 2'},
@@ -21,7 +22,7 @@ angular.module('myApp.browse', [
     $scope.hotelDetail = function(hotel) {
       $mdDialog.show({
         controller: 'anotherController',
-        templateUrl: 'dialog1.tmpl.html',
+        templateUrl: 'makeReservation.tmpl.html',
         parent: angular.element(document.body),
         clickOutsideToClose:true,
         locals:{ hotel },
@@ -30,8 +31,8 @@ angular.module('myApp.browse', [
     };
 
   })
-  .controller('anotherController', function ($scope, $mdDialog, hotel) {
-
+  .controller('anotherController', function ($scope, $mdDialog, $http, hotel) {
+    //$http.get
     var roomType = ["single", "double", "总统套房"];
     var tags = ["free breakfast", "good service", "sea view"];
     $scope.selected = [];
@@ -43,6 +44,7 @@ angular.module('myApp.browse', [
     $scope.tags = tags;
 
     $scope.makeReservation = function(selected, startDate, endDate){
+      //$http.post
       console.log(selected);
       console.log(startDate,endDate);
     };
@@ -73,13 +75,5 @@ angular.module('myApp.browse', [
 
     $scope.isChecked = function() {
       return $scope.selected.length === $scope.roomType.length;
-    };
-
-    $scope.toggleAll = function() {
-      if ($scope.selected.length === $scope.roomType.length) {
-        $scope.selected = [];
-      } else if ($scope.selected.length === 0 || $scope.selected.length > 0) {
-        $scope.selected = $scope.roomType.slice(0);
-      }
     };
   });

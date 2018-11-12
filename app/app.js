@@ -12,6 +12,7 @@ var app = angular.module('myApp', [
   'myApp.quickBook',
   'myApp.accountInfo',
   'myApp.reviews',
+  'myApp.history',
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
