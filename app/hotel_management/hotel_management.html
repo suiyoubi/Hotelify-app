@@ -38,7 +38,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="employee in hotels">
+        <tr ng-repeat="employee in hotels" ng-click="manageHotel(employee)">
           <td>{{employee.brand_name}}</td>
           <td>{{employee.branch_name}}</td>
           <td>{{employee.street}}</td>
@@ -46,12 +46,72 @@
         </tbody>
       </table>
     </div>
-  </div>>
+  </div>
+
+  <div>{{selectedHotel}}</div>
+
+  <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="" ng-show="selectedHotel">
+    <div>
+      <md-content>
+        <b>Basic Info</b>
+        <br><br>
+      </md-content>
+
+      <md-input-container>
+        <label>Hotel Name</label>
+        <input ng-model="selectedHotel.branch_name">
+      </md-input-container>
+
+      <md-input-container>
+        <label>Brand Name</label>
+        <input ng-model="selectedHotel.brand_name" type="email">
+      </md-input-container>
+
+      <md-input-container class="md-block">
+        <label>Description</label>
+        <textarea ng-model="selectedHotel.description" md-maxlength="150" rows="5" md-select-on-focus=""></textarea>
+      </md-input-container>
+    </div>
+  </md-content>
+
+  <md-content layout-padding="" ng-show="selectedHotel">
+    <div>
+      <md-content>
+        <b>Address Info</b>
+        <br><br>
+      </md-content>
+
+      <md-input-container class="md-block">
+        <label>Street</label>
+        <input ng-model="selectedHotel.street">
+      </md-input-container>
+
+      <div layout-gt-sm="row" >
+        <md-input-container class="md-block" flex-gt-sm="">
+          <label>City</label>
+          <input ng-model="selectedHotel.city">
+        </md-input-container>
+
+        <md-input-container class="md-block" flex-gt-sm="">
+          <label>Province</label>
+          <input ng-model="selectedHotel.province">
+        </md-input-container>
+
+        <md-input-container class="md-block" flex-gt-sm="">
+          <label>Postal Code</label>
+          <input ng-model="selectedHotel.postal_code">
+        </md-input-container>
+
+        <md-input-container class="md-block" flex-gt-sm="">
+          <label>Country</label>
+          <input ng-model="selectedHotel.country">
+        </md-input-container>
+      </div>
+    </div>
+  </md-content>
+
+
 </div>
->
 
-
-<button ng-click="addrow()">add row</button>
-HOTEL MANAGEMENT
 </body>
 </html>
