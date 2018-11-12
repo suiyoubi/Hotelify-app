@@ -10,7 +10,7 @@ angular.module('myApp.browse', [
       controller: 'browseController'
     });
   }])
-  .controller('browseController', function ($scope, $mdDialog, $http) {
+  .controller('browseController', function ($rootScope, $scope, $mdDialog, $http) {
     //$http.get
     $scope.hotels = [
       {id:1, branchName: 'haus hotel', brandName: 'haohao', address: 'fake add 1'},
