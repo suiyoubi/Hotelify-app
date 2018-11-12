@@ -181,3 +181,7 @@ md-dialog{
 .submit{
   background-color: #2196F3;
 }
+
+.hotelContent{
+  display: inline;
+}
