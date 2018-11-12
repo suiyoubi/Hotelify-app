@@ -55,6 +55,7 @@ angular.module('myApp.browse', [
     $scope.selected = [];
     this.startDate = new Date();
     this.endDate = new Date();
+    this.roomSelected = "";
 
     $scope.roomType = roomType;
     $scope.hotelInfo = hotel;
@@ -62,10 +63,11 @@ angular.module('myApp.browse', [
     $scope.coupons = coupons;
 
 
-    $scope.makeReservation = function(selected, startDate, endDate){
+    $scope.makeReservation = function(){
       //$http.post
-      console.log(selected);
-      console.log(startDate,endDate);
+      console.log($scope.roomSelected);
+      console.log($scope.selected);
+      console.log($scope.startDate,$scope.endDate);
     };
 
     $scope.cancel = function() {

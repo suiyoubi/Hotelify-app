@@ -62,12 +62,15 @@ Use of this source code is governed by an MIT-style license that can be foundin 
       </div>
 
       <md-chips ng-model="tags" readonly="true"></md-chips>
+      <md-radio-group ng-model="roomSelected">
+        <md-radio-button ng-repeat="room in roomType" ng-value="room">{{room}}</md-radio-button>
+      </md-radio-group>
 
       <table>
-        <tr ng-repeat="room in roomType">
+        <tr ng-repeat="coupon in coupons">
           <td>
-            <md-checkbox ng-checked="exists(room, selected)" ng-click="toggle(room, selected)">
-              {{room}}
+            <md-checkbox ng-checked="exists(coupon, selected)" ng-click="toggle(coupon, selected)">
+              {{coupon}}
             </md-checkbox>
           </td>
         </tr>
