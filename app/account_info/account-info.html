@@ -50,39 +50,39 @@
           <div layout-gt-sm="row">
             <md-input-container class="md-block" flex-gt-sm="">
               <label>First name</label>
-              <input ng-model="user.firstName">
+              <input ng-model="user.first_name">
             </md-input-container>
 
             <md-input-container class="md-block" flex-gt-sm="">
               <label>Last name</label>
-              <input ng-model="user.lastName">
+              <input ng-model="user.last_name">
             </md-input-container>
           </div>
 
           <md-input-container class="md-block" ng-show="isCustomer()">
             <label>Street</label>
-            <input ng-model="user.address.street">
+            <input ng-model="address.street">
           </md-input-container>
 
           <div layout-gt-sm="row" ng-show="isCustomer()">
             <md-input-container class="md-block" flex-gt-sm="">
               <label>City</label>
-              <input ng-model="user.address.city">
+              <input ng-model="address.city">
             </md-input-container>
 
             <md-input-container class="md-block" flex-gt-sm="">
               <label>Province</label>
-              <input ng-model="user.address.province">
+              <input ng-model="address.province">
             </md-input-container>
 
             <md-input-container class="md-block" flex-gt-sm="">
               <label>Postal Code</label>
-              <input ng-model="user.address.postalCode">
+              <input ng-model="address.postal_code">
             </md-input-container>
 
             <md-input-container class="md-block" flex-gt-sm="">
               <label>Country</label>
-              <input ng-model="user.address.nation">
+              <input ng-model="address.country">
             </md-input-container>
           </div>
         </form>

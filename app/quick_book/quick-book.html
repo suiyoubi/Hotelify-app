@@ -48,22 +48,26 @@
 
           <div layout-gt-sm="row">
             <md-input-container class="md-block">
-              <label>Destination</label>
-              <input ng-model="request.destination">
+              <label>Destination City</label>
+              <input ng-model="request.destination.city">
             </md-input-container>
 
             <md-input-container class="md-block">
-              <label>Street (optional)</label>
-              <input ng-model="request.street" size="30">
+              <label>number of people</label>
+              <input ng-model="request.people">
             </md-input-container>
+
+            <!--<md-input-container class="md-block">-->
+              <!--<label>Destination Country</label>-->
+              <!--<input ng-model="request.destination.country">-->
+            <!--</md-input-container>-->
+
+            <!--<md-input-container class="md-block">-->
+              <!--<label>Street (optional)</label>-->
+              <!--<input ng-model="request.street" size="30">-->
+            <!--</md-input-container>-->
           </div>
 
-          <div layout-gt-sm="row">
-            <md-input-container class="md-block">
-              <label>Number of Rooms</label>
-              <input ng-model="request.numberOfRoom" size="30">
-            </md-input-container>
-          </div>
         </form>
       </div>
       <button type="submit" class="btn btn-primary" ng-click="bookRequest()">Search</button>
