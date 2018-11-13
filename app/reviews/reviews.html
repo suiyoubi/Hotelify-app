@@ -16,11 +16,54 @@
   </md-nav-bar>
 </div>
 
-<div class="form-group" layout-gt-sm="row">
-  <h2> Search for hotel </h2>
-  <input type="text" class="form-control" placeholder="First Name" ng-model="firstName">
+<md-content ng-controller="hotelManagementController" md-theme="docs-dark" layout-gt-sm="row" layout-padding="">
+  <b> Search for hotel:</b>
+  <div class="form-group" layout-gt-sm="row">
+    <input type="text" placeholder="brand name" ng-model="searchObj.brandName">
+    <input type="text" placeholder="branch name" ng-model="searchObj.branchName">
+    <button ng-click="searchHotel()">Search</button>
+  </div>
+
+</md-content>
+
+<div ng-controller="reviewsController" flex-gt-sm="50">
+  <table st-table="rowCollection" class="table table-striped">
+    <thead>
+    <tr>
+      <th>Hotel Name</th>
+      <th>Brand Name</th>
+      <th>Address</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="row in rowCollection" ng-click="changeReviews(row)">
+      <td>{{row.branchName}}</td>
+      <td>{{row.brandName}}</td>
+      <td>{{row.address}}</td>
+    </tr>
+    </tbody>
+  </table>
 </div>
 
 REVIEWS
+
+<div ng-controller="reviewsController" ng-cloak layout-gt-sm="row" layout="column">
+
+  <div flex-gt-sm="50">
+    <md-toolbar layout="row" class="md-hue-3">
+      <div class="md-toolbar-tools">
+        <span>Reviews</span>
+      </div>
+    </md-toolbar>
+    <md-subheader class="md-no-sticky">reviews about {{selectedRow.branchName}}</md-subheader>
+    <md-list-item ng-repeat="row in rawList" class="md-3-line md-long-text">
+      <div class="md-list-item-text">
+        <h3>{{row.name}}</h3>
+        <p>{{row.info}}</p>
+      </div>
+    </md-list-item>
+  </div>
+  <button ng-click="addnewstuff()">add</button>
+</div>
 </body>
 </html>
