@@ -28,12 +28,22 @@
 
       <md-input-container>
         <label>Hotel Name</label>
-        <input ng-model="hotel.branchName">
+        <input ng-model="hotel.branch_name">
       </md-input-container>
 
       <md-input-container>
         <label>Brand Name</label>
-        <input ng-model="hotel.brandName" type="email">
+        <input ng-model="hotel.brand_name" type="text">
+      </md-input-container>
+
+      <md-input-container>
+        <label>Property Class</label>
+        <input ng-model="hotel.property_class" type="text">
+      </md-input-container>
+
+      <md-input-container>
+        <label>Phone Number</label>
+        <input ng-model="hotel.phone_number" type="text">
       </md-input-container>
 
       <md-input-container class="md-block">
@@ -52,28 +62,28 @@
 
         <md-input-container class="md-block">
           <label>Street</label>
-          <input ng-model="hotel.address.street">
+          <input ng-model="hotel.street">
         </md-input-container>
 
         <div layout-gt-sm="row" >
           <md-input-container class="md-block" flex-gt-sm="">
             <label>City</label>
-            <input ng-model="hotel.address.city">
+            <input ng-model="hotel.city">
           </md-input-container>
 
           <md-input-container class="md-block" flex-gt-sm="">
             <label>Province</label>
-            <input ng-model="hotel.address.province">
+            <input ng-model="hotel.province">
           </md-input-container>
 
           <md-input-container class="md-block" flex-gt-sm="">
             <label>Postal Code</label>
-            <input ng-model="hotel.address.postalCode">
+            <input ng-model="hotel.postal_code">
           </md-input-container>
 
           <md-input-container class="md-block" flex-gt-sm="">
             <label>Country</label>
-            <input ng-model="hotel.address.nation">
+            <input ng-model="hotel.country">
           </md-input-container>
         </div>
     </div>
@@ -82,7 +92,7 @@
   <md-content layout-padding="">
     <div>
       <md-content>
-        <b>Address Info</b>
+        <b>Room Info</b>
         <br><br>
       </md-content>
     </div>
@@ -104,9 +114,9 @@
     </thead>
     <tbody>
     <tr ng-repeat="row in roomTypes">
-      <td>{{row.typeName}}</td>
+      <td>{{row.type_name}}</td>
       <td>{{row.occupancy}}</td>
-      <td>{{row.number}}</td>
+      <td>{{row.slots}}</td>
       <td>{{row.price}}</td>
       <td>{{row.description}}</td>
       <td>
@@ -145,7 +155,7 @@
 
         <md-input-container>
           <label>Type Name</label>
-          <input ng-model="roomType.typeName">
+          <input ng-model="roomType.type_name">
         </md-input-container>
 
         <md-input-container>
@@ -155,7 +165,7 @@
 
         <md-input-container>
           <label>Number of Rooms</label>
-          <input ng-model="roomType.number">
+          <input ng-model="roomType.slots">
         </md-input-container>
 
         <md-input-container>
