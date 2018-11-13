@@ -10,12 +10,10 @@ angular.module('myApp.addHotel', [
       controller: 'addHotelController'
     });
   }])
-  .controller('addHotelController', function ($scope, $mdDialog, $rootScope) {
+  .controller('addHotelController', function ($scope, $mdDialog, $rootScope, $http) {
 
     $scope.hotel = {};
     $scope.roomTypes = [];
-
-    $scope.roomTypes.push({typeName:'romm1', number:500, price:300, description:'description', occupancy:3});
 
     $scope.addRoom = function() {
       $mdDialog.show({
@@ -31,11 +29,36 @@ angular.module('myApp.addHotel', [
 
     $scope.addHotel = function () {
 
-      $scope.hotel.roomTypes = $scope.roomTypes;
+      if(!checkInput($scope.hotel, $rootScope.popUp)) {
+        return;
+      }
 
-      console.error($scope.hotel);
-    }
-  }).controller('roomTypeInputController', function ($scope, $mdDialog) {
+      const addHotelUrl = $rootScope.url + '/hotels/create';
+
+      $http.post(addHotelUrl, $scope.hotel).then(function (res) {
+        console.log(res);
+        const hotel_id = res.data.id;
+
+        const addRoomUrl = `${$rootScope.url}/hotels/${hotel_id}/room-types`;
+
+        $scope.roomTypes.forEach( function (roomType) {
+
+          $http.post(addRoomUrl, roomType).then(function (res) {
+            console.log('success create room');
+          }, function (err) {
+            console.error(err);
+          });
+        }).then(function () {
+          $rootScope.popUp('You have created a hotel','Success', 'Cool');
+        });
+
+
+      }, function (err) {
+        console.error(err);
+      });
+    };
+
+  }).controller('roomTypeInputController', function ($scope, $mdDialog, $rootScope) {
 
     $scope.roomType = {};
 
@@ -45,8 +68,23 @@ angular.module('myApp.addHotel', [
 
     $scope.addIt = function () {
 
-      if($scope.roomType.typeName) {
+      if($scope.roomType.type_name) {
         $mdDialog.hide($scope.roomType);
+      } else {
+        $rootScope.popUp('please complete all the fields!');
       }
     };
 });
+
+function checkInput(hotel, popUp) {
+  if(!hotel.branch_name) {
+    popUp('Please provide at least the hotel name!');
+    return false;
+  }
+  if(!hotel.country || !hotel.province || !hotel.postal_code ||!hotel.city ||!hotel.street) {
+    popUp('Please provide the complete address info so that people know where your hotel is!');
+    return false;
+  }
+
+  return true;
+}
