@@ -31,6 +31,7 @@ angular.module('myApp.dashboard', [
         {value: "hotelify", label: "Hotelify"},
         {value: 'addHotel', label: 'add hotel'},
         {value: 'hotelManagement', label: 'hotel management'},
+        {value: 'coupon', label:'Distribute Coupon'},
         {value: "logout", label: "logout"},
       ];
     } else {
@@ -48,6 +49,7 @@ angular.module('myApp.dashboard', [
       if(page == 'reviews') $location.path('/reviews');
       if(page == 'addHotel') $location.path('/add_hotel');
       if(page == 'hotelManagement') $location.path('/hotel_management');
+      if(page == 'coupon') $location.path('/coupon');
     };
   })
    .controller('dsController', function ($scope, $http, $rootScope, $location) {
