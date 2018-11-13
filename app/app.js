@@ -16,8 +16,9 @@ var app = angular.module('myApp', [
   'myApp.addHotel',
   'myApp.hotelManagement',
   'myApp.history',
+  'myApp.reservation'
 ]).
-config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
+config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider, $stateProvider) {
   $locationProvider.hashPrefix('!');
 
   $routeProvider.otherwise({redirectTo: '/login'});
@@ -35,4 +36,5 @@ run(function($rootScope, $mdDialog) {
         .ok(confirmMessage)
     );
   };
-});
+})
+;

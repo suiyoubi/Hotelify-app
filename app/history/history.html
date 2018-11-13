@@ -24,11 +24,11 @@
       <th>checkout date</th>
       <th>price</th>
     </tr>
-    <tr>
-      <th>
-        <input st-search="hotelName" placeholder="search for Hotel Name" class="input-sm form-control" type="search"/>
-      </th>
-    </tr>
+    <!--<tr>-->
+      <!--<th>-->
+        <!--<input st-search="hotelName" placeholder="search for Hotel Name" class="input-sm form-control" type="search"/>-->
+      <!--</th>-->
+    <!--</tr>-->
     </thead>
     <tbody>
     <tr ng-repeat="row in history" ng-click="leaveReview(row.hotelId)">
@@ -46,7 +46,7 @@ Use of this source code is governed by an MIT-style license that can be foundin 
 -->
 
 <script type="text/ng-template" id="leaveReview.tmpl.html">
-<md-dialog aria-label="Hotel Detail">
+<md-dialog aria-label="Hotel Detail" class="fullScreenDialog">
   <form name="commentForm">
     <md-toolbar>
       <div class="md-toolbar-tools">
@@ -73,6 +73,15 @@ Use of this source code is governed by an MIT-style license that can be foundin 
         <md-option value="1">1</md-option>
         <md-option value="0">0</md-option>
       </md-select>
+    </md-input-container>
+
+    <md-input-container class = "md-block">
+      <label>Add a tag</label>
+      <textarea md-maxlength = "20" name="tag" ng-model = "tag"></textarea>
+      <div ng-messages = "commentForm.tag.$error">
+        <div ng-message = "md-maxlength">The comments has to be less
+          than 20 characters long.</div>
+      </div>
     </md-input-container>
 
     <md-dialog-actions layout="row">

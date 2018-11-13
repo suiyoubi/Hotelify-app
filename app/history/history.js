@@ -35,16 +35,22 @@ angular.module('myApp.history', [
   $scope.id = hotelId;
   this.comment = "";
   this.rating = -1;
+  this.tag = "";
 
   $scope.cancel = function(){
     $mdDialog.cancel();
   };
 
-  $scope.submit = function (comment, rating) {
+  $scope.submit = function () {
     //$http.post
-    console.log(hotelId);
-    console.log(comment);
-    console.log(rating);
+    if($scope.rating==undefined){
+      $rootScope.popUp("come on at least put a rating");
+      return;
+    }
+    console.log($scope.id);
+    console.log($scope.comment);
+    console.log($scope.rating);
+    console.log($scope.tag);
   }
 })
 ;
