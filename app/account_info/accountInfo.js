@@ -58,7 +58,15 @@ angular.module('myApp.accountInfo', [
         $http.post(targetUrl, $scope.address).then((res) => {
           console.log('create address sucess');
           $scope.user.address_id = parseInt(res.data.id);
-      }, (err) => {
+
+        // update user info
+        console.log($scope.user);
+        $http.put(updateUrl, $scope.user).then((res) => {
+          console.log('update user info success');
+        }, (err) => {
+            console.error('error updating user info');
+          });
+        }, (err) => {
           console.error('error creating address');
         });
       }else {
@@ -67,18 +75,19 @@ angular.module('myApp.accountInfo', [
         $http.put(targetUrl, $scope.address).then((res) => {
           console.log('sucess');
           console.log('update address success');
-      }, (err) => {
+
+          // update user info
+          console.log($scope.user);
+          $http.put(updateUrl, $scope.user).then((res) => {
+            console.log('update user info success');
+          }, (err) => {
+            console.error('error updating user info');
+          });
+        }, (err) => {
           console.error('error updating address');
         });
       }
 
-      // update user info
-      console.log($scope.user);
-      $http.put(updateUrl, $scope.user).then((res) => {
-        console.log('update user info success');
-      }, (err) => {
-        console.error('error updating user info');
-      });
     };
   })
   .config(function ($mdThemingProvider) {
