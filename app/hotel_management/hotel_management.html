@@ -48,8 +48,6 @@
     </div>
   </div>
 
-  <div>{{selectedHotel}}</div>
-
   <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="" ng-show="selectedHotel">
     <div>
       <md-content>
@@ -110,8 +108,112 @@
     </div>
   </md-content>
 
+  <button type="button" ng-click="updateHotel()" class="btn btn-sm btn-success" ng-show="selectedHotel">
+    <i class="glyphicon glyphicon-plus">
+    </i> Update the Hotel
+  </button>
+
+  <md-content layout-padding="" ng-show="selectedHotel">
+    <div>
+      <md-content>
+        <b>Room Info</b>
+        <br><br>
+      </md-content>
+    </div>
+  </md-content>
+
+  <button type="button" ng-click="addRoom(row)" class="btn btn-sm btn-success" ng-show="selectedHotel">
+    <i class="glyphicon glyphicon-plus">
+    </i> Add a Room Type
+  </button>
+  <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped" ng-show="selectedHotel">
+    <thead>
+    <tr>
+      <th>Room Type</th>
+      <th>Occupancy</th>
+      <th>Number of Rooms</th>
+      <th>Price</th>
+      <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="row in roomTypes">
+      <td>{{row.type_name}}</td>
+      <td>{{row.occupancy}}</td>
+      <td>{{row.slots || row.total_slots}}</td>
+      <td>{{row.price}}</td>
+      <td>{{row.description}}</td>
+      <td>
+        <button type="button" ng-click="removeItem(row)" class="btn btn-sm btn-danger">
+          <i class="glyphicon glyphicon-remove-circle">
+          </i>
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
 
 </div>
+
+<script type="text/ng-template" id="dialog2.tmpl.html"><md-dialog aria-label="Room Type">
+<form ng-cloak>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>Add a Room Type</h2>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content>
+
+    <md-content layout-gt-sm="row" layout-padding="">
+      <div>
+        <md-content>
+          <b>Basic Info</b>
+          <br><br>
+        </md-content>
+
+        <md-input-container>
+          <label>Type Name</label>
+          <input ng-model="roomType.type_name">
+        </md-input-container>
+
+        <md-input-container>
+          <label>Occupancy</label>
+          <input ng-model="roomType.occupancy">
+        </md-input-container>
+
+        <md-input-container>
+          <label>Number of Rooms</label>
+          <input ng-model="roomType.slots">
+        </md-input-container>
+
+        <md-input-container>
+          <label>Price</label>
+          <input ng-model="roomType.price">
+        </md-input-container>
+
+        <md-input-container class="md-block">
+          <label>Description</label>
+          <textarea ng-model="roomType.description" md-maxlength="150" rows="5" md-select-on-focus=""></textarea>
+        </md-input-container>
+      </div>
+    </md-content>
+
+  </md-dialog-content>
+
+  <md-dialog-actions layout="row">
+    <span flex></span>
+    <md-button ng-click="cancel()">
+      Back
+    </md-button>
+    <md-button ng-click="addIt()">
+      Add it
+    </md-button>
+  </md-dialog-actions>
+</form>
+</md-dialog>
+</script>
 
 </body>
 </html>
