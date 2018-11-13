@@ -31,10 +31,7 @@ angular.module('myApp.hotelManagement', [
       });
     };
 
-    $scope.hotels = [
-      {brand_name: "ex", branch_name: "ex", street: "ex"},
-      {brand_name: "ex", branch_name: "ex", street: "ex"},
-    ];
+    $scope.hotels = [];
 
     $scope.manageHotel = function (hotel) {
       console.error(hotel);
