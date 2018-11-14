@@ -177,3 +177,8 @@ input:checked + .slider:before {
   height: 80%;
   border-radius: 0;
 }
+
+#reservationWarning{
+  visibility: hidden;
+  color: red;
+}

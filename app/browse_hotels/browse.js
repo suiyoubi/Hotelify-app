@@ -20,6 +20,11 @@ angular.module('myApp.browse', [
         method: "GET"
       }).then(function (res) {
         $scope.hotels = res.data;
+        $scope.hotels.forEach(function (value) {
+          if(value.address_id!=null){
+            value.address = value.street + ", " + value.city + ", " + value.province;
+          }
+        });
         console.log($scope.hotels);
       }, function (err) {
         console.error(err);
@@ -38,8 +43,13 @@ angular.module('myApp.browse', [
         params: $scope.searchObj,
       }).then(function (res) {
 
-        console.error(res);
+        console.log(res);
         $scope.hotels = res.data;
+        $scope.hotels.forEach(function (value) {
+          if(value.address_id!=null){
+            value.address = value.street + ", " + value.city + ", " + value.province;
+          }
+        });
       }, function (err) {
         console.error(err);
       });

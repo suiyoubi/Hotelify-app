@@ -40,7 +40,7 @@
     <tr ng-repeat="row in hotels" ng-click="hotelDetail(row)">
       <td>{{row.branch_name}}</td>
       <td>{{row.brand_name}}</td>
-      <td>{{row.property_class}}</td>
+      <td>{{row.address}}</td>
     </tr>
     </tbody>
   </table>
@@ -54,14 +54,15 @@ Use of this source code is governed by an MIT-style license that can be foundin 
 <form ng-cloak>
   <md-toolbar>
     <div class="md-toolbar-tools">
-      <h2>{{hotelInfo.branch_name}}</h2>
+      <h2>{{hotelInfo.brand_name}} {{hotelInfo.branch_name}}</h2>
     </div>
   </md-toolbar>
 
   <md-dialog-content>
     <div class="md-dialog-content">
       <div id="hotelInfo">
-        {{hotelInfo}}
+        <h3><md-icon md-font-icon="material-icons">home</md-icon>{{hotelInfo.brand_name}} - {{hotelInfo.branch_name}}</h3>
+        <p><md-icon md-font-icon="material-icons">place</md-icon>{{hotelInfo.address}}</p>
       </div>
 
       <div flex-gt-xs="">
