@@ -10,7 +10,7 @@ angular.module('myApp.accountInfo', [
       controller: 'accInfoController'
     });
   }])
-  .controller('accInfoController', function ($scope, $http, $rootScope, $location) {
+  .controller('accInfoController', function ($scope, $http, $rootScope, $location, $mdDialog) {
     const {username, popUp} = $rootScope;
 
     const {url, userType} = $rootScope;
@@ -19,10 +19,54 @@ angular.module('myApp.accountInfo', [
     $scope.addressUrl = `${url}/addresses`;
     $scope.address = {street:"", city:"", province:"", postal_code:"", country:""};
 
+    $scope.cards = [
+      {card_number: '1234123412341234', card_holder_name:'haus', expire_date: '2008/01/01'},
+      {card_number: '4444333322221111', card_holder_name:'rex', expire_date: '2088/01/01'},
+    ];
+
+    $scope.deleteCard = function(card) {
+      const confirm = $mdDialog.confirm()
+        .title('Would you like to delete your card?')
+        .textContent('Your selected credit card information will be deleted from Hotelify')
+        .ok('Confirm')
+        .cancel('I change my mind');
+
+      $mdDialog.show(confirm).then(function() {
+        console.log('to delete card:', card);
+        // todo use DELETE
+      });
+    }
+    $scope.maskCard = function(number) {
+      // 1111 2222 3333 4444 to 1111-xxxx-xxxx-4444
+      return `${number.substring(0,4)}-XXXX-XXXX-${number.substring(11,15)}`;
+    };
+
     $scope.isCustomer = function () {
       return userType == 'customer' ? true : false;
     };
 
+    $scope.addNewCard = function () {
+
+      const {card_number, card_holder_name, csv, expire_date} = $scope.newCard;
+
+      if(!card_holder_name || !card_number || !csv || !expire_date) {
+        $rootScope.popUp('Please provide all information!');
+        return;
+      }
+      if(card_number.length != 16) {
+        $rootScope.popUp('Card number is not valid!');
+        return;
+      }
+      if(csv.length != 3) {
+        $rootScope.popUp('csv is not valid!');
+        return;
+      }
+
+      //todo add the POST here
+      $rootScope.popUp('You have added your new card info!', 'Great', 'nice');
+      $scope.cards.push($scope.newCard);
+      $scope.newCard = null;
+    }
     $scope.retrieveUserInfo = function () {
 
       // get user info
@@ -46,6 +90,9 @@ angular.module('myApp.accountInfo', [
         popUp('Looks like you hacked into this page, please go back and log in');
         $location.path('/login');
       });
+
+      // todo GET get card info
+
 
     };
 
