@@ -10,7 +10,7 @@ angular.module('myApp.accountInfo', [
       controller: 'accInfoController'
     });
   }])
-  .controller('accInfoController', function ($scope, $http, $rootScope, $location) {
+  .controller('accInfoController', function ($scope, $http, $rootScope, $location, $mdDialog) {
     const {username, popUp} = $rootScope;
 
     const {url, userType} = $rootScope;
@@ -25,8 +25,16 @@ angular.module('myApp.accountInfo', [
     ];
 
     $scope.deleteCard = function(card) {
-      console.log('to delete card:', card);
-      // todo use DELETE
+      const confirm = $mdDialog.confirm()
+        .title('Would you like to delete your card?')
+        .textContent('Your selected credit card information will be deleted from Hotelify')
+        .ok('Confirm')
+        .cancel('I change my mind');
+
+      $mdDialog.show(confirm).then(function() {
+        console.log('to delete card:', card);
+        // todo use DELETE
+      });
     }
     $scope.maskCard = function(number) {
       // 1111 2222 3333 4444 to 1111-xxxx-xxxx-4444
