@@ -20,16 +20,11 @@
 
 <md-content class="md-padding">
 
-  <div ng-controller="dsController" layout="column" ng-cloak="" class="md-inline-form inputdemoBasicUsage"
+  <div layout="column" ng-cloak="" class="md-inline-form inputdemoBasicUsage"
        ng-app="MyApp">
 
     <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="">
       <div>
-        <md-content>
-          <b>User Info</b>
-          <br><br>
-        </md-content>
-
         <md-input-container>
           <label>Username</label>
           <input ng-readonly="true" ng-model="user.username">
@@ -37,60 +32,137 @@
 
         <md-input-container>
           <label>Email</label>
-          <input ng-model="user.email" type="email">
+          <input ng-readonly="true" ng-model="user.email" type="email">
         </md-input-container>
       </div>
     </md-content>
 
-    <md-content layout-padding="">
-      <div>
-        <form name="userForm">
+    <div ng-cloak="" class="tabsdemoDynamicHeight" ng-app="MyApp">
+      <md-content><md-tabs md-dynamic-height="" md-border-bottom="">
+          <md-tab label="User Info">
+            <md-content layout-padding="">
+              <div>
+                <form name="userForm">
 
 
-          <div layout-gt-sm="row">
-            <md-input-container class="md-block" flex-gt-sm="">
-              <label>First name</label>
-              <input ng-model="user.firstName">
-            </md-input-container>
+                  <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm="">
+                      <label>First name</label>
+                      <input ng-model="user.first_name">
+                    </md-input-container>
 
-            <md-input-container class="md-block" flex-gt-sm="">
-              <label>Last name</label>
-              <input ng-model="user.lastName">
-            </md-input-container>
-          </div>
+                    <md-input-container class="md-block" flex-gt-sm="">
+                      <label>Last name</label>
+                      <input ng-model="user.last_name">
+                    </md-input-container>
+                  </div>
 
-          <md-input-container class="md-block" ng-show="isCustomer()">
-            <label>Street</label>
-            <input ng-model="user.address.street">
-          </md-input-container>
+                  <md-input-container class="md-block" ng-show="isCustomer()">
+                    <label>Street</label>
+                    <input ng-model="address.street">
+                  </md-input-container>
 
-          <div layout-gt-sm="row" ng-show="isCustomer()">
-            <md-input-container class="md-block" flex-gt-sm="">
-              <label>City</label>
-              <input ng-model="user.address.city">
-            </md-input-container>
+                  <div layout-gt-sm="row" ng-show="isCustomer()">
+                    <md-input-container class="md-block" flex-gt-sm="">
+                      <label>City</label>
+                      <input ng-model="address.city">
+                    </md-input-container>
 
-            <md-input-container class="md-block" flex-gt-sm="">
-              <label>Province</label>
-              <input ng-model="user.address.province">
-            </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm="">
+                      <label>Province</label>
+                      <input ng-model="address.province">
+                    </md-input-container>
 
-            <md-input-container class="md-block" flex-gt-sm="">
-              <label>Postal Code</label>
-              <input ng-model="user.address.postalCode">
-            </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm="">
+                      <label>Postal Code</label>
+                      <input ng-model="address.postal_code">
+                    </md-input-container>
 
-            <md-input-container class="md-block" flex-gt-sm="">
-              <label>Country</label>
-              <input ng-model="user.address.nation">
-            </md-input-container>
-          </div>
-        </form>
-      </div>
-    </md-content>
+                    <md-input-container class="md-block" flex-gt-sm="">
+                      <label>Country</label>
+                      <input ng-model="address.country">
+                    </md-input-container>
+                  </div>
+                </form>
+              </div>
+            </md-content>
+            <button type="submit" class="btn btn-primary" ng-click="updateUserInfo()">Update</button>
+          </md-tab>
+          <md-tab label="Card Management">
+
+            <div class="row">
+              <div class='col-sm-12'>
+                <table class="table table-striped table-bordered">
+                  <thead>
+                  <tr>
+                    <th>Card Number</th>
+                    <th>Card Holder Name</th>
+                    <th>Expired Date</th>
+                    <th>Remove</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr ng-repeat="card in cards" ng-click="modifyCard(card)">
+                    <td>{{ maskCard(card.card_number) }}</td>
+                    <td>{{card.card_holder_name}}</td>
+                    <td>{{card.expire_date}}</td>
+                    <td><md-icon md-font-icon="material-icons" ng-click="deleteCard(card)">delete</md-icon></td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <md-content class="md-padding">
+              <div layout-gt-sm="row" >
+                <md-input-container class="md-block" flex-gt-sm="">
+                  <label>Card Number</label>
+                  <input ng-model="newCard.card_number">
+                </md-input-container>
+
+                <md-input-container class="md-block" flex-gt-sm="">
+                  <label>Card Holder Name</label>
+                  <input ng-model="newCard.card_holder_name">
+                </md-input-container>
+              </div>
+
+              <div layout-gt-sm="row" >
+                <md-input-container class="md-block" flex-gt-sm="10">
+                  <label>CSV</label>
+                  <input ng-model="newCard.csv">
+                </md-input-container>
+
+                <md-content>Expired Date</md-content>
+                <md-datepicker ng-model="newCard.expire_date" md-placeholder="Enter date" md-mode="month"></md-datepicker>
+              </div>
+
+              <button class="btn btn-primary" ng-click="addNewCard()">Add New Card</button>
+            </md-content>
+          </md-tab>
+          <md-tab label="My Coupons">
+            <md-content class="md-padding">
+            </md-content>
+          </md-tab>
+          <md-tab label="My Reviews">
+            <md-content class="md-padding">
+              <div flex-gt-sm="50">
+                <md-subheader class="md-no-sticky">You have written {{reviews.length}} reviews about {{calculateHotelNumber(reviews)}} hotels</md-subheader>
+                <md-divider ></md-divider>
+                <md-list-item ng-repeat="row in reviews" class="md-3-line md-long-text">
+                  <div class="md-list-item-text">
+                    <h3>{{row.brand_name}} {{row.branch_name}}</h3>
+                    <h4>Rating: {{row.rating}}</h4>
+                    <p>{{row.comment}}</p>
+                  </div>
+                  <md-divider ></md-divider>
+                </md-list-item>
+              </div>
+            </md-content>
+          </md-tab>
+        </md-tabs>
+      </md-content>
+    </div>
   </div>
 
-  <button type="submit" class="btn btn-primary" ng-click="updateUserInfo()">Update</button>
 
 </md-content>
 

@@ -169,3 +169,11 @@ input:checked + .slider:before {
   /** Demo styles for mdCalendar. */ }
 .datepickerdemoCalendar label {
   font-size: x-small; }
+
+.fullScreenDialog{
+  max-width: 80%;
+  max-height: 80%;
+  width: 80%;
+  height: 80%;
+  border-radius: 0;
+}
