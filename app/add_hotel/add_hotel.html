@@ -50,6 +50,18 @@
         <label>Description</label>
         <textarea ng-model="hotel.description" md-maxlength="150" rows="5" md-select-on-focus=""></textarea>
       </md-input-container>
+
+      <div>
+        <md-content>
+          <b>Add a Fancy Picture For The Hotel</b>
+          <br><br>
+        </md-content>
+        <button type="file" ngf-select="selectFile($file)" accept="image/*">
+          Select File
+        </button>
+        <div ng-show="file">You have selected {{file.name}}</div>
+        <button ng-click="uploadFile(file)">upload the file</button>
+      </div>
     </div>
   </md-content>
 
