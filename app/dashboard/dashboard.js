@@ -19,19 +19,19 @@ angular.module('myApp.dashboard', [
     if($rootScope.userType == 'customer') {
       $scope.navItems = [
         {value: "hotelify", label: "Hotelify"},
-        {value: "quick-book", label: "Quick Book"},
-        {value: "browse-hotels", label: "Browse"},
-        {value: "reviews", label: "Reviews"},
-        {value: "account-info", label: "Account Info"},
-        {value: "book-history", label: "Book History"},
-        {value: "logout", label: "logout"},
+        {value: "quick-book", label: "Quick Book", icon: "date_range"},
+        {value: "browse-hotels", label: "Browse", icon: "hotel"},
+        {value: "reviews", label: "Reviews", icon: "rate_review"},
+        {value: "account-info", label: "Account Info", icon: "account_box"},
+        {value: "book-history", label: "Book History", icon: "history"},
+        {value: "logout", label: "logout", icon: "exit_to_app"},
       ];
     } else if($rootScope.userType == 'administrator') {
       $scope.navItems = [
         {value: "hotelify", label: "Hotelify"},
-        {value: 'addHotel', label: 'add hotel'},
-        {value: 'hotelManagement', label: 'hotel management'},
-        {value: "logout", label: "logout"},
+        {value: 'addHotel', label: 'add hotel', icon: "library_add"},
+        {value: 'hotelManagement', label: 'hotel management', icon: "explore"},
+        {value: "logout", label: "logout", icon: "exit_to_app"},
       ];
     } else {
       $location.path('/login');
