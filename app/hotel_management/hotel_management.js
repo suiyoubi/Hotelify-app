@@ -70,6 +70,32 @@ angular.module('myApp.hotelManagement', [
       });
     };
 
+    $scope.deleteRoomType = function(roomType) {
+
+      const confirm = $mdDialog.confirm()
+        .title('Would you like to delete this room type?')
+        .textContent('All the rooms under this room type will be deleted as well')
+        .ok('Confirm')
+        .cancel('I change my mind');
+
+      $mdDialog.show(confirm).then(function() {
+
+        const deleteRoomTypeUrl = `${$rootScope.url}/room-types/${roomType.id}`;
+
+        $http.delete(deleteRoomTypeUrl).then(function (res) {
+          $rootScope.popUp("successfully delete this row", 'Success');
+
+          const index = $scope.roomTypes.indexOf(roomType);
+
+          if(index != -1) {
+            $scope.roomTypes.splice(index, 1);
+          }
+        }, function (err) {
+          console.error(err);
+          $rootScope.popUp('Failed to delete this room type');
+        })
+      });
+    }
     $scope.updateHotel = function () {
 
       const updateHotelUrl = `${$rootScope.url}/hotels/update`;

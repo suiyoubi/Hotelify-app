@@ -122,10 +122,6 @@
     </div>
   </md-content>
 
-  <button type="button" ng-click="addRoom(row)" class="btn btn-sm btn-success" ng-show="selectedHotel">
-    <i class="glyphicon glyphicon-plus">
-    </i> Add a Room Type
-  </button>
   <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped" ng-show="selectedHotel">
     <thead>
     <tr>
@@ -134,6 +130,7 @@
       <th>Number of Rooms</th>
       <th>Price</th>
       <th>Description</th>
+      <th>Delete</th>
     </tr>
     </thead>
     <tbody>
@@ -143,15 +140,14 @@
       <td>{{row.slots || row.total_slots}}</td>
       <td>{{row.price}}</td>
       <td>{{row.description}}</td>
-      <td>
-        <button type="button" ng-click="removeItem(row)" class="btn btn-sm btn-danger">
-          <i class="glyphicon glyphicon-remove-circle">
-          </i>
-        </button>
-      </td>
+      <td><md-icon md-font-icon="material-icons" ng-click="deleteRoomType(row)">delete</md-icon></td>
     </tr>
     </tbody>
   </table>
+  <button type="button" ng-click="addRoom(row)" class="btn btn-sm btn-success" ng-show="selectedHotel">
+    <i class="glyphicon glyphicon-plus">
+    </i> Add a Room Type
+  </button>
 
 
 </div>
