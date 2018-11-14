@@ -65,7 +65,15 @@ angular.module('myApp.browse', [
         });
 
       }, function (err) {
-        console.error(err);
+
+        $mdDialog.show({
+          controller: 'browseHotelController',
+          templateUrl: 'browse.tmpl.html',
+          parent: angular.element(document.body),
+          clickOutsideToClose:true,
+          locals:{ hotel, url:null },
+          fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+        });
       });
     };
 
