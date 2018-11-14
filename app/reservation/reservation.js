@@ -36,6 +36,7 @@ angular.module('myApp.reservation', [
     //init room info
     $scope.roomType = {};
     //$http.get room
+    // todo: connect to db
     var availableRoom = [
       {id:101, type_name:"double", occupancy:4, description:"just another double room", price:200},
       {id:102, type_name:"single", occupancy:1, description:"for 单身狗", price:111},
@@ -55,6 +56,7 @@ angular.module('myApp.reservation', [
     console.log($scope.roomType);
     // init tag
     // $http.get tag
+    // todo: connect to db
     $scope.tags = ["free breakfast", "good service", "sea view"];
   };
 
@@ -63,6 +65,8 @@ angular.module('myApp.reservation', [
 
   $scope.makeReservation = function(){
     //$http.post
+    // todo: connect to db
+    // todo: date format
     if(angular.equals($scope.roomSelected, {})){
       console.log("no room selected");
       document.getElementById("reservationWarning").style.visibility = "visible";
