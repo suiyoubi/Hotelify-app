@@ -18,12 +18,18 @@
 
 <div ng-controller="hotelManagementController">
 
-  <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="">
+  <md-content md-theme="docs-dark" layout-padding="">
     <b> Search for hotel:</b>
     <div class="form-group" layout-gt-sm="row">
-      <input type="text" placeholder="brand name" ng-model="searchObj.brandName">
-      <input type="text" placeholder="branch name" ng-model="searchObj.branchName">
-      <button ng-click="searchHotel()">Search</button>
+      <md-input-container>
+        <label>Brand Name</label>
+        <input ng-model="searchObj.brandName">
+      </md-input-container>
+      <md-input-container>
+        <label>Branch Name</label>
+        <input ng-model="searchObj.branchName">
+      </md-input-container>
+      <button ng-click="searchHotel()" class="searchBtn">Search</button>
     </div>
   </md-content>
 
