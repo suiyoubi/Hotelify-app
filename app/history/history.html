@@ -15,6 +15,8 @@
   </md-nav-bar>
 </div>
 
+<div data-ng-init="initHistory()"></div>
+
 <div>
   <table st-table="history" class="table table-striped">
     <thead>
@@ -22,20 +24,17 @@
       <th st-sort="hotelName">Hotel Name</th>
       <th>checkin date</th>
       <th>checkout date</th>
-      <th>price</th>
+      <th>total price</th>
+      <th>payment</th>
     </tr>
-    <!--<tr>-->
-      <!--<th>-->
-        <!--<input st-search="hotelName" placeholder="search for Hotel Name" class="input-sm form-control" type="search"/>-->
-      <!--</th>-->
-    <!--</tr>-->
     </thead>
     <tbody>
-    <tr ng-repeat="row in history" ng-click="leaveReview(row.hotelId)">
+    <tr ng-repeat="row in history" ng-click="leaveReview(row)">
       <td>{{row.hotelName}}</td>
       <td>{{row.checkinDate}}</td>
       <td>{{row.checkoutDate}}</td>
       <td>{{row.price}}</td>
+      <td>{{row.status}}</td>
     </tr>
     </tbody>
   </table>
@@ -46,6 +45,9 @@ Use of this source code is governed by an MIT-style license that can be foundin 
 -->
 
 <script type="text/ng-template" id="leaveReview.tmpl.html">
+
+<div data-ng-init="retreiveTag()"></div>
+
 <md-dialog aria-label="Hotel Detail" class="fullScreenDialog">
   <form name="commentForm">
     <md-toolbar>
@@ -75,11 +77,13 @@ Use of this source code is governed by an MIT-style license that can be foundin 
       </md-select>
     </md-input-container>
 
+    <md-chips ng-model="displayTags" md-removable="true" readonly="true" md-on-remove="onModelChange($chip)"></md-chips>
+
     <md-input-container class = "md-block">
       <label>Add a tag</label>
       <textarea md-maxlength = "20" name="tag" ng-model = "tag"></textarea>
       <div ng-messages = "commentForm.tag.$error">
-        <div ng-message = "md-maxlength">The comments has to be less
+        <div ng-message = "md-maxlength">The tag has to be less
           than 20 characters long.</div>
       </div>
     </md-input-container>
