@@ -96,12 +96,13 @@
         <br><br>
       </md-content>
     </div>
+
+    <button type="button" ng-click="addRoom(row)" class="btn btn-sm btn-success">
+      <i class="glyphicon glyphicon-plus">
+      </i> Add a Room Type
+    </button>
   </md-content>
 
-  <button type="button" ng-click="addRoom(row)" class="btn btn-sm btn-success">
-    <i class="glyphicon glyphicon-plus">
-    </i> Add a Room Type
-  </button>
   <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped">
     <thead>
     <tr>
@@ -129,10 +130,12 @@
     </tbody>
   </table>
 
-  <button type="button" ng-click="addHotel()" class="btn btn-sm btn-success">
-    <i class="glyphicon glyphicon-plus">
-    </i> Add the Hotel
-  </button>
+  <md-content layout-padding="">
+    <button type="button" ng-click="addHotel()" class="btn btn-sm btn-primary">
+      <i class="glyphicon glyphicon-plus">
+      </i> Add the Hotel
+    </button>
+  </md-content>
 </div>
 
 
