@@ -3,6 +3,7 @@
 angular.module('myApp.browse', [
   'ngMaterial',
   'ngMessages',
+  'firebase',
   'ngRoute'])
   .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/browse', {
@@ -46,18 +47,30 @@ angular.module('myApp.browse', [
     };
 
     $scope.hotelDetail = function(hotel) {
-      $mdDialog.show({
-        controller: 'browseHotelController',
-        templateUrl: 'browse.tmpl.html',
-        parent: angular.element(document.body),
-        clickOutsideToClose:true,
-        locals:{ hotel },
-        fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+
+      const storage = firebase.storage();
+      const storageRef = storage.ref(`${hotel.id}/image.png`);
+
+      storageRef.getDownloadURL().then(function (url) {
+        $scope.imageUrl = url;
+        console.log(url);
+
+        $mdDialog.show({
+          controller: 'browseHotelController',
+          templateUrl: 'browse.tmpl.html',
+          parent: angular.element(document.body),
+          clickOutsideToClose:true,
+          locals:{ hotel, url },
+          fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+        });
+
+      }, function (err) {
+        console.error(err);
       });
     };
 
   })
-.controller('browseHotelController', function ($scope, $mdDialog, $http, $rootScope, hotel) {
+.controller('browseHotelController', function ($scope, $mdDialog, $http, $rootScope, hotel, url) {
   var hotelId = hotel.id;
   //$http.get
   $scope.selected = [];
@@ -65,6 +78,7 @@ angular.module('myApp.browse', [
   this.endDate = new Date();
 
   $scope.hotelInfo = hotel;
+  $scope.url = url;
 
   $scope.makeReservation = function(){
     //$http.post
