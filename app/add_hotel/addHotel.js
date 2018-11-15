@@ -3,7 +3,10 @@
 angular.module('myApp.addHotel', [
   'ngMaterial',
   'ngMessages',
-  'ngRoute'])
+  'ngRoute',
+  'firebase',
+  'ngFileUpload',
+])
   .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/add_hotel', {
       templateUrl: 'add_hotel/add_hotel.html',
@@ -14,6 +17,25 @@ angular.module('myApp.addHotel', [
 
     $scope.hotel = {};
     $scope.roomTypes = [];
+
+    $scope.selectFile  = function (file) {
+      console.error(file);
+      $scope.file = file;
+    };
+    $scope.uploadFile = function (file, id) {
+
+      console.error('try to update the file:', file);
+      var storageRef = firebase.storage().ref();
+      storageRef = storageRef.child(`${id}/image.${file.name.split('.').pop()}`);
+      storageRef.put(file).then(function (res) {
+        console.log(res);
+        $rootScope.popUp('you have uploaded your image successfully', 'great');
+        $scope.file = null;
+        $scope.hotel = null;
+      }, function (err) {
+        console.error(err);
+      });
+    };
 
     $scope.addRoom = function() {
       $mdDialog.show({
@@ -39,12 +61,16 @@ angular.module('myApp.addHotel', [
         console.log(res);
         const hotel_id = res.data.id;
 
+        $rootScope.popUp('You have created the hotel, please wait for the image to be uploaded', 'success');
+        console.log('success create room');
+        $scope.uploadFile($scope.file, hotel_id);
+
         const addRoomUrl = `${$rootScope.url}/hotels/${hotel_id}/room-types`;
 
         $scope.roomTypes.forEach( function (roomType) {
 
           $http.post(addRoomUrl, roomType).then(function (res) {
-            console.log('success create room');
+
           }, function (err) {
             console.error(err);
           });
