@@ -131,7 +131,7 @@ angular.module('myApp.history', [
         //$http.post
         // todo: connect with db
         if ($scope.rating == undefined || $scope.comment == undefined) {
-          $rootScope.popUp("please fill out comment form");
+          document.getElementById("reservationWarning").style.visibility = "visible";
           return;
         }
 
@@ -211,10 +211,7 @@ angular.module('myApp.history', [
           });
         }
 
-        console.log($scope.hotel_id);
-        console.log($scope.comment);
-        console.log($scope.rating);
-        console.log($scope.tag);
+        $rootScope.popUp("thank you for your review!", "success");
       }
     })
 ;

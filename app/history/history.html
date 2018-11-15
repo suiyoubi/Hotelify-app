@@ -25,7 +25,7 @@
       <th>checkin date</th>
       <th>checkout date</th>
       <th>total price</th>
-      <th>payment</th>
+      <th>status</th>
     </tr>
     </thead>
     <tbody>
@@ -90,9 +90,14 @@ Use of this source code is governed by an MIT-style license that can be foundin 
           than 20 characters long.</div>
       </div>
     </md-input-container>
-    <md-chips ng-model="displayTags" md-removable="true" readonly="true" md-on-remove="onModelChange($chip)" flex="90%"></md-chips>
+
+    <div>
+      <p>Popular tags</p>
+      <md-chips ng-model="displayTags" md-removable="true" readonly="true" md-on-remove="onModelChange($chip)" flex="90%"></md-chips>
+    </div>
 
     <md-dialog-actions layout="row">
+      <p id="reservationWarning">please fill out comment and rating</p>
       <span flex></span>
       <md-button ng-click="submit(comment, rating)">
         Submit
