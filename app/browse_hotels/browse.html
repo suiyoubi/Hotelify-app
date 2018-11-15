@@ -71,16 +71,25 @@ Use of this source code is governed by an MIT-style license that can be foundin 
       <div id="hotelInfo">
         <h3><md-icon md-font-icon="material-icons">home</md-icon>{{hotelInfo.brand_name}} - {{hotelInfo.branch_name}}</h3>
         <p><md-icon md-font-icon="material-icons">place</md-icon>{{hotelInfo.address}}</p>
+        <p><md-icon md-font-icon="material-icons">description</md-icon>{{hotelInfo.description}}</p>
       </div>
 
-      <div flex-gt-xs="">
-        <h4>Start date</h4>
-        <md-datepicker ng-model="startDate" md-placeholder="Enter date"></md-datepicker>
+      <div>
+        <md-chips ng-model="displayTags" md-removable="false" readonly="true"></md-chips>
       </div>
-      <div flex-gt-xs="">
-        <h4>End date</h4>
-        <md-datepicker ng-model="endDate" md-placeholder="Enter date"></md-datepicker>
-      </div>
+
+      <table st-table="rowCollection" class="table table-striped">
+        <tbody>
+        <tr ng-repeat="review in reviews">
+          <td>
+            <md-icon md-font-icon="material-icons">account_box</md-icon>{{review.username}}<br>
+            <md-icon md-font-icon="material-icons">star</md-icon>{{review.rating}}
+          </td>
+          <td>{{review.comment}}</td>
+        </tr>
+        </tbody>
+      </table>
+
     </div>
 
   </md-dialog-content>
