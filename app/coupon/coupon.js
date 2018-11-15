@@ -12,10 +12,8 @@ angular.module('myApp.coupon', [
   }])
   .controller('couponController', function ($scope, $mdDialog, $rootScope, $http) {
 
-    $scope.couponTypes = [
-      {id: 1, discount_type: '%', value: 30},
-      {id: 2, discount_type: '$', value: 50},
-    ];
+    $scope.coupon = {};
+    $scope.couponTypes = $rootScope.couponTypes;
 
     $scope.checkCustomer = function() {
 
@@ -53,6 +51,46 @@ angular.module('myApp.coupon', [
 
     $scope.selectHotel = function (hotel) {
       $scope.selectedHotel = hotel;
+      $scope.coupon.hotel_id = hotel.id;
     };
 
+    $scope.inputCheck = function() {
+
+      const coupon = $scope.coupon;
+      if(!coupon) {
+        $rootScope.popUp('Please input coupon information');
+        return false;
+      } else if(!coupon.type_id || !coupon.expire_date) {
+        $rootScope.popUp('Please provide all the information');
+        return false;
+      }
+      return true;
+    };
+
+    $scope.distributeCoupon = function () {
+
+      if(!$scope.inputCheck()) {
+       return;
+      }
+
+      const distributeCouponUrl = $scope.toEveryUser ?
+        `${$rootScope.url}/coupons/createAll` :
+        `${$rootScope.url}/coupons/create`;
+
+      if(!$scope.toEveryUser && !$scope.coupon.username) {
+        $rootScope.popUp('please provide username');
+        return;
+      }
+
+      console.log(distributeCouponUrl);
+      console.log($scope.coupon);
+
+      $http.post(distributeCouponUrl, $scope.coupon).then(function (res) {
+        console.log(res);
+        $rootScope.popUp('You have successfully distributed coupons!');
+      }, function (err) {
+        console.error(err);
+      });
+    };
   });
+

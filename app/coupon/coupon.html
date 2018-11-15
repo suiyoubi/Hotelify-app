@@ -11,20 +11,28 @@
   <md-nav-bar md-no-ink-bar="disableInkBar" md-selected-nav-item="currentNavItem"
               nav-bar-aria-label="navigation links">
     <md-nav-item ng-repeat="item in navItems" md-nav-click="goto(item.value)" name="{{item.value}}">
-      {{item.label}}
+      <md-icon md-font-icon="material-icons">{{item.icon}}</md-icon>{{item.label}}
     </md-nav-item>
   </md-nav-bar>
 </div>
 
+<div data-ng-init="initCouponType()"></div>
+
 <div ng-controller="couponController">
 
   <div>
-    <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="">
+    <md-content md-theme="docs-dark" layout-padding="">
       <b> Search for hotel:</b>
       <div class="form-group" layout-gt-sm="row">
-        <input type="text" placeholder="brand name" ng-model="searchObj.brandName">
-        <input type="text" placeholder="branch name" ng-model="searchObj.branchName">
-        <button ng-click="searchHotel()">Search</button>
+        <md-input-container>
+          <label>Brand Name</label>
+          <input ng-model="searchObj.brandName">
+        </md-input-container>
+        <md-input-container>
+          <label>Branch Name</label>
+          <input ng-model="searchObj.branchName">
+        </md-input-container>
+        <button ng-click="searchHotel()" class="searchBtn">Search</button>
       </div>
     </md-content>
 
@@ -50,23 +58,23 @@
     </div>
   </div>
 
-  <div ng-show="selectedHotel">
+  <md-content ng-show="selectedHotel" layout-padding="">
     <div>
       <h3>You have selected {{selectedHotel.brand_name}}</h3>
     </div>
 
     Distribute coupon to:
     <div>
-      <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+      <md-checkbox ng-model="toEveryUser" aria-label="Checkbox 1">
         Every User
       </md-checkbox>
     </div>
     <div>
-      <md-checkbox ng-model="!data.cb1" aria-label="Checkbox 1">
+      <md-checkbox ng-model="!toEveryUser" aria-label="Checkbox 1">
         Specific User
       </md-checkbox>
       <input ng-model="coupon.username" placeholder="username">
-      <button ng-click="checkCustomer()">Check Customer</button>
+      <button ng-click="checkCustomer()" class="btn btn-sm btn-primary">Check Customer</button>
     </div>
 
 
@@ -74,13 +82,13 @@
       <div layout-gt-sm="row">
         <md-input-container>
           <label>Expired Date</label>
-          <md-datepicker ng-model="coupon.expired_date"></md-datepicker>
+          <md-datepicker ng-model="coupon.expire_date"></md-datepicker>
         </md-input-container>
 
         <md-input-container class="md-block" flex-gt-sm>
           <label>Type</label>
           <md-select ng-model="coupon.type_id">
-            <md-option ng-repeat="type in couponTypes" value="type.id">
+            <md-option ng-repeat="type in couponTypes" value="{{type.id}}">
               {{ generateCouponTypeValue(type) }}
             </md-option>
           </md-select>
@@ -88,8 +96,8 @@
       </div>
     </md-content>
 
-    <button ng-click="distributeCoupon()">Distribute Coupon!</button>
-  </div>
+    <button ng-click="distributeCoupon()" class="btn btn-sm btn-success">Distribute Coupon!</button>
+  </md-content>
 </div>
 
 

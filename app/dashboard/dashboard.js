@@ -31,8 +31,8 @@ angular.module('myApp.dashboard', [
         {value: "hotelify", label: "Hotelify"},
         {value: 'addHotel', label: 'add hotel', icon: "library_add"},
         {value: 'hotelManagement', label: 'hotel management', icon: "explore"},
+        {value: 'coupon', label:'Distribute Coupon', icon: "attach_money"},
         {value: "logout", label: "logout", icon: "exit_to_app"},
-        {value: 'coupon', label:'Distribute Coupon'},
       ];
     } else {
       $location.path('/login');
@@ -54,6 +54,16 @@ angular.module('myApp.dashboard', [
     };
   })
    .controller('dsController', function ($scope, $http, $rootScope, $location) {
+
+     // Light-weight coupon type eager fetch here.
+     const couponTypeUrl = `${$rootScope.url}/couponTypes`;
+
+     $http.get(couponTypeUrl).then(function (res) {
+       $rootScope.couponTypes = res.data;
+     }, function (err) {
+       console.error(err);
+     });
+
 
      // if($rootScope.userType=='customer') {
      //   $location.path('/quick-book');
