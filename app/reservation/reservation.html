@@ -21,6 +21,7 @@
 <div ng-controller="reservationController">
   <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="">
     <b> Hotelify has found {{hotels.length}} hotels that perfectly match your requirement!</b>
+    <button ng-click="backToQuickBook()" class="btn btn-primary">Back</button>
   </md-content>
 
   <table st-table="rowCollection" class="table table-striped">
@@ -60,7 +61,13 @@ Use of this source code is governed by an MIT-style license that can be foundin 
         <h3><md-icon md-font-icon="material-icons">home</md-icon>{{hotelInfo.brand_name}} - {{hotelInfo.branch_name}}</h3>
         <p><md-icon md-font-icon="material-icons">place</md-icon>{{hotelInfo.address}}</p>
       </div>
-      <md-chips ng-model="displayTags" readonly="true"></md-chips>
+      <md-chips ng-model="tags" name="fruitName" readonly="true"
+                md-removable="false">
+        <md-chip-template>
+          <strong>{{$chip.tag_name}}</strong>
+          <em>({{$chip.popularity}})</em>
+        </md-chip-template>
+      </md-chips>
 
       <img ng-show="url" ng-src="{{url}}" alt="Description" />
       <md-tabs>
