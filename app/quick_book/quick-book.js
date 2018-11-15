@@ -16,11 +16,29 @@ angular.module('myApp.quickBook', [
     $scope.request.startDate = new Date();
     $scope.request.endDate = new Date();
 
+    $scope.inputCheck = function(request) {
+
+      if(!request) {
+        $rootScope.popUp('Please input booking information');
+        return false;
+      } else if(!request.rooms) {
+        $rootScope.popUp('Please input how many rooms you want');
+        return false;
+      } else if(!request.checkin_date || !request.checkout_date || request.checkin_date > request.checkout_date) {
+        $rootScope.popUp('Please input correct date information');
+        return false;
+      }
+
+      return true;
+    }
     $scope.bookRequest = function () {
 
-      const request = $scope.request
+      const request = $scope.request;
 
-      console.error($scope.request);
+      if(!$scope.inputCheck(request)) {
+        return;
+      }
+
       const checkAvailabilitiesUrl = `${$rootScope.url}/hotels/availabilities`;
       $http.get(checkAvailabilitiesUrl, {
         params: $scope.request
