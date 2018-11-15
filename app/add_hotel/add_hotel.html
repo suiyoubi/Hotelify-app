@@ -11,7 +11,7 @@
   <md-nav-bar md-no-ink-bar="disableInkBar" md-selected-nav-item="currentNavItem"
               nav-bar-aria-label="navigation links">
     <md-nav-item ng-repeat="item in navItems" md-nav-click="goto(item.value)" name="{{item.value}}">
-      {{item.label}}
+      <md-icon md-font-icon="material-icons">{{item.icon}}</md-icon>{{item.label}}
     </md-nav-item>
   </md-nav-bar>
 </div>
@@ -96,12 +96,13 @@
         <br><br>
       </md-content>
     </div>
+
+    <button type="button" ng-click="addRoom(row)" class="btn btn-sm btn-success">
+      <i class="glyphicon glyphicon-plus">
+      </i> Add a Room Type
+    </button>
   </md-content>
 
-  <button type="button" ng-click="addRoom(row)" class="btn btn-sm btn-success">
-    <i class="glyphicon glyphicon-plus">
-    </i> Add a Room Type
-  </button>
   <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped">
     <thead>
     <tr>
@@ -129,10 +130,12 @@
     </tbody>
   </table>
 
-  <button type="button" ng-click="addHotel()" class="btn btn-sm btn-success">
-    <i class="glyphicon glyphicon-plus">
-    </i> Add the Hotel
-  </button>
+  <md-content layout-padding="">
+    <button type="button" ng-click="addHotel()" class="btn btn-sm btn-primary">
+      <i class="glyphicon glyphicon-plus">
+      </i> Add the Hotel
+    </button>
+  </md-content>
 </div>
 
 

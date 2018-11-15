@@ -11,19 +11,25 @@
   <md-nav-bar md-no-ink-bar="disableInkBar" md-selected-nav-item="currentNavItem"
               nav-bar-aria-label="navigation links">
     <md-nav-item ng-repeat="item in navItems" md-nav-click="goto(item.value)" name="{{item.value}}">
-      {{item.label}}
+      <md-icon md-font-icon="material-icons">{{item.icon}}</md-icon>{{item.label}}
     </md-nav-item>
   </md-nav-bar>
 </div>
 
 <div ng-controller="hotelManagementController">
 
-  <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="">
+  <md-content md-theme="docs-dark" layout-padding="">
     <b> Search for hotel:</b>
     <div class="form-group" layout-gt-sm="row">
-      <input type="text" placeholder="brand name" ng-model="searchObj.brandName">
-      <input type="text" placeholder="branch name" ng-model="searchObj.branchName">
-      <button ng-click="searchHotel()">Search</button>
+      <md-input-container>
+        <label>Brand Name</label>
+        <input ng-model="searchObj.brandName">
+      </md-input-container>
+      <md-input-container>
+        <label>Branch Name</label>
+        <input ng-model="searchObj.branchName">
+      </md-input-container>
+      <button ng-click="searchHotel()" class="searchBtn">Search</button>
     </div>
   </md-content>
 
