@@ -11,7 +11,7 @@
   <md-nav-bar md-no-ink-bar="disableInkBar" md-selected-nav-item="currentNavItem"
               nav-bar-aria-label="navigation links">
     <md-nav-item ng-repeat="item in navItems" md-nav-click="goto(item.value)" name="{{item.value}}">
-      {{item.label}}
+      <md-icon md-font-icon="material-icons">{{item.icon}}</md-icon>{{item.label}}
     </md-nav-item>
   </md-nav-bar>
 </div>
@@ -32,7 +32,7 @@
 
         <md-input-container>
           <label>Email</label>
-          <input ng-model="user.email" type="email">
+          <input ng-readonly="true" ng-model="user.email" type="email">
         </md-input-container>
       </div>
     </md-content>
@@ -98,7 +98,7 @@
                     <th>Card Number</th>
                     <th>Card Holder Name</th>
                     <th>Expired Date</th>
-                    <th>Remove</th>th>
+                    <th>Remove</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -144,6 +144,18 @@
           </md-tab>
           <md-tab label="My Reviews">
             <md-content class="md-padding">
+              <div flex-gt-sm="50">
+                <md-subheader class="md-no-sticky">You have written {{reviews.length}} reviews about {{calculateHotelNumber(reviews)}} hotels</md-subheader>
+                <md-divider ></md-divider>
+                <md-list-item ng-repeat="row in reviews" class="md-3-line md-long-text">
+                  <div class="md-list-item-text">
+                    <h3>{{row.brand_name}} {{row.branch_name}}</h3>
+                    <h4>Rating: {{row.rating}}</h4>
+                    <p>{{row.comment}}</p>
+                  </div>
+                  <md-divider ></md-divider>
+                </md-list-item>
+              </div>
             </md-content>
           </md-tab>
         </md-tabs>
