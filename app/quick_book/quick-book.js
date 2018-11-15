@@ -38,7 +38,7 @@ angular.module('myApp.quickBook', [
          city: "Vancouver",
          country: "Canada",
          description: "this is a better one",
-         id: "2",
+         id: "3",
          phone_number: "7786814260",
          postal_code: "V6T 1Z4",
          property_class: "5",

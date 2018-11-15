@@ -35,6 +35,7 @@ angular.module('myApp.reservation', [
   $scope.initRoomInfo = function () {
     //init room info
     $scope.roomType = {};
+    $scope.displayTags = [];
     //$http.get room
     // todo: connect to db
     var availableRoom = [
@@ -55,9 +56,25 @@ angular.module('myApp.reservation', [
 
     console.log($scope.roomType);
     // init tag
-    // $http.get tag
-    // todo: connect to db
-    $scope.tags = ["free breakfast", "good service", "sea view"];
+    // get all tags of this hotel
+    var url = $rootScope.url + "/tags/hotel/" + hotel.id;
+    $http({
+      url: url,
+      method: "GET"
+    }).then(function (res) {
+      console.log(res);
+      $scope.currentTags = res.data;
+      $scope.displayTags = [];
+      var cycle = $scope.currentTags.length > 3 ? 3
+          : $scope.currentTags.length;
+      for (var i = 0; i < cycle; i++) {
+        $scope.displayTags[i] = $scope.currentTags[i].tag_name;
+      }
+    }, function (err) {
+      // handle error here
+      console.log(err);
+    });
+    // $scope.tags = ["free breakfast", "good service", "sea view"];
   };
 
   $scope.roomSelected ={};
