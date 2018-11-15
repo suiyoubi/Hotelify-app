@@ -12,7 +12,7 @@ angular.module('myApp.register', ['ngRoute'])
 .controller('RegisterCtrl', function($scope, $location, $rootScope, $http, $mdDialog) {
 
   $scope.registerCustomer = () => {
-    const { username, password, lastName, firstName, repeatPassword, email } = $scope;
+    const { username, password, last_name, first_name, repeatPassword, email, phone } = $scope;
     const { popUp, url } = $rootScope;
 
     if(!username || !password || !email) {
@@ -30,12 +30,14 @@ angular.module('myApp.register', ['ngRoute'])
     const user = {
       username,
       password,
-      lastName,
-      firstName,
+      last_name,
+      first_name,
       email,
+      phone
     };
 
-    const registerUtl = url + '/customers';
+    console.log(user);
+    const registerUtl = url + '/customers/signup';
 
     $http.post(registerUtl, user).then((res) => {
       popUp('Successfully created the account!', 'Nice');

@@ -10,32 +10,72 @@ angular.module('myApp.browse', [
       controller: 'browseController'
     });
   }])
-  .controller('browseController', function ($scope, $mdDialog) {
-    $scope.rowCollection = [
-      {branchName: 'haus hotel', brandName: 'haohao', address: 'fake add 1'},
-      {branchName: 'kanglong hotel', brandName: 'haohao', address: 'fake add 2'},
-      {branchName: 'rex hotel', brandName: 'xixi', address: 'fake add 3'},
-      {branchName: 'jingrui hotel', brandName: 'xixi', address: 'add 4'},
-    ];
+  .controller('browseController', function ($rootScope, $scope, $mdDialog, $http) {
+
+    $scope.retrieveHotelInfo = function(){
+      const url = `${$rootScope.url}/hotels`;
+
+      $http({
+        url: url,
+        method: "GET"
+      }).then(function (res) {
+        $scope.hotels = res.data;
+        console.log($scope.hotels);
+      }, function (err) {
+        console.error(err);
+      });
+    };
+
+    $scope.searchHotel = function () {
+
+      // GET api/hotels/
+      const url = `${$rootScope.url}/hotels/feature/search`;
+      console.log($scope.searchObj);
+
+      $http({
+        url: url,
+        method: "GET",
+        params: $scope.searchObj,
+      }).then(function (res) {
+
+        console.error(res);
+        $scope.hotels = res.data;
+      }, function (err) {
+        console.error(err);
+      });
+    };
 
     $scope.hotelDetail = function(hotel) {
       $mdDialog.show({
-        controller: 'anotherController',
-        templateUrl: 'dialog1.tmpl.html',
+        controller: 'browseHotelController',
+        templateUrl: 'browse.tmpl.html',
         parent: angular.element(document.body),
         clickOutsideToClose:true,
         locals:{ hotel },
         fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
       });
     };
+
   })
-  .controller('anotherController', function ($scope, $mdDialog, hotel) {
+.controller('browseHotelController', function ($scope, $mdDialog, $http, $rootScope, hotel) {
+  var hotelId = hotel.id;
+  //$http.get
+  $scope.selected = [];
+  this.startDate = new Date();
+  this.endDate = new Date();
 
-    $scope.hotelInfo = hotel;
-    console.error('hello'+JSON.stringify(hotel));
+  $scope.hotelInfo = hotel;
 
-    $scope.cancel = function() {
-      console.error('123')
-      $mdDialog.cancel();
-    };
-  });
+  $scope.makeReservation = function(){
+    //$http.post
+    // search specific hotel in given interval
+    console.log($scope.startDate,$scope.endDate, $scope.hotelInfo.id);
+    // redirect to reservation page if successed
+  };
+
+  $scope.cancel = function() {
+    console.log('cancel');
+    $mdDialog.cancel();
+  };
+
+});

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<!--navigation bar-->
+<div ng-controller="navController" ng-cloak="" class="navBardemoBasicUsage" ng-app="MyApp">
+  <md-nav-bar md-no-ink-bar="disableInkBar" md-selected-nav-item="currentNavItem"
+              nav-bar-aria-label="navigation links">
+    <md-nav-item ng-repeat="item in navItems" md-nav-click="goto(item.value)" name="{{item.value}}">
+      <md-icon md-font-icon="material-icons">{{item.icon}}</md-icon>{{item.label}}
+    </md-nav-item>
+  </md-nav-bar>
+</div>
+
+<div>
+  <table st-table="history" class="table table-striped">
+    <thead>
+    <tr>
+      <th st-sort="hotelName">Hotel Name</th>
+      <th>checkin date</th>
+      <th>checkout date</th>
+      <th>price</th>
+    </tr>
+    <!--<tr>-->
+      <!--<th>-->
+        <!--<input st-search="hotelName" placeholder="search for Hotel Name" class="input-sm form-control" type="search"/>-->
+      <!--</th>-->
+    <!--</tr>-->
+    </thead>
+    <tbody>
+    <tr ng-repeat="row in history" ng-click="leaveReview(row.hotelId)">
+      <td>{{row.hotelName}}</td>
+      <td>{{row.checkinDate}}</td>
+      <td>{{row.checkoutDate}}</td>
+      <td>{{row.price}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<!--
+Copyright 2018 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that can be foundin the LICENSE file at http://material.angularjs.org/HEAD/license.
+-->
+
+<script type="text/ng-template" id="leaveReview.tmpl.html">
+<md-dialog aria-label="Hotel Detail" class="fullScreenDialog">
+  <form name="commentForm">
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Comments</h2>
+      </div>
+    </md-toolbar>
+
+    <md-input-container class = "md-block">
+      <label>Comments</label>
+      <textarea md-maxlength = "300" name="comment" ng-model = "comment"></textarea>
+      <div ng-messages = "commentForm.comment.$error">
+        <div ng-message = "md-maxlength">The comments has to be less
+          than 300 characters long.</div>
+      </div>
+    </md-input-container>
+
+    <md-input-container>
+      <label>Ratings (0-5)</label>
+      <md-select ng-model="rating" required="">
+        <md-option value="5">5</md-option>
+        <md-option value="4">4</md-option>
+        <md-option value="3">3</md-option>
+        <md-option value="2">2</md-option>
+        <md-option value="1">1</md-option>
+        <md-option value="0">0</md-option>
+      </md-select>
+    </md-input-container>
+
+    <md-input-container class = "md-block">
+      <label>Add a tag</label>
+      <textarea md-maxlength = "20" name="tag" ng-model = "tag"></textarea>
+      <div ng-messages = "commentForm.tag.$error">
+        <div ng-message = "md-maxlength">The comments has to be less
+          than 20 characters long.</div>
+      </div>
+    </md-input-container>
+
+    <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button ng-click="submit(comment, rating)">
+        Submit
+      </md-button>
+      <md-button ng-click="cancel()">
+        Back
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>
+</script>
+
+</body>
+</html>

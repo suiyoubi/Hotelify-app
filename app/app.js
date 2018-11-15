@@ -15,6 +15,8 @@ var app = angular.module('myApp', [
   'myApp.reviews',
   'myApp.addHotel',
   'myApp.hotelManagement',
+  'myApp.history',
+  'myApp.reservation'
   'myApp.coupon',
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
@@ -35,4 +37,5 @@ run(function($rootScope, $mdDialog) {
         .ok(confirmMessage)
     );
   };
-});
+})
+;
