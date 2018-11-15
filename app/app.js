@@ -5,6 +5,7 @@ var app = angular.module('myApp', [
   'ngMaterial',
   'ngRoute',
   "ngTable",
+  'firebase',
   'myApp.login',
   'myApp.register',
   'myApp.dashboard',
@@ -36,5 +37,4 @@ run(function($rootScope, $mdDialog) {
         .ok(confirmMessage)
     );
   };
-})
-;
+});
