@@ -16,6 +16,7 @@ angular.module('myApp.accountInfo', [
     const {url, userType} = $rootScope;
     const userInfoUrl = `${url}/${userType}s/${username}`;
     const updateUrl = `${url}/${userType}s/update`;
+    const getReviewsUrl = `${$rootScope.url}/reviews/username/${username}`;
     $scope.addressUrl = `${url}/addresses`;
     $scope.address = {street:"", city:"", province:"", postal_code:"", country:""};
 
@@ -23,6 +24,7 @@ angular.module('myApp.accountInfo', [
       {card_number: '1234123412341234', card_holder_name:'haus', expire_date: '2008/01/01'},
       {card_number: '4444333322221111', card_holder_name:'rex', expire_date: '2088/01/01'},
     ];
+    $scope.reviews = [];
 
     $scope.deleteCard = function(card) {
       const confirm = $mdDialog.confirm()
@@ -93,9 +95,19 @@ angular.module('myApp.accountInfo', [
 
       // todo GET get card info
 
-
+      //get reviews
+      $http.get(getReviewsUrl).then(function (res) {
+        $scope.reviews = res.data;
+      }, function (err) {
+        $rootScope.popUp('Retrieve Reviews failed');
+        console.error(err);
+      });
     };
 
+    $scope.calculateHotelNumber = function() {
+      return $scope.reviews.map((review)=>review.brand_name)
+        .filter(function(item, i, ar){ return ar.indexOf(item) === i; }).length;
+    }
     $scope.updateUserInfo = () => {
       console.log($scope.address);
 
