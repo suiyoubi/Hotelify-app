@@ -11,6 +11,11 @@ angular.module('myApp.reservation', [
 .controller('reservationController', function ($scope, $http, $rootScope, $mdDialog) {
   $scope.initHotelInfo = function() {
     $scope.hotels = $rootScope.hotels;
+    $scope.hotels.forEach(function (value) {
+      if(value.address_id!=null){
+        value.address = value.street + ", " + value.city + ", " + value.province;
+      }
+    });
     console.log($scope.hotels);
   };
 
@@ -27,27 +32,83 @@ angular.module('myApp.reservation', [
 
 })
 .controller('makeReservationController', function ($scope, $mdDialog, $http, $rootScope, hotel) {
-  var hotelId = hotel.id;
-  //$http.get
-  var roomType = ["single", "double", "总统套房"];
-  var tags = ["free breakfast", "good service", "sea view"];
-  var coupons = ["freeNight", "20% off"];
-  $scope.selected = [];
-  this.startDate = $rootScope.checkinDate;
-  this.endDate = $rootScope.checkoutDate;
-  this.roomSelected = "";
+  $scope.initRoomInfo = function () {
+    //init room info
+    $scope.roomType = {};
+    $scope.displayTags = [];
+    //$http.get room
+    // todo: connect to db
+    var availableRoom = [
+      {id:101, type_name:"double", occupancy:4, description:"just another double room", price:200},
+      {id:102, type_name:"single", occupancy:1, description:"for 单身狗", price:111},
+      {id:103, type_name:"总统套房", occupancy:4, description:"Holy shit that is LUXURY!", price:2000},
+      {id:104, type_name:"double", occupancy:4, description:"just another double room 2", price:200},
+      {id:105, type_name:"double", occupancy:4, description:"just another double room 3", price:200}
+    ];
+    // only display one room for each room type
+    // only support reserving one room at a time currently
+    // todo: support reserving multiple room (if time permitted)
+    availableRoom.forEach(function (value) {
+      if($scope.roomType[value.type_name]==undefined){
+        $scope.roomType[value.type_name] = value;
+      }
+    });
 
-  $scope.roomType = roomType;
+    console.log($scope.roomType);
+    // init tag
+    // get all tags of this hotel
+    var url = $rootScope.url + "/tags/hotel/" + hotel.id;
+    $http({
+      url: url,
+      method: "GET"
+    }).then(function (res) {
+      console.log(res);
+      $scope.currentTags = res.data;
+      $scope.displayTags = [];
+      var cycle = $scope.currentTags.length > 3 ? 3
+          : $scope.currentTags.length;
+      for (var i = 0; i < cycle; i++) {
+        $scope.displayTags[i] = $scope.currentTags[i].tag_name;
+      }
+    }, function (err) {
+      // handle error here
+      console.log(err);
+    });
+    // $scope.tags = ["free breakfast", "good service", "sea view"];
+  };
+
+  $scope.roomSelected ={};
   $scope.hotelInfo = hotel;
-  $scope.tags = tags;
-  $scope.coupons = coupons;
-
 
   $scope.makeReservation = function(){
     //$http.post
+    // todo: connect to db
+    // todo: date format
+    if(angular.equals($scope.roomSelected, {})){
+      console.log("no room selected");
+      document.getElementById("reservationWarning").style.visibility = "visible";
+      return;
+    }
     console.log($scope.roomSelected);
     console.log($scope.selected);
-    console.log($scope.startDate,$scope.endDate);
+    console.log($rootScope.checkinDate,$rootScope.checkoutDate);
+    $mdDialog.show(
+        $mdDialog.alert()
+        .clickOutsideToClose(true)
+        .title('Success')
+        .textContent('Your reservation has been proceed!')
+        .ok('OK')
+    )
+  };
+
+  $scope.addRoom = function(room){
+    $scope.roomSelected = room;
+    document.getElementById("reservationWarning").style.visibility = "hidden";
+    console.log($scope.roomSelected);
+  };
+
+  $scope.removeRoom = function(room){
+    $scope.roomSelected = {};
   };
 
   $scope.cancel = function() {

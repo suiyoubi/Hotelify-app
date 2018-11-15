@@ -20,10 +20,30 @@ angular.module('myApp.quickBook', [
       //todo send http request
      console.log($scope.request);
      $rootScope.hotels = [
-       {id:1, branch_name: 'haus hotel', brand_name: 'haohao', address: 'fake add 1'},
-       {id:2, branch_name: 'kanglong hotel', brand_name: 'haohao', address: 'fake add 2'},
-       {id:3, branch_name: 'rex hotel', brand_name: 'xixi', address: 'fake add 3'},
-       {id:4, branch_name: 'jingrui hotel', brand_name: 'xixi', address: 'add 4'}
+       { address_id: "3",
+         branch_name: "UBC",
+         brand_name: "Walter Gage",
+         city: "Vancouver",
+         country: "Canada",
+         description: "this is a good one",
+         id: "1",
+         phone_number: "6048221020",
+         postal_code: "V6T 1K2",
+         property_class: "1",
+         province: "British Columbia",
+         street: "5959 Student Union Blvd"},
+       { address_id: "30",
+         branch_name: "Ponderosa Oak house 7-002",
+         brand_name: "JR Inc. Co. Ltd.",
+         city: "Vancouver",
+         country: "Canada",
+         description: "this is a better one",
+         id: "3",
+         phone_number: "7786814260",
+         postal_code: "V6T 1Z4",
+         property_class: "5",
+         province: "British Columbia",
+         street: "2075 West Mall"}
      ];
      $rootScope.checkinDate = $scope.request.interval.startDate;
      $rootScope.checkoutDate = $scope.request.interval.endDate;

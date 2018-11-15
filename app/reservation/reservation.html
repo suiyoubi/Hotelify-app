@@ -31,7 +31,7 @@
     <tr ng-repeat="row in hotels" ng-click="hotelDetail(row)">
       <td>{{row.branch_name}}</td>
       <td>{{row.brand_name}}</td>
-      <td>{{row.property_class}}</td>
+      <td>{{row.address}}</td>
     </tr>
     </tbody>
   </table>
@@ -42,50 +42,75 @@ Copyright 2018 Google Inc. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that can be foundin the LICENSE file at http://material.angularjs.org/HEAD/license.
 -->
 <script type="text/ng-template" id="makeReservation.tmpl.html"><md-dialog aria-label="Hotel Detail" class="fullScreenDialog">
+<div data-ng-init="initRoomInfo()"></div>
 <form ng-cloak>
   <md-toolbar>
     <div class="md-toolbar-tools">
-      <h2>{{hotelInfo.branch_name}}</h2>
+      <h2>{{hotelInfo.brand_name}} {{hotelInfo.branch_name}}</h2>
     </div>
   </md-toolbar>
 
   <md-dialog-content>
     <div class="md-dialog-content">
       <div id="hotelInfo">
-        {{hotelInfo}}
+        <h3><md-icon md-font-icon="material-icons">home</md-icon>{{hotelInfo.brand_name}} - {{hotelInfo.branch_name}}</h3>
+        <p><md-icon md-font-icon="material-icons">place</md-icon>{{hotelInfo.address}}</p>
       </div>
 
-      <md-chips ng-model="tags" readonly="true"></md-chips>
+      <md-chips ng-model="displayTags" readonly="true"></md-chips>
 
-      <div layout-gt-sm="row">
-        <md-radio-group ng-model="roomSelected">
-          <md-radio-button ng-repeat="room in roomType" ng-value="room">{{room}}</md-radio-button>
-        </md-radio-group>
-
-        <table>
-          <tr ng-repeat="coupon in coupons">
-            <td>
-              <md-checkbox ng-checked="exists(coupon, selected)" ng-click="toggle(coupon, selected)">
-                {{coupon}}
-              </md-checkbox>
-            </td>
-          </tr>
-        </table>
-      </div>
-
-      <!--<div flex-gt-xs="">-->
-        <!--<h4>Start date</h4>-->
-        <!--<md-datepicker ng-model="startDate" md-placeholder="Enter date"></md-datepicker>-->
-      <!--</div>-->
-      <!--<div flex-gt-xs="">-->
-        <!--<h4>End date</h4>-->
-        <!--<md-datepicker ng-model="endDate" md-placeholder="Enter date"></md-datepicker>-->
-      <!--</div>-->
+      <md-tabs>
+        <md-tab label="rooms">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>room type</th>
+              <th>occupancy</th>
+              <th>nightly price</th>
+              <th>description</th>
+              <th>add</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="room in roomType">
+              <td>{{room.type_name}}</td>
+              <td>{{room.occupancy}}</td>
+              <td>{{room.price}}</td>
+              <td>{{room.description}}</td>
+              <td><md-icon md-font-icon="material-icons" ng-click="addRoom(room)">add</md-icon></td>
+            </tr>
+            </tbody>
+          </table>
+        </md-tab>
+        <md-tab label="selected rooms">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>room type</th>
+              <th>occupancy</th>
+              <th>nightly price</th>
+              <th>description</th>
+              <th>remove</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>{{roomSelected.type_name}}</td>
+              <td>{{roomSelected.occupancy}}</td>
+              <td>{{roomSelected.price}}</td>
+              <td>{{roomSelected.description}}</td>
+              <td><md-icon md-font-icon="material-icons" ng-click="removeRoom(room)">delete</md-icon></td>
+            </tr>
+            </tbody>
+          </table>
+        </md-tab>
+      </md-tabs>
     </div>
 
   </md-dialog-content>
 
   <md-dialog-actions layout="row">
+    <p id="reservationWarning">please select a room</p>
     <span flex></span>
     <md-button ng-click="makeReservation()">
       Make A Reservation
