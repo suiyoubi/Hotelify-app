@@ -72,7 +72,7 @@ angular.module('myApp.history', [
       this.rating = -1;
       this.tag = "";
 
-      $scope.retreiveTag = function () {
+      $scope.retrieveTag = function () {
         // get all tags of this hotel
         var url = $rootScope.url + "/tags/hotel/" + reservation.hotel_id;
         $http({
