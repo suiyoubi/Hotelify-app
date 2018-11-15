@@ -94,18 +94,22 @@ angular.module('myApp.history', [
 
       };
 
-      $scope.onModelChange = function($chip){
+      $scope.onModelChange = function ($chip) {
         // update popular tags
         var targetTag;
-        for(var i=0; i<$scope.currentTags.length; i++){
-          if($scope.currentTags[i].tag_name==$chip){
+        for (var i = 0; i < $scope.currentTags.length; i++) {
+          if ($scope.currentTags[i].tag_name == $chip) {
             targetTag = $scope.currentTags[i];
             break;
           }
         }
         targetTag.popularity = parseInt(targetTag.popularity) + 1;
         var url = $rootScope.url + "/tags/update";
-        var request = {hotel_id:$scope.hotel_id, tag_name:targetTag.tag_name, popularity:targetTag.popularity};
+        var request = {
+          hotel_id: $scope.hotel_id,
+          tag_name: targetTag.tag_name,
+          popularity: targetTag.popularity
+        };
         console.log("put " + request);
         $http({
           url: url,
@@ -131,6 +135,31 @@ angular.module('myApp.history', [
           return;
         }
 
+        var reviewUrl = $rootScope.url + "/reviews/create";
+        var reviewRequest = {
+          username: $rootScope.username,
+          hotel_id: reservation.hotel_id,
+          rating: parseInt($scope.rating),
+          comment: $scope.comment
+        };
+
+        console.log(reviewRequest);
+        $http({
+          url: reviewUrl,
+          method: "POST",
+          params: reviewRequest
+        }).then(function (res) {
+          console.log(res);
+        }, function (err) {
+          console.log(err);
+        });
+
+        // check if user provides a tag
+        if($scope.tag==undefined){
+          console.log("didn't add any new tag");
+          return;
+        }
+
         // check if this tag already exists
         var isNewTag = true;
         var targetTag = {};
@@ -142,10 +171,14 @@ angular.module('myApp.history', [
           }
         }
 
-        if(isNewTag){
+        if (isNewTag) {
           // $http.post
           var url = $rootScope.url + "/tags/create";
-          var request = {hotel_id:$scope.hotel_id, tag_name:$scope.tag, popularity:1};
+          var request = {
+            hotel_id: $scope.hotel_id,
+            tag_name: $scope.tag,
+            popularity: 1
+          };
           console.log(request);
           console.log($scope.displayTags);
           $http({
@@ -157,11 +190,15 @@ angular.module('myApp.history', [
           }, function (err) {
             console.log(err);
           });
-        }else{
+        } else {
           // if the tag already exists, update its popularity
           targetTag.popularity = parseInt(targetTag.popularity) + 1;
           var url = $rootScope.url + "/tags/update";
-          var request = {hotel_id:$scope.hotel_id, tag_name:targetTag.tag_name, popularity:targetTag.popularity};
+          var request = {
+            hotel_id: $scope.hotel_id,
+            tag_name: targetTag.tag_name,
+            popularity: targetTag.popularity
+          };
           console.log("put " + request);
           $http({
             url: url,
