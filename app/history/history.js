@@ -73,25 +73,29 @@ angular.module('myApp.history', [
       this.tag = "";
 
       $scope.retreiveTag = function () {
-        // $http.get
-        //const url = $rootScope.url + "/tags/hotel/" + reservation.hotel_id;
-        $scope.currentTags = [
-          {tag_name: "good view", popularity: "150"},
-          {tag_name: "free breakfast", popularity: "100"},
-          {tag_name: "sea view", popularity: "50"},
-          {tag_name: "laji", popularity: "10"}];
-
-        $scope.displayTags = [];
-        var cycle = $scope.currentTags.length > 3 ? 3
-            : $scope.currentTags.length;
-        for (var i = 0; i < cycle; i++) {
-          $scope.displayTags[i] = $scope.currentTags[i].tag_name;
-        }
+        // get all tags of this hotel
+        var url = $rootScope.url + "/tags/hotel/" + reservation.hotel_id;
+        $http({
+          url: url,
+          method: "GET"
+        }).then(function (res) {
+          console.log(res);
+          $scope.currentTags = res.data;
+          $scope.displayTags = [];
+          var cycle = $scope.currentTags.length > 3 ? 3
+              : $scope.currentTags.length;
+          for (var i = 0; i < cycle; i++) {
+            $scope.displayTags[i] = $scope.currentTags[i].tag_name;
+          }
+        }, function (err) {
+          // handle error here
+          console.log(err);
+        });
 
       };
 
       $scope.onModelChange = function($chip){
-        // http put
+        // update popular tags
         var targetTag;
         for(var i=0; i<$scope.currentTags.length; i++){
           if($scope.currentTags[i].tag_name==$chip){
@@ -99,12 +103,19 @@ angular.module('myApp.history', [
             break;
           }
         }
-        var request = {
-          hotel_id:$scope.hotel_id,
-          tag_name:targetTag.tag_name,
-          popularity:targetTag.popularity
-        };
-        console.log(request);
+        targetTag.popularity = parseInt(targetTag.popularity) + 1;
+        var url = $rootScope.url + "/tags/update";
+        var request = {hotel_id:$scope.hotel_id, tag_name:targetTag.tag_name, popularity:targetTag.popularity};
+        console.log("put " + request);
+        $http({
+          url: url,
+          method: "PUT",
+          params: request
+        }).then(function (res) {
+          console.log(res);
+        }, function (err) {
+          console.log(err);
+        });
 
       };
 
@@ -140,20 +151,27 @@ angular.module('myApp.history', [
           $http({
             url: url,
             method: "POST",
-            params: targetTag
+            params: request
           }).then(function (res) {
             console.log(res);
           }, function (err) {
             console.log(err);
           });
         }else{
-          // $http.put
-          console.log("put");
-          console.log(targetTag);
+          // if the tag already exists, update its popularity
           targetTag.popularity = parseInt(targetTag.popularity) + 1;
-          console.log(targetTag);
-          //var url = $rootScope.url + "/tags/update";
-          //var request = {hotel_id:$scope.hotel_id, tag_name:targetTag.tag_name, popularity:targetTag.popularity};
+          var url = $rootScope.url + "/tags/update";
+          var request = {hotel_id:$scope.hotel_id, tag_name:targetTag.tag_name, popularity:targetTag.popularity};
+          console.log("put " + request);
+          $http({
+            url: url,
+            method: "PUT",
+            params: request
+          }).then(function (res) {
+            console.log(res);
+          }, function (err) {
+            console.log(err);
+          });
         }
 
         console.log($scope.hotel_id);
