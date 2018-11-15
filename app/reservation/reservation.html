@@ -64,45 +64,51 @@ Use of this source code is governed by an MIT-style license that can be foundin 
           <table class="table table-striped">
             <thead>
             <tr>
-              <th>room type</th>
-              <th>occupancy</th>
-              <th>nightly price</th>
-              <th>description</th>
-              <th>add</th>
+              <th>Room type</th>
+              <th>Available number</th>
+              <th>Occupancy</th>
+              <th>Nightly price</th>
+              <th>Description</th>
+              <th>Added number</th>
+              <th>Add to Reservation</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="room in roomType">
               <td>{{room.type_name}}</td>
-              <td>{{room.occupancy}}</td>
+              <td>{{room.count}}</td>
+              <td>{{room.occupancy}} people</td>
               <td>{{room.price}}</td>
               <td>{{room.description}}</td>
-              <td><md-icon md-font-icon="material-icons" ng-click="addRoom(room)">add</md-icon></td>
+              <td>{{room.addedCount}}</td>
+              <td>
+                <md-icon md-font-icon="material-icons" ng-click="addRoom(room)">add</md-icon>
+                <md-icon md-font-icon="material-icons" ng-click="removeRoom(room)">remove</md-icon>
+              </td>
             </tr>
             </tbody>
           </table>
         </md-tab>
-        <md-tab label="selected rooms">
+        <md-tab label="Final Reservation Rooms">
           <table class="table table-striped">
             <thead>
             <tr>
-              <th>room type</th>
-              <th>occupancy</th>
-              <th>nightly price</th>
-              <th>description</th>
-              <th>remove</th>
+              <th>Room type</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Total Price</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-              <td>{{roomSelected.type_name}}</td>
-              <td>{{roomSelected.occupancy}}</td>
-              <td>{{roomSelected.price}}</td>
-              <td>{{roomSelected.description}}</td>
-              <td><md-icon md-font-icon="material-icons" ng-click="removeRoom(room)">delete</md-icon></td>
+            <tr ng-repeat="room in selectedRoomTypes">
+              <td>{{room.type_name}}</td>
+              <td>{{room.addedCount}}</td>
+              <td>{{room.price}}</td>
+              <td>{{room.price * room.addedCount}}</td>
             </tr>
             </tbody>
           </table>
+          Your total price will be {{calculateTotalPrice()}}, don't forget to use your coupon when you pay!
         </md-tab>
       </md-tabs>
     </div>
@@ -110,7 +116,7 @@ Use of this source code is governed by an MIT-style license that can be foundin 
   </md-dialog-content>
 
   <md-dialog-actions layout="row">
-    <p id="reservationWarning">please select a room</p>
+    <p id="reservationWarning">Please Select Your Rooms</p>
     <span flex></span>
     <md-button ng-click="makeReservation()">
       Make A Reservation
