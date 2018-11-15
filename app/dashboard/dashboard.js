@@ -56,7 +56,7 @@ angular.module('myApp.dashboard', [
    .controller('dsController', function ($scope, $http, $rootScope, $location) {
 
      // Light-weight coupon type eager fetch here.
-     const couponTypeUrl = `${$rootScope.url}/couponTypes`;
+     const couponTypeUrl = `${$rootScope.url}/coupon-types`;
 
      $http.get(couponTypeUrl).then(function (res) {
        $rootScope.couponTypes = res.data;
