@@ -63,7 +63,7 @@
       <td>{{row[0].brand_name}}-{{row[0].branch_name}}</td>
       <td>{{row[0].checkin_date}}</td>
       <td>{{row[0].checkout_date}}</td>
-      <td>{{row.amount}}</td>
+      <td>{{paidPrice[row[0].id]}}</td>
     </tr>
     </tbody>
   </table>
@@ -71,7 +71,7 @@
 <div>
   <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="">
     <div>
-      <b>Pending Reservations:</b>
+      <b>Past Reservations:</b>
     </div>
   </md-content>
   <table st-table="history" class="table table-striped">
@@ -88,7 +88,7 @@
       <td>{{row[0].brand_name}}-{{row[0].branch_name}}</td>
       <td>{{row[0].checkin_date}}</td>
       <td>{{row[0].checkout_date}}</td>
-      <td>{{row.price}}</td>
+      <td>{{paidPrice[row[0].id]}}</td>
     </tr>
     </tbody>
   </table>

@@ -62,6 +62,24 @@ angular.module('myApp.history', [
         $scope.pendingReservations = Object.values(groupBy($scope.pendingReservationRooms, 'id'));
         $scope.upcomingReservations = Object.values(groupBy($scope.upcomingReservationRooms, 'id'));
         $scope.historyReservations = Object.values(groupBy($scope.historyReservationRooms, 'id'));
+
+        $scope.paidPrice = {};
+        $scope.upcomingReservations.forEach(r => {
+          const payment_id = r[0].payment_id;
+          $http.get(`${$rootScope.url}/payments/${payment_id}`).then(function (res) {
+            $scope.paidPrice[r[0].id] = res.data.amount;
+          }, function (err) {
+            console.error(err);
+          });
+        });
+        $scope.historyReservations.forEach(r => {
+          const payment_id = r[0].payment_id;
+          $http.get(`${$rootScope.url}/payments/${payment_id}`).then(function (res) {
+            $scope.paidPrice[r[0].id] = res.data.amount;
+          }, function (err) {
+            console.error(err);
+          });
+        });
       };
 
       $scope.calculatePrice = function (reservation) {
