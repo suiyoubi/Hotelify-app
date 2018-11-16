@@ -77,16 +77,15 @@ angular.module('myApp.accountInfo', [
         $rootScope.popUp('csv is not valid!');
         return;
       }
-      //FIXME:something is wrong but i don't know what it is
       var request = $scope.newCard;
-      request.expire_date = $scope.newCard.expire_date.toISOString();
+      request.expire_date = $scope.newCard.expire_date.toISOString().substring(0,10);
       console.log(createCardUrl, request);
 
       // add a new card
       $http({
         url: createCardUrl,
         method: "POST",
-        param: request
+        params: request
       }).then(function (res) {
         $rootScope.popUp('You have added your new card info!', 'Great', 'nice');
         $scope.cards.push($scope.newCard);
@@ -152,7 +151,7 @@ angular.module('myApp.accountInfo', [
         //no address associated
         var targetUrl = $scope.addressUrl + "/create";
         $http.post(targetUrl, $scope.address).then((res) => {
-          console.log('create address sucess');
+          console.log('create address success');
           $scope.user.address_id = parseInt(res.data.id);
 
         // update user info
