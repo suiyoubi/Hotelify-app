@@ -10,43 +10,49 @@ angular.module('myApp.history', [
 }])
 .controller('historyController',
     function ($scope, $http, $rootScope, $mdDialog) {
+
+      $scope.history = [];
       $scope.initHistory = function () {
         var username = $rootScope.username;
         console.log(username);
-        //$http.get
-        // todo: connect to db
-        $scope.history = [
-          //hotelName = 'brandName'+'-branchName'
-          {
-            hotel_id: 1,
-            hotelName: "jingrui hotel xixi",
-            checkinDate: "some date",
-            checkoutDate: "some date",
-            price: 300,
-            status: "payment pending"
-          },
-          {
-            hotel_id: 2,
-            hotelName: "Hyatt UBC",
-            checkinDate: "some date",
-            checkoutDate: "some date",
-            price: 500,
-            status: "paid"
-          },
-          {
-            hotel_id: 3,
-            hotelName: "hotel 3",
-            checkinDate: "some date",
-            checkoutDate: "some date",
-            price: 600,
-            status: "done"
-          }
-        ];
+        // get all reservation of a customer
+        var url = $rootScope.url + "/reservations/customer/"
+            + $rootScope.username;
+        $http({
+          url: url,
+          method: "GET"
+        }).then(function (res) {
+          console.log(res);
+          $scope.history = res.data;
+          $scope.history.forEach(function (value) {
+            // get reservation status
+            if (value.payment_id != null && new Date(value.checkout_date)<new Date()) {
+              value.status = "finished";
+            } else if (value.payment_id != null) {
+              value.status = "paid";
+            } else {
+              value.status = "payment pending";
+            }
+
+            // get hotel info (hotel name...)
+            var hotelNameUrl = $rootScope.url + "/hotels/" + value.hotel_id;
+            $http({
+              url: hotelNameUrl,
+              method: "GET"
+            }).then(function (res) {
+              value.hotelInfo = res.data;
+            }, function (err) {
+              console.log(err);
+            });
+          })
+        }, function (err) {
+          console.log(err);
+        });
       };
 
       $scope.leaveReview = function (reservation) {
         if (reservation.status == "payment pending") {
-          // go to payment
+          // todo:go to payment
           console.log("payment pending");
         } else if (reservation.status == "paid") {
           // paid, not finished trip yet
@@ -131,7 +137,8 @@ angular.module('myApp.history', [
         //$http.post
         // todo: connect with db
         if ($scope.rating == undefined || $scope.comment == undefined) {
-          document.getElementById("reservationWarning").style.visibility = "visible";
+          document.getElementById(
+              "reservationWarning").style.visibility = "visible";
           return;
         }
 
@@ -155,7 +162,7 @@ angular.module('myApp.history', [
         });
 
         // check if user provides a tag
-        if($scope.tag==undefined){
+        if ($scope.tag == undefined) {
           console.log("didn't add any new tag");
           return;
         }

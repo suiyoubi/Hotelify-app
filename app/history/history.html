@@ -30,9 +30,9 @@
     </thead>
     <tbody>
     <tr ng-repeat="row in history" ng-click="leaveReview(row)">
-      <td>{{row.hotelName}}</td>
-      <td>{{row.checkinDate}}</td>
-      <td>{{row.checkoutDate}}</td>
+      <td>{{row.hotelInfo.brand_name}}-{{row.hotelInfo.branch_name}}</td>
+      <td>{{row.checkin_date}}</td>
+      <td>{{row.checkout_date}}</td>
       <td>{{row.price}}</td>
       <td>{{row.status}}</td>
     </tr>
