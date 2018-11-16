@@ -53,7 +53,7 @@ angular.module('myApp.accountInfo', [
     }
     $scope.maskCard = function(number) {
       // 1111 2222 3333 4444 to 1111-xxxx-xxxx-4444
-      return `${number.substring(0,4)}-XXXX-XXXX-${number.substring(11,15)}`;
+      return `${number.substring(0,4)}-XXXX-XXXX-${number.substring(12,16)}`;
     };
 
     $scope.isCustomer = function () {
