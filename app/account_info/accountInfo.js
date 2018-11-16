@@ -17,16 +17,18 @@ angular.module('myApp.accountInfo', [
     const userInfoUrl = `${url}/${userType}s/${username}`;
     const updateUrl = `${url}/${userType}s/update`;
     const getReviewsUrl = `${$rootScope.url}/reviews/username/${username}`;
+    const createCardUrl = $rootScope.url + "/cards/create";
+    const userCardUrl = `${url}/cards/${userType}/${username}`;
     $scope.addressUrl = `${url}/addresses`;
     $scope.address = {street:"", city:"", province:"", postal_code:"", country:""};
 
     $scope.cards = [
-      {card_number: '1234123412341234', card_holder_name:'haus', expire_date: '2008/01/01'},
-      {card_number: '4444333322221111', card_holder_name:'rex', expire_date: '2088/01/01'},
+      // {card_number: '1234123412341234', card_holder_name:'haus', expire_date: '2008/01/01'},
+      // {card_number: '4444333322221111', card_holder_name:'rex', expire_date: '2088/01/01'},
     ];
     $scope.reviews = [];
 
-    $scope.deleteCard = function(card) {
+    $scope.deleteCard = function(card, $index) {
       const confirm = $mdDialog.confirm()
         .title('Would you like to delete your card?')
         .textContent('Your selected credit card information will be deleted from Hotelify')
@@ -34,8 +36,19 @@ angular.module('myApp.accountInfo', [
         .cancel('I change my mind');
 
       $mdDialog.show(confirm).then(function() {
-        console.log('to delete card:', card);
-        // todo use DELETE
+        // delete card
+        var deleteCardUrl = $rootScope.url + "/cards/delete/" + card.card_number;
+        $http({
+          url: deleteCardUrl,
+          method: "DELETE"
+        }).then(function (res) {
+          console.log(res);
+          $scope.cards.splice($index,1);
+        }, function (err) {
+          // handle error here
+          console.log(err);
+        });
+
       });
     }
     $scope.maskCard = function(number) {
@@ -50,6 +63,7 @@ angular.module('myApp.accountInfo', [
     $scope.addNewCard = function () {
 
       const {card_number, card_holder_name, csv, expire_date} = $scope.newCard;
+      $scope.newCard.username = $rootScope.username;
 
       if(!card_holder_name || !card_number || !csv || !expire_date) {
         $rootScope.popUp('Please provide all information!');
@@ -63,12 +77,25 @@ angular.module('myApp.accountInfo', [
         $rootScope.popUp('csv is not valid!');
         return;
       }
+      //FIXME:something is wrong but i don't know what it is
+      var request = $scope.newCard;
+      request.expire_date = $scope.newCard.expire_date.toISOString();
+      console.log(createCardUrl, request);
 
-      //todo add the POST here
-      $rootScope.popUp('You have added your new card info!', 'Great', 'nice');
-      $scope.cards.push($scope.newCard);
-      $scope.newCard = null;
-    }
+      // add a new card
+      $http({
+        url: createCardUrl,
+        method: "POST",
+        param: request
+      }).then(function (res) {
+        $rootScope.popUp('You have added your new card info!', 'Great', 'nice');
+        $scope.cards.push($scope.newCard);
+        $scope.newCard = null;
+      }, function (err) {
+        // handle error here
+        console.log(err);
+      });
+    };
     $scope.retrieveUserInfo = function () {
 
       // get user info
@@ -93,7 +120,17 @@ angular.module('myApp.accountInfo', [
         $location.path('/login');
       });
 
-      // todo GET get card info
+      // get card info
+      $http({
+        url: userCardUrl,
+        method: "GET"
+      }).then(function (res) {
+        $scope.cards = res.data;
+        console.log($scope.cards);
+      }, function (err) {
+        // handle error here
+        console.log(err);
+      });
 
       //get reviews
       $http.get(getReviewsUrl).then(function (res) {
