@@ -53,19 +53,17 @@
     <thead>
     <tr>
       <th st-sort="hotelName">Hotel Name</th>
-      <th>checkin date</th>
-      <th>checkout date</th>
-      <th>total price</th>
-      <th>status</th>
+      <th>Check-in Date</th>
+      <th>Check-out date</th>
+      <th>Paid Price</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="row in upcomingReservations" ng-click="leaveReview(row)">
-      <td>{{row.brand_name}}-{{row.branch_name}}</td>
-      <td>{{row.checkin_date}}</td>
-      <td>{{row.checkout_date}}</td>
-      <td>{{row.price}}</td>
-      <td>{{row.status}}</td>
+      <td>{{row[0].brand_name}}-{{row[0].branch_name}}</td>
+      <td>{{row[0].checkin_date}}</td>
+      <td>{{row[0].checkout_date}}</td>
+      <td>{{row.amount}}</td>
     </tr>
     </tbody>
   </table>
@@ -80,19 +78,17 @@
     <thead>
     <tr>
       <th st-sort="hotelName">Hotel Name</th>
-      <th>checkin date</th>
-      <th>checkout date</th>
-      <th>total price</th>
-      <th>status</th>
+      <th>Check-in Date</th>
+      <th>Check-out Date</th>
+      <th>Paid Price</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="row in historyReservations" ng-click="leaveReview(row)">
-      <td>{{row.brand_name}}-{{row.branch_name}}</td>
-      <td>{{row.checkin_date}}</td>
-      <td>{{row.checkout_date}}</td>
+      <td>{{row[0].brand_name}}-{{row[0].branch_name}}</td>
+      <td>{{row[0].checkin_date}}</td>
+      <td>{{row[0].checkout_date}}</td>
       <td>{{row.price}}</td>
-      <td>{{row.status}}</td>
     </tr>
     </tbody>
   </table>

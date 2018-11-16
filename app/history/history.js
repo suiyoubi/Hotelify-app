@@ -36,30 +36,32 @@ angular.module('myApp.history', [
             }
           });
 
-          $scope.pendingReservationRooms = [];
-          $scope.upcomingReservationRooms = [];
-          $scope.historyReservationRooms = [];
-          // cat into three tables
-          $scope.allReservation.forEach(function (r) {
-            if (r.status == 'finished') $scope.historyReservationRooms.push(r);
-            if (r.status == 'paid') $scope.upcomingReservationRooms.push(r);
-            if (r.status == 'payment pending') $scope.pendingReservationRooms.push(r);
-          });
-
-          var groupBy = function (xs, key) {
-            return xs.reduce(function (rv, x) {
-              (rv[x[key]] = rv[x[key]] || []).push(x);
-              return rv;
-            }, {});
-          };
-          $scope.pendingReservations = Object.values(groupBy($scope.pendingReservationRooms, 'id'));
-          $scope.upcomingReservations = Object.values(groupBy($scope.upcomingReservationRooms, 'id'));
-          $scope.historyReservations = Object.values(groupBy($scope.historyReservationRooms, 'id'));
-
-          console.log($scope.pendingReservations);
+          $scope.refreshThreeLists();
         }, function (err) {
           console.log(err);
         });
+      };
+
+      $scope.refreshThreeLists = function() {
+        $scope.pendingReservationRooms = [];
+        $scope.upcomingReservationRooms = [];
+        $scope.historyReservationRooms = [];
+        // cat into three tables
+        $scope.allReservation.forEach(function (r) {
+          if (r.status == 'finished') $scope.historyReservationRooms.push(r);
+          if (r.status == 'paid') $scope.upcomingReservationRooms.push(r);
+          if (r.status == 'payment pending') $scope.pendingReservationRooms.push(r);
+        });
+
+        var groupBy = function (xs, key) {
+          return xs.reduce(function (rv, x) {
+            (rv[x[key]] = rv[x[key]] || []).push(x);
+            return rv;
+          }, {});
+        };
+        $scope.pendingReservations = Object.values(groupBy($scope.pendingReservationRooms, 'id'));
+        $scope.upcomingReservations = Object.values(groupBy($scope.upcomingReservationRooms, 'id'));
+        $scope.historyReservations = Object.values(groupBy($scope.historyReservationRooms, 'id'));
       };
 
       $scope.calculatePrice = function (reservation) {
@@ -77,8 +79,12 @@ angular.module('myApp.history', [
           templateUrl: 'payment.tmpl.html',
           parent: angular.element(document.body),
           clickOutsideToClose: true,
-          locals: {reservation},
+          locals: {reservation, reservationId: reservation[0].id},
           fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+        }).then(function () {
+          $scope.initHistory();
+        }, function() {
+          $scope.initHistory();
         });
       }
       $scope.leaveReview = function (reservation) {
@@ -102,7 +108,7 @@ angular.module('myApp.history', [
         }
       };
     })
-  .controller('paymentController', function ($rootScope, $scope, $http, $mdDialog, reservation) {
+  .controller('paymentController', function ($rootScope, $scope, $http, $mdDialog, reservation, reservationId) {
 
     $scope.cancel = function () {
       console.log('cancel');
@@ -113,9 +119,22 @@ angular.module('myApp.history', [
         $rootScope.popUp('You have not selected any card');
         return;
       }
-      ;
-      // todo MAKE THE REAL PAYMENT AND CHANGE THE THREE LISTS
-      $rootScope.popUp('success');
+
+      const paymentUrl = `${$rootScope.url}/payments/reservation/${reservationId}`;
+      $http.post(paymentUrl, {
+        amount: $scope.calculateTotalPrice(),
+        coupon_id: $scope.selectedCoupon ? $scope.selectedCoupon.id : null,
+        card_number: $scope.selectedCard.card_number,
+      }).then(function (res) {
+        //success
+        $mdDialog.cancel();
+        $rootScope.popUp('You have successfully paid your reservation', 'Excellent');
+      }, (function (err) {
+        $rootScope.popUp('Your payment dis not go through, please try with another card');
+      }));
+
+
+
     }
     $scope.selectCard = function (card) {
       $scope.selectedCard = card;
@@ -124,11 +143,13 @@ angular.module('myApp.history', [
       $scope.selectedCoupon = coupon;
     };
     $scope.calculateDiscountType = function (coupon) {
+      if(!coupon) return 'Not Available';
       return `${coupon.value} ${coupon.discount_type} off`;
     };
     $scope.maskCard = function (number) {
       // 1111 2222 3333 4444 to 1111-xxxx-xxxx-4444
-      return `${number.substring(0, 4)}-XXXX-XXXX-${number.substring(11, 15)}`;
+      if(!number) return `XXXX-XXXX-XXXX-XXXX`;
+      return `${number.substring(0, 4)}-XXXX-XXXX-${number.substring(12, 16)}`;
     };
     $scope.calculateTotalPrice = function () {
       let beforeCouponPrice = 0;
