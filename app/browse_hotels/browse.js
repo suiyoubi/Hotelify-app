@@ -122,12 +122,6 @@ angular.module('myApp.browse', [
     console.log(err);
   });
 
-  $scope.makeReservation = function(){
-    // redirect to reservation page if successed
-    $location.path("/quick-book");
-    $mdDialog.cancel();
-  };
-
   $scope.cancel = function() {
     console.log('cancel');
     $mdDialog.cancel();
