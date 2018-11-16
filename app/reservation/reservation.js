@@ -21,7 +21,6 @@ angular.module('myApp.reservation', [
           value.address = value.street + ", " + value.city + ", " + value.province;
         }
       });
-      console.log($scope.hotels);
     };
 
     $scope.backToQuickBook = function() {
@@ -36,7 +35,6 @@ angular.module('myApp.reservation', [
 
       storageRef.getDownloadURL().then(function (url) {
         $scope.imageUrl = url;
-        console.log(url);
 
         $mdDialog.show({
           controller: 'makeReservationController',
@@ -69,7 +67,10 @@ angular.module('myApp.reservation', [
       $scope.roomType = {};
       $scope.displayTags = [];
       $scope.url = url;
+      $scope.checkin_date = $rootScope.reservation.checkin_date;
+      $scope.checkout_date = $rootScope.reservation.checkout_date;
 
+      $scope.nights = $rootScope.reservation.nights;
       const hotelRoomsAvaUrl = `${$rootScope.url}/hotels/${hotel.id}/availabilities`;
 
       $http.get(hotelRoomsAvaUrl, {
@@ -125,7 +126,7 @@ angular.module('myApp.reservation', [
       };
     };
 
-    $scope.makeReservation = function () {
+    $scope.sendServationSequenceRequest = function() {
 
       const {firstRoom, restRooms} = $scope.findAllRoomsForReservation();
 
@@ -155,7 +156,7 @@ angular.module('myApp.reservation', [
           $http.post(reservationUrl, sequencePostBody).then(function (res) {
             console.log('part-reservation finished');
           }, function (err) {
-            console.error('create reservation failed');
+            console.error('create reservation failed', err);
           });
         });
       }, function (err) {
@@ -166,9 +167,28 @@ angular.module('myApp.reservation', [
         $mdDialog.alert()
           .clickOutsideToClose(true)
           .title('Success')
-          .textContent('Your reservation has been proceed!')
+          .textContent('Your reservation has been processed!')
           .ok('OK')
-      )
+      );
+    };
+    $scope.makeReservation = function () {
+
+      if($scope.selectedRoomTypes.length == 0) {
+        $rootScope.popUp('You have not selected any room!');
+        return;
+      }
+
+      var confirm = $mdDialog.confirm()
+        .title('Would you like to make your reservation?')
+        .textContent('You can change your reservation details later as well')
+        .ok('Confirm')
+        .cancel('Let Me Double Check');
+
+      $mdDialog.show(confirm).then(function() {
+
+        $scope.sendServationSequenceRequest();
+      });
+
     };
 
     $scope.addRoom = function (room) {
@@ -179,11 +199,6 @@ angular.module('myApp.reservation', [
       if ($scope.selectedRoomTypes.indexOf(room) == -1) {
         $scope.selectedRoomTypes.push(room);
       }
-      ;
-
-      $scope.roomSelected = room;
-      document.getElementById("reservationWarning").style.visibility = "hidden";
-      console.log($scope.roomSelected);
     };
 
     $scope.removeRoom = function (room) {
@@ -199,7 +214,7 @@ angular.module('myApp.reservation', [
     $scope.calculateTotalPrice = function () {
       var totalPrice = 0;
       $scope.selectedRoomTypes.forEach(({price, addedCount}) => {
-        totalPrice += price * addedCount
+        totalPrice += price * addedCount * $scope.nights;
       });
       return totalPrice;
     }

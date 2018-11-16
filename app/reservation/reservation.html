@@ -51,7 +51,7 @@ Use of this source code is governed by an MIT-style license that can be foundin 
 <form ng-cloak>
   <md-toolbar>
     <div class="md-toolbar-tools">
-      <h2>{{hotelInfo.brand_name}} {{hotelInfo.branch_name}}</h2>
+      <h2>{{hotelInfo.brand_name}} {{hotelInfo.branch_name}} | {{checkin_date | date:shortDate}} - {{checkout_date | date:shortDate}}</h2>
     </div>
   </md-toolbar>
 
@@ -71,7 +71,7 @@ Use of this source code is governed by an MIT-style license that can be foundin 
 
       <img ng-show="url" ng-src="{{url}}" alt="Description" />
       <md-tabs>
-        <md-tab label="rooms">
+        <md-tab label="Available Rooms">
           <table class="table table-striped">
             <thead>
             <tr>
@@ -89,7 +89,7 @@ Use of this source code is governed by an MIT-style license that can be foundin 
               <td>{{room.type_name}}</td>
               <td>{{room.count}}</td>
               <td>{{room.occupancy}} people</td>
-              <td>{{room.price}}</td>
+              <td>${{room.price}}</td>
               <td>{{room.description}}</td>
               <td>{{room.addedCount}}</td>
               <td>
@@ -107,7 +107,7 @@ Use of this source code is governed by an MIT-style license that can be foundin 
               <th>Room type</th>
               <th>Quantity</th>
               <th>Price</th>
-              <th>Total Price</th>
+              <th>Total Price (x {{nights}} {{nights > 1 ? 'Nights' : 'Night'}})</th>
             </tr>
             </thead>
             <tbody>
@@ -115,11 +115,11 @@ Use of this source code is governed by an MIT-style license that can be foundin 
               <td>{{room.type_name}}</td>
               <td>{{room.addedCount}}</td>
               <td>{{room.price}}</td>
-              <td>{{room.price * room.addedCount}}</td>
+              <td>{{room.price * room.addedCount * nights}}</td>
             </tr>
             </tbody>
           </table>
-          Your total price will be {{calculateTotalPrice()}}, don't forget to use your coupon when you pay!
+          Your total price will be ${{calculateTotalPrice()}}, don't forget to use your coupons when you pay!
         </md-tab>
       </md-tabs>
     </div>

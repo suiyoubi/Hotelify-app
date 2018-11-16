@@ -19,13 +19,13 @@ angular.module('myApp.quickBook', [
     $scope.inputCheck = function(request) {
 
       if(!request) {
-        $rootScope.popUp('Please input booking information');
+        $rootScope.popUp('Please specify booking information');
         return false;
       } else if(!request.rooms) {
-        $rootScope.popUp('Please input how many rooms you want');
+        $rootScope.popUp('Please specify how many rooms you wanna book');
         return false;
       } else if(!request.checkin_date || !request.checkout_date || request.checkin_date > request.checkout_date) {
-        $rootScope.popUp('Please input correct date information');
+        $rootScope.popUp('Please specify correct date information');
         return false;
       }
 
@@ -46,8 +46,8 @@ angular.module('myApp.quickBook', [
         console.log(res);
 
         if(res.data.length == 0) {
-          $rootScope.popUp('Sorry there is no hotel satisfy your need on Hotelify. ' +
-            'Please try to book for less rooms or choose other date range.');
+          $rootScope.popUp('Sorry there is no hotel that satisfies your needs on Hotelify. ' +
+            'Please change your reservation details.');
           $scope.request = {};
           return;
         }
@@ -57,12 +57,12 @@ angular.module('myApp.quickBook', [
         $rootScope.reservation.hotels = res.data;
         $rootScope.reservation.checkin_date = $scope.request.checkin_date;
         $rootScope.reservation.checkout_date = $scope.request.checkout_date;
+        $rootScope.reservation.nights =
+          Math.floor(($scope.request.checkout_date - $scope.request.checkin_date) / (1000*60*60*24));
 
         $location.path('/reservation');
       }, function (err) {
         console.error(err);
-      })
-      //todo send http request
-     console.log($scope.request);
+      });
     };
   });
