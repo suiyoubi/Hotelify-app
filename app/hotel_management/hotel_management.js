@@ -83,7 +83,7 @@ angular.module('myApp.hotelManagement', [
         const deleteRoomTypeUrl = `${$rootScope.url}/room-types/${roomType.id}`;
 
         $http.delete(deleteRoomTypeUrl).then(function (res) {
-          $rootScope.popUp("successfully delete this row", 'Success');
+          $rootScope.popUp("successfully delete this room type", 'Success');
 
           const index = $scope.roomTypes.indexOf(roomType);
 

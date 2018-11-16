@@ -10,43 +10,59 @@ angular.module('myApp.quickBook', [
       controller: 'quickBookController'
     });
   }])
-  .controller('quickBookController', function ($rootScope, $scope, $mdDialog, $location) {
+  .controller('quickBookController', function ($rootScope, $scope, $mdDialog, $location, $http) {
 
-    $scope.request = { interval: {} };
-    $scope.request.interval.startDate = new Date();
-    $scope.request.interval.endDate = new Date();
+    $scope.request = {};
+    $scope.request.startDate = new Date();
+    $scope.request.endDate = new Date();
 
+    $scope.inputCheck = function(request) {
+
+      if(!request) {
+        $rootScope.popUp('Please specify booking information');
+        return false;
+      } else if(!request.rooms) {
+        $rootScope.popUp('Please specify how many rooms you wanna book');
+        return false;
+      } else if(!request.checkin_date || !request.checkout_date || request.checkin_date > request.checkout_date) {
+        $rootScope.popUp('Please specify correct date information');
+        return false;
+      }
+
+      return true;
+    }
     $scope.bookRequest = function () {
-      //todo send http request
-     console.log($scope.request);
-     $rootScope.hotels = [
-       { address_id: "3",
-         branch_name: "UBC",
-         brand_name: "Walter Gage",
-         city: "Vancouver",
-         country: "Canada",
-         description: "this is a good one",
-         id: "1",
-         phone_number: "6048221020",
-         postal_code: "V6T 1K2",
-         property_class: "1",
-         province: "British Columbia",
-         street: "5959 Student Union Blvd"},
-       { address_id: "30",
-         branch_name: "Ponderosa Oak house 7-002",
-         brand_name: "JR Inc. Co. Ltd.",
-         city: "Vancouver",
-         country: "Canada",
-         description: "this is a better one",
-         id: "3",
-         phone_number: "7786814260",
-         postal_code: "V6T 1Z4",
-         property_class: "5",
-         province: "British Columbia",
-         street: "2075 West Mall"}
-     ];
-     $rootScope.checkinDate = $scope.request.interval.startDate;
-     $rootScope.checkoutDate = $scope.request.interval.endDate;
-     $location.path('/reservation');
+
+      const request = $scope.request;
+
+      if(!$scope.inputCheck(request)) {
+        return;
+      }
+
+      const checkAvailabilitiesUrl = `${$rootScope.url}/hotels/availabilities`;
+      $http.get(checkAvailabilitiesUrl, {
+        params: $scope.request
+      }).then(function (res) {
+        console.log(res);
+
+        if(res.data.length == 0) {
+          $rootScope.popUp('Sorry there is no hotel that satisfies your needs on Hotelify. ' +
+            'Please change your reservation details.');
+          $scope.request = {};
+          return;
+        }
+
+        $rootScope.reservation = {};
+
+        $rootScope.reservation.hotels = res.data;
+        $rootScope.reservation.checkin_date = $scope.request.checkin_date;
+        $rootScope.reservation.checkout_date = $scope.request.checkout_date;
+        $rootScope.reservation.nights =
+          Math.floor(($scope.request.checkout_date - $scope.request.checkin_date) / (1000*60*60*24));
+
+        $location.path('/reservation');
+      }, function (err) {
+        console.error(err);
+      });
     };
   });

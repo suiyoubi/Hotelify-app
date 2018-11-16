@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>Reservation</title>
 </head>
 <body>
 
@@ -19,6 +19,11 @@
 <div data-ng-init="initHotelInfo()"></div>
 
 <div ng-controller="reservationController">
+  <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="">
+    <b> Hotelify has found {{hotels.length}} hotels that perfectly match your requirement!</b>
+    <button ng-click="backToQuickBook()" class="btn btn-primary">Back</button>
+  </md-content>
+
   <table st-table="rowCollection" class="table table-striped">
     <thead>
     <tr>
@@ -46,7 +51,7 @@ Use of this source code is governed by an MIT-style license that can be foundin 
 <form ng-cloak>
   <md-toolbar>
     <div class="md-toolbar-tools">
-      <h2>{{hotelInfo.brand_name}} {{hotelInfo.branch_name}}</h2>
+      <h2>{{hotelInfo.brand_name}} {{hotelInfo.branch_name}} | {{checkin_date | date:shortDate}} - {{checkout_date | date:shortDate}}</h2>
     </div>
   </md-toolbar>
 
@@ -56,53 +61,65 @@ Use of this source code is governed by an MIT-style license that can be foundin 
         <h3><md-icon md-font-icon="material-icons">home</md-icon>{{hotelInfo.brand_name}} - {{hotelInfo.branch_name}}</h3>
         <p><md-icon md-font-icon="material-icons">place</md-icon>{{hotelInfo.address}}</p>
       </div>
+      <md-chips ng-model="tags" name="fruitName" readonly="true"
+                md-removable="false">
+        <md-chip-template>
+          <strong>{{$chip.tag_name}}</strong>
+          <em>({{$chip.popularity}})</em>
+        </md-chip-template>
+      </md-chips>
 
-      <md-chips ng-model="displayTags" readonly="true"></md-chips>
-
+      <img ng-show="url" ng-src="{{url}}" alt="Description" />
       <md-tabs>
-        <md-tab label="rooms">
+        <md-tab label="Available Rooms">
           <table class="table table-striped">
             <thead>
             <tr>
-              <th>room type</th>
-              <th>occupancy</th>
-              <th>nightly price</th>
-              <th>description</th>
-              <th>add</th>
+              <th>Room type</th>
+              <th>Available number</th>
+              <th>Occupancy</th>
+              <th>Nightly price</th>
+              <th>Description</th>
+              <th>Added number</th>
+              <th>Add to Reservation</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="room in roomType">
               <td>{{room.type_name}}</td>
-              <td>{{room.occupancy}}</td>
-              <td>{{room.price}}</td>
+              <td>{{room.count}}</td>
+              <td>{{room.occupancy}} people</td>
+              <td>${{room.price}}</td>
               <td>{{room.description}}</td>
-              <td><md-icon md-font-icon="material-icons" ng-click="addRoom(room)">add</md-icon></td>
+              <td>{{room.addedCount}}</td>
+              <td>
+                <md-icon md-font-icon="material-icons" ng-click="addRoom(room)">add</md-icon>
+                <md-icon md-font-icon="material-icons" ng-click="removeRoom(room)">remove</md-icon>
+              </td>
             </tr>
             </tbody>
           </table>
         </md-tab>
-        <md-tab label="selected rooms">
+        <md-tab label="Final Reservation Rooms">
           <table class="table table-striped">
             <thead>
             <tr>
-              <th>room type</th>
-              <th>occupancy</th>
-              <th>nightly price</th>
-              <th>description</th>
-              <th>remove</th>
+              <th>Room type</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Total Price (x {{nights}} {{nights > 1 ? 'Nights' : 'Night'}})</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-              <td>{{roomSelected.type_name}}</td>
-              <td>{{roomSelected.occupancy}}</td>
-              <td>{{roomSelected.price}}</td>
-              <td>{{roomSelected.description}}</td>
-              <td><md-icon md-font-icon="material-icons" ng-click="removeRoom(room)">delete</md-icon></td>
+            <tr ng-repeat="room in selectedRoomTypes">
+              <td>{{room.type_name}}</td>
+              <td>{{room.addedCount}}</td>
+              <td>{{room.price}}</td>
+              <td>{{room.price * room.addedCount * nights}}</td>
             </tr>
             </tbody>
           </table>
+          Your total price will be ${{calculateTotalPrice()}}, don't forget to use your coupons when you pay!
         </md-tab>
       </md-tabs>
     </div>
@@ -110,7 +127,7 @@ Use of this source code is governed by an MIT-style license that can be foundin 
   </md-dialog-content>
 
   <md-dialog-actions layout="row">
-    <p id="reservationWarning">please select a room</p>
+    <p id="reservationWarning">Please Select Your Rooms</p>
     <span flex></span>
     <md-button ng-click="makeReservation()">
       Make A Reservation
