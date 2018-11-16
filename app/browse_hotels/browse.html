@@ -11,7 +11,8 @@
   <md-nav-bar md-no-ink-bar="disableInkBar" md-selected-nav-item="currentNavItem"
               nav-bar-aria-label="navigation links">
     <md-nav-item ng-repeat="item in navItems" md-nav-click="goto(item.value)" name="{{item.value}}">
-      <md-icon md-font-icon="material-icons">{{item.icon}}</md-icon>{{item.label}}
+      <md-icon md-font-icon="material-icons">{{item.icon}}</md-icon>
+      {{item.label}}
     </md-nav-item>
   </md-nav-bar>
 </div>
@@ -56,55 +57,75 @@ Copyright 2018 Google Inc. All Rights Reserved.
 Use of this source code is governed by an MIT-style license that can be foundin the LICENSE file at http://material.angularjs.org/HEAD/license.
 -->
 
-<script type="text/ng-template" id="browse.tmpl.html"><md-dialog aria-label="Hotel Detail" class="fullScreenDialog">
-<form ng-cloak>
-  <md-toolbar>
-    <div class="md-toolbar-tools">
-      <h2>{{hotelInfo.brand_name}} {{hotelInfo.branch_name}}</h2>
-    </div>
-  </md-toolbar>
+<script type="text/ng-template" id="browse.tmpl.html">
+  <md-dialog
+      aria-label="Hotel Detail" class="fullScreenDialog">
+    <form ng-cloak>
+      <md-toolbar>
+        <div class="md-toolbar-tools">
+          <h2>{{hotelInfo.brand_name}} {{hotelInfo.branch_name}}</h2>
+        </div>
+      </md-toolbar>
 
-  <md-dialog-content>
-    <img ng-show="url" ng-src="{{url}}" alt="Description" />
-    <div ng-show="!url"><h4>No Image Provided</h4></div>
-    <div class="md-dialog-content">
-      <div id="hotelInfo">
-        <h3><md-icon md-font-icon="material-icons">home</md-icon>{{hotelInfo.brand_name}} - {{hotelInfo.branch_name}}</h3>
-        <p><md-icon md-font-icon="material-icons">place</md-icon>{{hotelInfo.address}}</p>
-        <p><md-icon md-font-icon="material-icons">description</md-icon>{{hotelInfo.description}}</p>
-      </div>
+      <md-dialog-content>
+        <img ng-show="url" ng-src="{{url}}" alt="Description"/>
+        <div ng-show="!url"><h4>No Image Provided</h4></div>
+        <div class="md-dialog-content">
+          <div id="hotelInfo">
+            <h3>
+              <md-icon md-font-icon="material-icons">home</md-icon>
+              {{hotelInfo.brand_name}} - {{hotelInfo.branch_name}}
+            </h3>
+            <p>
+              <md-icon md-font-icon="material-icons">place</md-icon>
+              {{hotelInfo.address}}
+            </p>
+            <p>
+              <md-icon md-font-icon="material-icons">description</md-icon>
+              {{hotelInfo.description}}
+            </p>
+          </div>
 
-      <div>
-        <md-chips ng-model="displayTags" md-removable="false" readonly="true"></md-chips>
-      </div>
+          <div>
+            <md-chips ng-model="displayTags" md-removable="false" readonly="true"></md-chips>
+          </div>
 
-      <table st-table="rowCollection" class="table table-striped">
-        <tbody>
-        <tr ng-repeat="review in reviews">
-          <td>
-            <md-icon md-font-icon="material-icons">account_box</md-icon>{{review.username}}<br>
-            <md-icon md-font-icon="material-icons">star</md-icon>{{review.rating}}
-          </td>
-          <td>{{review.comment}}</td>
-        </tr>
-        </tbody>
-      </table>
+          <md-tabs md-dynamic-height="" md-border-bottom="">
+            <md-tab label="Hotelify comments">
+              <table st-table="rowCollection" class="table table-striped">
+                <tbody>
+                <tr ng-repeat="review in reviews">
+                  <td>
+                    <md-icon md-font-icon="material-icons">account_box</md-icon>
+                    {{review.username}}<br>
+                    <md-icon md-font-icon="material-icons">star</md-icon>
+                    {{review.rating}}
+                  </td>
+                  <td>{{review.comment}}</td>
+                </tr>
+                </tbody>
+              </table>
+            </md-tab>
+            <md-tab label="yelp comments">
+              <p>displaying yelp comments</p>
+            </md-tab>
+          </md-tabs>
 
-    </div>
+        </div>
 
-  </md-dialog-content>
+      </md-dialog-content>
 
-  <md-dialog-actions layout="row">
-    <span flex></span>
-    <md-button ng-click="makeReservation()">
-      Make A Reservation
-    </md-button>
-    <md-button ng-click="cancel()">
-      Back
-    </md-button>
-  </md-dialog-actions>
-</form>
-</md-dialog>
+      <md-dialog-actions layout="row">
+        <span flex></span>
+        <md-button ng-click="makeReservation()">
+          Make A Reservation
+        </md-button>
+        <md-button ng-click="cancel()">
+          Back
+        </md-button>
+      </md-dialog-actions>
+    </form>
+  </md-dialog>
 </script>
 </body>
 
