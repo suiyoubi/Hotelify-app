@@ -25,14 +25,14 @@
       <th>checkin date</th>
       <th>checkout date</th>
       <th>total price</th>
-      <th>payment</th>
+      <th>status</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="row in history" ng-click="leaveReview(row)">
-      <td>{{row.hotelName}}</td>
-      <td>{{row.checkinDate}}</td>
-      <td>{{row.checkoutDate}}</td>
+      <td>{{row.hotelInfo.brand_name}}-{{row.hotelInfo.branch_name}}</td>
+      <td>{{row.checkin_date}}</td>
+      <td>{{row.checkout_date}}</td>
       <td>{{row.price}}</td>
       <td>{{row.status}}</td>
     </tr>
@@ -46,7 +46,7 @@ Use of this source code is governed by an MIT-style license that can be foundin 
 
 <script type="text/ng-template" id="leaveReview.tmpl.html">
 
-<div data-ng-init="retreiveTag()"></div>
+<div data-ng-init="retrieveTag()"></div>
 
 <md-dialog aria-label="Hotel Detail" class="fullScreenDialog">
   <form name="commentForm">
@@ -57,6 +57,7 @@ Use of this source code is governed by an MIT-style license that can be foundin 
     </md-toolbar>
 
     <md-input-container class = "md-block" style="margin-top: 50px">
+      <md-icon md-font-icon="material-icons">comment</md-icon>
       <label>Comments</label>
       <textarea md-maxlength = "300" name="comment" ng-model = "comment"></textarea>
       <div ng-messages = "commentForm.comment.$error">
@@ -67,6 +68,7 @@ Use of this source code is governed by an MIT-style license that can be foundin 
 
     <div layout="row" >
       <md-input-container max-width="30%">
+        <md-icon md-font-icon="material-icons">star</md-icon>
         <label>Ratings (0-5)</label>
         <md-select ng-model="rating" required="">
           <md-option value="5">5</md-option>
@@ -79,9 +81,8 @@ Use of this source code is governed by an MIT-style license that can be foundin 
       </md-input-container>
     </div>
 
-    <md-chips ng-model="displayTags" md-removable="true" readonly="true" md-on-remove="onModelChange($chip)"></md-chips>
-
     <md-input-container class = "md-block" style="margin-top: 50px">
+      <md-icon md-font-icon="material-icons">label</md-icon>
       <label>Add a tag</label>
       <textarea md-maxlength = "20" name="tag" ng-model = "tag"></textarea>
       <div ng-messages = "commentForm.tag.$error">
@@ -90,7 +91,13 @@ Use of this source code is governed by an MIT-style license that can be foundin 
       </div>
     </md-input-container>
 
+    <div>
+      <p>Popular tags</p>
+      <md-chips ng-model="displayTags" md-removable="true" readonly="true" md-on-remove="onModelChange($chip)" flex="90%"></md-chips>
+    </div>
+
     <md-dialog-actions layout="row">
+      <p id="reservationWarning">please fill out comment and rating</p>
       <span flex></span>
       <md-button ng-click="submit(comment, rating)">
         Submit
