@@ -18,7 +18,7 @@ angular.module('myApp.reservation', [
       $scope.hotels = $rootScope.reservation.hotels;
       $scope.hotels.forEach(function (value) {
         if (value.address_id != null) {
-          value.address = value.street + ", " + value.city + ", " + value.province;
+          value.address = value.street + ", " + value.city + ", " + value.province + ", " + value.country;
         }
       });
     };

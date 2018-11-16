@@ -13,6 +13,10 @@ angular.module('myApp.hotelManagement', [
   }])
   .controller('hotelManagementController', function ($scope, $http, $rootScope, $mdDialog) {
 
+    $http.get(`${$rootScope.url}/hotels`).then(function (res) {
+      $scope.hotels = res.data;
+    });
+
     $scope.searchHotel = function () {
 
       // GET api/hotels/
