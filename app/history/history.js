@@ -1,55 +1,86 @@
+'use strict';
+
 angular.module('myApp.history', [
   'ngMaterial',
   'ngMessages',
   'ngRoute'])
-.config(['$routeProvider', function ($routeProvider) {
-  $routeProvider.when('/history', {
-    templateUrl: 'history/history.html',
-    controller: 'historyController'
-  });
-}])
-.controller('historyController',
+  .config(['$routeProvider', function ($routeProvider) {
+    $routeProvider.when('/history', {
+      templateUrl: 'history/history.html',
+      controller: 'historyController'
+    });
+  }])
+  .controller('historyController',
     function ($scope, $http, $rootScope, $mdDialog) {
 
       $scope.history = [];
       $scope.initHistory = function () {
         var username = $rootScope.username;
-        console.log(username);
         // get all reservation of a customer
         var url = $rootScope.url + "/reservations/customer/"
-            + $rootScope.username;
+          + $rootScope.username;
         $http({
           url: url,
           method: "GET"
         }).then(function (res) {
           console.log(res);
-          $scope.history = res.data;
-          $scope.history.forEach(function (value) {
+          $scope.allReservation = res.data;
+          $scope.allReservation.forEach(function (value) {
             // get reservation status
-            if (value.payment_id != null && new Date(value.checkout_date)<new Date()) {
+            if (value.payment_id != null && new Date(value.checkout_date) < new Date()) {
               value.status = "finished";
             } else if (value.payment_id != null) {
               value.status = "paid";
             } else {
               value.status = "payment pending";
             }
+          });
 
-            // get hotel info (hotel name...)
-            var hotelNameUrl = $rootScope.url + "/hotels/" + value.hotel_id;
-            $http({
-              url: hotelNameUrl,
-              method: "GET"
-            }).then(function (res) {
-              value.hotelInfo = res.data;
-            }, function (err) {
-              console.log(err);
-            });
-          })
+          $scope.pendingReservationRooms = [];
+          $scope.upcomingReservationRooms = [];
+          $scope.historyReservationRooms = [];
+          // cat into three tables
+          $scope.allReservation.forEach(function (r) {
+            if (r.status == 'finished') $scope.historyReservationRooms.push(r);
+            if (r.status == 'paid') $scope.upcomingReservationRooms.push(r);
+            if (r.status == 'payment pending') $scope.pendingReservationRooms.push(r);
+          });
+
+          var groupBy = function (xs, key) {
+            return xs.reduce(function (rv, x) {
+              (rv[x[key]] = rv[x[key]] || []).push(x);
+              return rv;
+            }, {});
+          };
+          $scope.pendingReservations = Object.values(groupBy($scope.pendingReservationRooms, 'id'));
+          $scope.upcomingReservations = Object.values(groupBy($scope.upcomingReservationRooms, 'id'));
+          $scope.historyReservations = Object.values(groupBy($scope.historyReservationRooms, 'id'));
+
+          console.log($scope.pendingReservations);
         }, function (err) {
           console.log(err);
         });
       };
 
+      $scope.calculatePrice = function (reservation) {
+        var totalPrice = 0;
+        reservation.forEach(r => {
+          totalPrice += Number(r.price);
+        });
+        return totalPrice;
+      };
+
+      $scope.paymentSubPage = function (reservation) {
+
+        $mdDialog.show({
+          controller: 'paymentController',
+          templateUrl: 'payment.tmpl.html',
+          parent: angular.element(document.body),
+          clickOutsideToClose: true,
+          locals: {reservation},
+          fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+        });
+      }
       $scope.leaveReview = function (reservation) {
         if (reservation.status == "payment pending") {
           // todo:go to payment
@@ -71,7 +102,82 @@ angular.module('myApp.history', [
         }
       };
     })
-.controller('leaveReviewController',
+  .controller('paymentController', function ($rootScope, $scope, $http, $mdDialog, reservation) {
+
+    $scope.cancel = function () {
+      console.log('cancel');
+      $mdDialog.cancel();
+    };
+    $scope.makePayment = function () {
+      if (!$scope.selectedCard) {
+        $rootScope.popUp('You have not selected any card');
+        return;
+      }
+      ;
+      // todo MAKE THE REAL PAYMENT AND CHANGE THE THREE LISTS
+      $rootScope.popUp('success');
+    }
+    $scope.selectCard = function (card) {
+      $scope.selectedCard = card;
+    }
+    $scope.selectCoupon = function (coupon) {
+      $scope.selectedCoupon = coupon;
+    };
+    $scope.calculateDiscountType = function (coupon) {
+      return `${coupon.value} ${coupon.discount_type} off`;
+    };
+    $scope.maskCard = function (number) {
+      // 1111 2222 3333 4444 to 1111-xxxx-xxxx-4444
+      return `${number.substring(0, 4)}-XXXX-XXXX-${number.substring(11, 15)}`;
+    };
+    $scope.calculateTotalPrice = function () {
+      let beforeCouponPrice = 0;
+      reservation.forEach(function (room) {
+        beforeCouponPrice += room.price * $scope.nights;
+      });
+      if ($scope.selectedCoupon) {
+        if ($scope.selectedCoupon.discount_type == '$') {
+          return (beforeCouponPrice - $scope.selectedCoupon.value) > 0 ? (beforeCouponPrice - $scope.selectedCoupon.value) : 0;
+        } else {
+          return beforeCouponPrice * 0.1 / 10 * (100 - $scope.selectedCoupon.value);
+        }
+      }
+      return beforeCouponPrice;
+    };
+
+    $scope.allRooms = reservation;
+
+    const availableRoom = reservation;
+
+    $http.get(`${$rootScope.url}/cards/customer/${$rootScope.username}`).then(function (res) {
+      $scope.cards = res.data;
+    }, function (err) {
+      console.error(err);
+    });
+    $http.get(`${$rootScope.url}/coupons/customer/${$rootScope.username}/hotel/${availableRoom[0].hotel_id}`).then(function (res) {
+      $scope.coupons = res.data;
+    }, function (err) {
+      console.error(err);
+    });
+
+    $scope.roomType = {};
+
+    console.log(availableRoom);
+
+    $scope.nights = (new Date(availableRoom[0].checkout_date) - new Date(availableRoom[0].checkin_date)) / (1000 * 60 * 60 * 24);
+    availableRoom.forEach(function (value) {
+
+      if ($scope.roomType[value.room_type_id] == undefined) {
+        $scope.roomType[value.room_type_id] = value;
+        $scope.roomType[value.room_type_id].count = 1;
+        $scope.roomType[value.room_type_id].addedCount = 0;
+        //$scope.roomType[value.room_type_id].nights = (new Date(value.checkout_date) - new Date(value.checkin_date)) / (1000*60*60*24);
+      } else {
+        $scope.roomType[value.room_type_id].count += 1;
+      }
+    });
+  })
+  .controller('leaveReviewController',
     function ($rootScope, $scope, $mdDialog, $http, reservation) {
       $scope.hotel_id = reservation.hotel_id; // todo: check format
       this.comment = "";
@@ -89,7 +195,7 @@ angular.module('myApp.history', [
           $scope.currentTags = res.data;
           $scope.displayTags = [];
           var cycle = $scope.currentTags.length > 3 ? 3
-              : $scope.currentTags.length;
+            : $scope.currentTags.length;
           for (var i = 0; i < cycle; i++) {
             $scope.displayTags[i] = $scope.currentTags[i].tag_name;
           }
@@ -138,7 +244,7 @@ angular.module('myApp.history', [
         // todo: connect with db
         if ($scope.rating == undefined || $scope.comment == undefined) {
           document.getElementById(
-              "reservationWarning").style.visibility = "visible";
+            "reservationWarning").style.visibility = "visible";
           return;
         }
 
@@ -222,3 +328,5 @@ angular.module('myApp.history', [
       }
     })
 ;
+
+
