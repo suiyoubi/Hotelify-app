@@ -17,6 +17,7 @@ angular.module('myApp.accountInfo', [
     const userInfoUrl = `${url}/${userType}s/${username}`;
     const updateUrl = `${url}/${userType}s/update`;
     const getReviewsUrl = `${$rootScope.url}/reviews/username/${username}`;
+    const getCouponUrl = `${$rootScope.url}/coupons/customer/${username}`;
     $scope.addressUrl = `${url}/addresses`;
     $scope.address = {street:"", city:"", province:"", postal_code:"", country:""};
 
@@ -94,6 +95,22 @@ angular.module('myApp.accountInfo', [
       });
 
       // todo GET get card info
+
+      // get coupon info
+      $http.get(getCouponUrl).then(function (res) {
+        $scope.coupons = res.data;
+        console.log(getCouponUrl);
+        $scope.coupons.forEach(function (value) {
+          if(value.discount_type=="%"){
+            value.displayValue = value.value + value.discount_type;
+          }else{
+            value.displayValue = value.discount_type + value.value;
+          }
+        })
+      }, function (err) {
+        $rootScope.popUp('Retrieve Reviews failed');
+        console.error(err);
+      });
 
       //get reviews
       $http.get(getReviewsUrl).then(function (res) {
