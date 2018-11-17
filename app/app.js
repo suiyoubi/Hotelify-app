@@ -26,7 +26,7 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
   $routeProvider.otherwise({redirectTo: '/login'});
 }]).
 run(function($rootScope, $mdDialog) {
-  $rootScope.url = 'http://localhost:8080/hotelify/public/index.php/api';
+  $rootScope.url = 'http://localhost/hotelify-php/public/index.php/api';
   $rootScope.popUp = function(content = "Something went wrong...", title = 'Oops', confirmMessage = 'Okay') {
     $mdDialog.show(
       $mdDialog.alert()

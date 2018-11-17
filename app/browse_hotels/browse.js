@@ -88,22 +88,36 @@ angular.module('myApp.browse', [
     };
 
   })
-.controller('browseHotelController', function ($scope, $mdDialog, $http, $rootScope, hotel, url) {
+.controller('browseHotelController', function ($location, $scope, $mdDialog, $http, $rootScope, hotel, url) {
   var hotelId = hotel.id;
-  //$http.get
-  $scope.selected = [];
-  this.startDate = new Date();
-  this.endDate = new Date();
 
   $scope.hotelInfo = hotel;
   $scope.url = url;
+  $scope.reviews = [];
 
-  $scope.makeReservation = function(){
-    //$http.post
-    // search specific hotel in given interval
-    console.log($scope.startDate,$scope.endDate, $scope.hotelInfo.id);
-    // redirect to reservation page if successed
-  };
+  // get tags
+  var tagUrl = $rootScope.url + "/tags/hotel/" + hotel.id;
+  $http({
+    url: tagUrl,
+    method: "GET"
+  }).then(function (res) {
+    $scope.displayTags = res.data;
+  }, function (err) {
+    // handle error here
+    console.log(err);
+  });
+
+  //get reviews
+  var reviewUrl = $rootScope.url + "/reviews/hotel/" + hotel.id;
+  $http({
+    url: reviewUrl,
+    method: "GET"
+  }).then(function (res) {
+    $scope.reviews = res.data;
+  }, function (err) {
+    // handle error here
+    console.log(err);
+  });
 
   $scope.cancel = function() {
     console.log('cancel');
