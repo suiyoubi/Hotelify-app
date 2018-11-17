@@ -42,7 +42,7 @@ angular.module('myApp.history', [
         });
       };
 
-      $scope.refreshThreeLists = function() {
+      $scope.refreshThreeLists = function () {
         $scope.pendingReservationRooms = [];
         $scope.upcomingReservationRooms = [];
         $scope.historyReservationRooms = [];
@@ -101,7 +101,7 @@ angular.module('myApp.history', [
           fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
         }).then(function () {
           $scope.initHistory();
-        }, function() {
+        }, function () {
           $scope.initHistory();
         });
       }
@@ -158,7 +158,7 @@ angular.module('myApp.history', [
     }, function (err) {
       console.error(err);
     })
-})
+  })
   .controller('paymentController', function ($rootScope, $scope, $http, $mdDialog, reservation, reservationId) {
 
     $scope.cancel = function () {
@@ -191,12 +191,12 @@ angular.module('myApp.history', [
       $scope.selectedCoupon = coupon;
     };
     $scope.calculateDiscountType = function (coupon) {
-      if(!coupon) return 'Not Available';
+      if (!coupon) return 'Not Available';
       return `${coupon.value} ${coupon.discount_type} off`;
     };
     $scope.maskCard = function (number) {
       // 1111 2222 3333 4444 to 1111-xxxx-xxxx-4444
-      if(!number) return `XXXX-XXXX-XXXX-XXXX`;
+      if (!number) return `XXXX-XXXX-XXXX-XXXX`;
       return `${number.substring(0, 4)}-XXXX-XXXX-${number.substring(12, 16)}`;
     };
     $scope.calculateTotalPrice = function () {
@@ -214,6 +214,7 @@ angular.module('myApp.history', [
       return beforeCouponPrice;
     };
 
+    const availableRoom = reservation;
     $scope.allRooms = reservation;
 
     $http.get(`${$rootScope.url}/cards/customer/${$rootScope.username}`).then(function (res) {
@@ -229,7 +230,6 @@ angular.module('myApp.history', [
 
     $scope.roomType = {};
 
-    const availableRoom = reservation;
     console.log(availableRoom);
 
     $scope.nights = (new Date(availableRoom[0].checkout_date) - new Date(availableRoom[0].checkin_date)) / (1000 * 60 * 60 * 24);
@@ -247,26 +247,33 @@ angular.module('myApp.history', [
   })
   .controller('leaveReviewController',
     function ($rootScope, $scope, $mdDialog, $http, reservation) {
-      $scope.hotel_id = reservation.hotel_id; // todo: check format
+      $scope.hotel_id = reservation[0].hotel_id;
+      console.log('hotel_id:' + $scope.hotel_id);
       this.comment = "";
       this.rating = -1;
       this.tag = "";
 
+      $scope.tagHash = {};
+      $scope.clickOnTag = function (tag) {
+        console.error(tag);
+        tag.isExistTag = true;
+        if ($scope.selectedTags.indexOf(tag.tag_name) == -1) {
+          $scope.selectedTags.push(tag.tag_name);
+          $scope.tagHash[tag.tag_name] = tag.popularity;
+        }
+      };
+      $scope.selectedTags = [];
       $scope.retrieveTag = function () {
         // get all tags of this hotel
-        var url = $rootScope.url + "/tags/hotel/" + reservation.hotel_id;
+        var url = $rootScope.url + "/tags/hotel/" + reservation[0].hotel_id;
+        console.log(url);
         $http({
           url: url,
           method: "GET"
         }).then(function (res) {
           console.log(res);
-          $scope.currentTags = res.data;
-          $scope.displayTags = [];
-          var cycle = $scope.currentTags.length > 3 ? 3
-            : $scope.currentTags.length;
-          for (var i = 0; i < cycle; i++) {
-            $scope.displayTags[i] = $scope.currentTags[i].tag_name;
-          }
+          $scope.displayTags = res.data;
+          console.log($scope.displayTags);
         }, function (err) {
           // handle error here
           console.log(err);
@@ -307,6 +314,15 @@ angular.module('myApp.history', [
         $mdDialog.cancel();
       };
 
+      $scope.checkForTagNameExist = function (tag_name) {
+
+        console.error('to checkwith:' + tag_name);
+        $scope.displayTags.forEach(tag => {
+          console.log('checked tag name:' + tag.tag_name);
+          if (tag.tag_name === tag_name) return true;
+        });
+        return false;
+      }
       $scope.submit = function () {
         //$http.post
         // todo: connect with db
@@ -319,7 +335,7 @@ angular.module('myApp.history', [
         var reviewUrl = $rootScope.url + "/reviews/create";
         var reviewRequest = {
           username: $rootScope.username,
-          hotel_id: reservation.hotel_id,
+          hotel_id: reservation[0].hotel_id,
           rating: parseInt($scope.rating),
           comment: $scope.comment
         };
@@ -335,66 +351,49 @@ angular.module('myApp.history', [
           console.log(err);
         });
 
-        // check if user provides a tag
-        if ($scope.tag == undefined) {
-          console.log("didn't add any new tag");
-          return;
-        }
-
-        // check if this tag already exists
-        var isNewTag = true;
-        var targetTag = {};
-        for (var item in $scope.currentTags) {
-          if ($scope.currentTags[item].tag_name == $scope.tag) {
-            isNewTag = false;
-            targetTag = $scope.currentTags[item];
-            break;
+        $scope.selectedTags.forEach(tag_name => {
+          //const isNewTag = $scope.tagHash[tag_name];
+          if ($scope.tagHash[tag_name]) {
+            // if the tag already exists, update its popularity
+            var url = $rootScope.url + "/tags/update";
+            var request = {
+              hotel_id: $scope.hotel_id,
+              tag_name: tag_name,
+              popularity: 1 + Number($scope.tagHash[tag_name])
+            };
+            console.log("put " + request);
+            $http({
+              url: url,
+              method: "PUT",
+              params: request
+            }).then(function (res) {
+              console.log(res);
+            }, function (err) {
+              console.log(err);
+            });
+          } else {
+            var url = $rootScope.url + "/tags/create";
+            var request = {
+              hotel_id: $scope.hotel_id,
+              tag_name: tag_name,
+              popularity: 1
+            };
+            console.log(request);
+            console.log($scope.displayTags);
+            $http({
+              url: url,
+              method: "POST",
+              params: request
+            }).then(function (res) {
+              console.log(res);
+            }, function (err) {
+              console.log(err);
+            });
           }
-        }
-
-        if (isNewTag) {
-          // $http.post
-          var url = $rootScope.url + "/tags/create";
-          var request = {
-            hotel_id: $scope.hotel_id,
-            tag_name: $scope.tag,
-            popularity: 1
-          };
-          console.log(request);
-          console.log($scope.displayTags);
-          $http({
-            url: url,
-            method: "POST",
-            params: request
-          }).then(function (res) {
-            console.log(res);
-          }, function (err) {
-            console.log(err);
-          });
-        } else {
-          // if the tag already exists, update its popularity
-          targetTag.popularity = parseInt(targetTag.popularity) + 1;
-          var url = $rootScope.url + "/tags/update";
-          var request = {
-            hotel_id: $scope.hotel_id,
-            tag_name: targetTag.tag_name,
-            popularity: targetTag.popularity
-          };
-          console.log("put " + request);
-          $http({
-            url: url,
-            method: "PUT",
-            params: request
-          }).then(function (res) {
-            console.log(res);
-          }, function (err) {
-            console.log(err);
-          });
-        }
+        });
 
         $rootScope.popUp("thank you for your review!", "success");
-      }
-    })
-;
+      };
+    });
 
 

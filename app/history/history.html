@@ -22,9 +22,10 @@
   <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="">
     <div>
       <b>Pending Reservations:</b>
+      <div ng-show="!pendingReservations.length"><br>You do not have any pending reservation.</div>
     </div>
   </md-content>
-  <table st-table="history" class="table table-striped">
+  <table st-table="history" class="table table-striped" ng-show="pendingReservations.length">
     <thead>
     <tr>
       <th>Hotel Name</th>
@@ -47,9 +48,10 @@
   <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="">
     <div>
       <b>Upcoming Reservations:</b>
+      <div ng-show="!upcomingReservations.length"><br>You do not have any upcoming reservation.</div>
     </div>
   </md-content>
-  <table st-table="history" class="table table-striped">
+  <table st-table="history" class="table table-striped" ng-show="upcomingReservations.length">
     <thead>
     <tr>
       <th st-sort="hotelName">Hotel Name</th>
@@ -72,9 +74,10 @@
   <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="">
     <div>
       <b>Past Reservations:</b>
+      <div ng-show="!historyReservations.length"><br>You do not have any past reservation.</div>
     </div>
   </md-content>
-  <table st-table="history" class="table table-striped">
+  <table st-table="history" class="table table-striped" ng-show="historyReservations.length">
     <thead>
     <tr>
       <th st-sort="hotelName">Hotel Name</th>
@@ -106,19 +109,21 @@ Use of this source code is governed by an MIT-style license that can be foundin 
     <form name="commentForm">
       <md-toolbar>
         <div class="md-toolbar-tools">
-          <h2>Comments</h2>
+          <h2>Reviews</h2>
         </div>
       </md-toolbar>
 
-      <md-input-container class="md-block">
-        <br><br>
-        <md-icon md-font-icon="material-icons">review</md-icon>
-        <label>Description</label>
-        <textarea ng-model="reviews" rows="5" md-select-on-focus=""></textarea>
+      <md-input-container class = "md-block" style="margin-top: 50px">
+        <md-icon md-font-icon="material-icons">comment</md-icon>
+        <label>Comments</label>
+        <textarea md-maxlength = "300" name="comment" ng-model = "comment"></textarea>
+        <div ng-messages = "commentForm.comment.$error">
+          <div ng-message = "md-maxlength">The comments has to be less
+            than 300 characters long.</div>
+        </div>
       </md-input-container>
 
-      <div layout="row">
-        <md-input-container max-width="30%">
+        <md-input-container max-width="30px">
           <md-icon md-font-icon="material-icons">star</md-icon>
           <label>Ratings (0-5)</label>
           <md-select ng-model="rating" required="">
@@ -130,23 +135,25 @@ Use of this source code is governed by an MIT-style license that can be foundin 
             <md-option value="0">0</md-option>
           </md-select>
         </md-input-container>
-      </div>
 
-      <md-input-container class="md-block" style="margin-top: 50px">
-        <md-icon md-font-icon="material-icons">label</md-icon>
-        <label>Add a tag</label>
-        <textarea md-maxlength="20" name="tag" ng-model="tag"></textarea>
-        <div ng-messages="commentForm.tag.$error">
-          <div ng-message="md-maxlength">The tag has to be less
-            than 20 characters long.
-          </div>
-        </div>
-      </md-input-container>
 
       <div>
+        Leave Your Tags:
+        <md-chips ng-model="selectedTags"  md-removable="true">
+          <md-chip-template>
+            <strong>{{$chip}}</strong>
+          </md-chip-template>
+        </md-chips>
+      </div>
+
+      <div ng-show = "displayTags.length">
         <p>Popular tags</p>
-        <md-chips ng-model="displayTags" md-removable="true" readonly="true" md-on-remove="onModelChange($chip)"
-                  flex="90%"></md-chips>
+        <md-chips ng-model="displayTags" md-removable="false" readonly="true" flex="90%" >
+          <md-chip-template ng-click="clickOnTag($chip)">
+            <strong>{{$chip.tag_name}}</strong>
+            <em>({{$chip.popularity}})</em>
+          </md-chip-template>
+        </md-chips>
       </div>
 
       <md-dialog-actions layout="row">
