@@ -34,6 +34,11 @@
           <label>Email</label>
           <input ng-readonly="true" ng-model="user.email" type="email">
         </md-input-container>
+
+        <md-input-container>
+          <label>Member Points</label>
+          <input ng-readonly="true" ng-model="user.points">
+        </md-input-container>
       </div>
     </md-content>
 
@@ -60,6 +65,11 @@
                   <md-input-container class="md-block" ng-show="isCustomer()">
                     <label>Street</label>
                     <input ng-model="address.street">
+                  </md-input-container>
+
+                  <md-input-container class="md-block" ng-show="isCustomer()">
+                    <label>Phone Number</label>
+                    <input ng-model="user.phone_number">
                   </md-input-container>
 
                   <div layout-gt-sm="row" ng-show="isCustomer()">
