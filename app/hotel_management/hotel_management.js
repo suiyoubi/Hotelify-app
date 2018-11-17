@@ -13,6 +13,10 @@ angular.module('myApp.hotelManagement', [
   }])
   .controller('hotelManagementController', function ($scope, $http, $rootScope, $mdDialog) {
 
+    $http.get(`${$rootScope.url}/hotels`).then(function (res) {
+      $scope.hotels = res.data;
+    });
+
     $scope.searchHotel = function () {
 
       // GET api/hotels/
@@ -83,7 +87,7 @@ angular.module('myApp.hotelManagement', [
         const deleteRoomTypeUrl = `${$rootScope.url}/room-types/${roomType.id}`;
 
         $http.delete(deleteRoomTypeUrl).then(function (res) {
-          $rootScope.popUp("successfully delete this row", 'Success');
+          $rootScope.popUp("successfully delete this room type", 'Success');
 
           const index = $scope.roomTypes.indexOf(roomType);
 
