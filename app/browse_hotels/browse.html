@@ -87,7 +87,12 @@ Use of this source code is governed by an MIT-style license that can be foundin 
           </div>
 
           <div>
-            <md-chips ng-model="displayTags" md-removable="false" readonly="true"></md-chips>
+            <md-chips ng-model="displayTags" md-removable="false" readonly="true">
+              <md-chip-template>
+                <strong>{{$chip.tag_name}}</strong>
+                <em>({{$chip.popularity}})</em>
+              </md-chip-template>
+            </md-chips>
           </div>
 
           <md-tabs md-dynamic-height="" md-border-bottom="">

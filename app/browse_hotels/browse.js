@@ -101,10 +101,7 @@ angular.module('myApp.browse', [
     url: tagUrl,
     method: "GET"
   }).then(function (res) {
-    $scope.displayTags = [];
-    for (var i = 0; i < res.data.length; i++) {
-      $scope.displayTags[i] = res.data[i].tag_name;
-    }
+    $scope.displayTags = res.data;
   }, function (err) {
     // handle error here
     console.log(err);
