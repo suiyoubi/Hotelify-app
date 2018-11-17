@@ -172,7 +172,7 @@ angular.module('myApp.reservation', [
     $scope.makeReservation = function () {
 
       if($scope.selectedRoomTypes.length == 0) {
-        $rootScope.popUp('You have not selected any room!');
+        document.getElementById("reservationWarning").style.visibility = "visible";
         return;
       }
 
@@ -197,6 +197,7 @@ angular.module('myApp.reservation', [
       if ($scope.selectedRoomTypes.indexOf(room) == -1) {
         $scope.selectedRoomTypes.push(room);
       }
+      document.getElementById("reservationWarning").style.visibility = "hidden";
     };
 
     $scope.removeRoom = function (room) {
@@ -219,28 +220,5 @@ angular.module('myApp.reservation', [
     $scope.cancel = function () {
       console.log('cancel');
       $mdDialog.cancel();
-    };
-
-    $scope.toggle = function (item, list) {
-      var idx = list.indexOf(item);
-      if (idx > -1) {
-        list.splice(idx, 1);
-      }
-      else {
-        list.push(item);
-      }
-    };
-
-    $scope.exists = function (item, list) {
-      return list.indexOf(item) > -1;
-    };
-
-    $scope.isIndeterminate = function () {
-      return ($scope.selected.length !== 0 &&
-        $scope.selected.length !== $scope.roomType.length);
-    };
-
-    $scope.isChecked = function () {
-      return $scope.selected.length === $scope.roomType.length;
     };
   });
