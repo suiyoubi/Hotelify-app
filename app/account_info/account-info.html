@@ -106,7 +106,7 @@
                     <td>{{ maskCard(card.card_number) }}</td>
                     <td>{{card.card_holder_name}}</td>
                     <td>{{card.expire_date}}</td>
-                    <td><md-icon md-font-icon="material-icons" ng-click="deleteCard(card)">delete</md-icon></td>
+                    <td><md-icon md-font-icon="material-icons" ng-click="deleteCard(card, $index)">delete</md-icon></td>
                   </tr>
                   </tbody>
                 </table>
