@@ -59,7 +59,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="row in upcomingReservations" ng-click="leaveReview(row)">
+    <tr ng-repeat="row in upcomingReservations" ng-click="showReservation(row)">
       <td>{{row[0].brand_name}}-{{row[0].branch_name}}</td>
       <td>{{row[0].checkin_date}}</td>
       <td>{{row[0].checkout_date}}</td>
@@ -255,6 +255,42 @@ Use of this source code is governed by an MIT-style license that can be foundin 
           Not Now
         </md-button>
       </md-dialog-actions>
+    </form>
+  </md-dialog>
+</script>
+
+
+<script type="text/ng-template" id="showReservation.tmpl.html">
+
+  <md-dialog aria-label="Hotel Detail">
+    <form ng-cloak>
+      <md-toolbar>
+        <div class="md-toolbar-tools">
+          <h2>Upcoming Reservation</h2>
+        </div>
+      </md-toolbar>
+
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Room type</th>
+          <th>Number of Rooms</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="room in roomType">
+          <td>{{room.type_name}}</td>
+          <td>{{room.count}}</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div  layout-padding="">
+        <b> Your paid ${{payment.amount}} for this reservation. </b><br><br>
+        <b> Your rooms will be ready for you from {{startDate}} to {{endDate}}</b> <br><br>
+        <b> Wish you have a pleasant journey!</b>
+      </div>
+
     </form>
   </md-dialog>
 </script>

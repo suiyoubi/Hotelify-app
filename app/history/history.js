@@ -105,27 +105,60 @@ angular.module('myApp.history', [
           $scope.initHistory();
         });
       }
+      $scope.showReservation = function (reservation) {
+        $mdDialog.show({
+          controller: 'showReservationController',
+          templateUrl: 'showReservation.tmpl.html',
+          parent: angular.element(document.body),
+          clickOutsideToClose: true,
+          locals: {
+            reservation,
+            paymentId: reservation[0].payment_id,
+            startDate: reservation[0].checkin_date,
+            endDate: reservation[0].checkout_date,
+          },
+          fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+        });
+      };
       $scope.leaveReview = function (reservation) {
-        if (reservation.status == "payment pending") {
-          // todo:go to payment
-          console.log("payment pending");
-        } else if (reservation.status == "paid") {
-          // paid, not finished trip yet
-          console.log("paid");
-        }
-        else {
-          // finished trip
-          $mdDialog.show({
-            controller: 'leaveReviewController',
-            templateUrl: 'leaveReview.tmpl.html',
-            parent: angular.element(document.body),
-            clickOutsideToClose: true,
-            locals: {reservation},
-            fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
-          });
-        }
+        // finished trip
+        $mdDialog.show({
+          controller: 'leaveReviewController',
+          templateUrl: 'leaveReview.tmpl.html',
+          parent: angular.element(document.body),
+          clickOutsideToClose: true,
+          locals: {reservation},
+          fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+        });
+
       };
     })
+  .controller('showReservationController', function ($rootScope, $scope, $http, $mdDialog, reservation, paymentId, startDate, endDate) {
+
+    $scope.startDate = startDate;
+    $scope.endDate = endDate;
+    $scope.roomType = {};
+
+    const availableRoom = reservation;
+    console.log(availableRoom);
+
+    $scope.nights = (new Date(availableRoom[0].checkout_date) - new Date(availableRoom[0].checkin_date)) / (1000 * 60 * 60 * 24);
+    availableRoom.forEach(function (value) {
+
+      if ($scope.roomType[value.room_type_id] == undefined) {
+        $scope.roomType[value.room_type_id] = value;
+        $scope.roomType[value.room_type_id].count = 1;
+      } else {
+        $scope.roomType[value.room_type_id].count += 1;
+      }
+    });
+
+    $http.get(`${$rootScope.url}/payments/${paymentId}`).then(function (res) {
+      $scope.payment = res.data;
+    }, function (err) {
+      console.error(err);
+    })
+})
   .controller('paymentController', function ($rootScope, $scope, $http, $mdDialog, reservation, reservationId) {
 
     $scope.cancel = function () {
@@ -150,9 +183,6 @@ angular.module('myApp.history', [
       }, (function (err) {
         $rootScope.popUp('Your payment dis not go through, please try with another card');
       }));
-
-
-
     }
     $scope.selectCard = function (card) {
       $scope.selectedCard = card;
@@ -186,8 +216,6 @@ angular.module('myApp.history', [
 
     $scope.allRooms = reservation;
 
-    const availableRoom = reservation;
-
     $http.get(`${$rootScope.url}/cards/customer/${$rootScope.username}`).then(function (res) {
       $scope.cards = res.data;
     }, function (err) {
@@ -201,6 +229,7 @@ angular.module('myApp.history', [
 
     $scope.roomType = {};
 
+    const availableRoom = reservation;
     console.log(availableRoom);
 
     $scope.nights = (new Date(availableRoom[0].checkout_date) - new Date(availableRoom[0].checkin_date)) / (1000 * 60 * 60 * 24);
