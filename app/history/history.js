@@ -314,15 +314,6 @@ angular.module('myApp.history', [
         $mdDialog.cancel();
       };
 
-      $scope.checkForTagNameExist = function (tag_name) {
-
-        console.error('to checkwith:' + tag_name);
-        $scope.displayTags.forEach(tag => {
-          console.log('checked tag name:' + tag.tag_name);
-          if (tag.tag_name === tag_name) return true;
-        });
-        return false;
-      }
       $scope.submit = function () {
         //$http.post
         // todo: connect with db
@@ -332,15 +323,13 @@ angular.module('myApp.history', [
           return;
         }
 
-        var reviewUrl = $rootScope.url + "/reviews/create";
-        var reviewRequest = {
+        const reviewUrl = $rootScope.url + "/reviews/create";
+        const reviewRequest = {
           username: $rootScope.username,
           hotel_id: reservation[0].hotel_id,
           rating: parseInt($scope.rating),
           comment: $scope.comment
         };
-
-        console.log(reviewRequest);
         $http({
           url: reviewUrl,
           method: "POST",
@@ -348,11 +337,10 @@ angular.module('myApp.history', [
         }).then(function (res) {
           console.log(res);
         }, function (err) {
-          console.log(err);
+          console.error(err);
         });
 
         $scope.selectedTags.forEach(tag_name => {
-          //const isNewTag = $scope.tagHash[tag_name];
           if ($scope.tagHash[tag_name]) {
             // if the tag already exists, update its popularity
             var url = $rootScope.url + "/tags/update";
@@ -361,7 +349,6 @@ angular.module('myApp.history', [
               tag_name: tag_name,
               popularity: 1 + Number($scope.tagHash[tag_name])
             };
-            console.log("put " + request);
             $http({
               url: url,
               method: "PUT",
@@ -378,8 +365,6 @@ angular.module('myApp.history', [
               tag_name: tag_name,
               popularity: 1
             };
-            console.log(request);
-            console.log($scope.displayTags);
             $http({
               url: url,
               method: "POST",
