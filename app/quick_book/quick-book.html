@@ -11,7 +11,7 @@
   <md-nav-bar md-no-ink-bar="disableInkBar" md-selected-nav-item="currentNavItem"
               nav-bar-aria-label="navigation links">
     <md-nav-item ng-repeat="item in navItems" md-nav-click="goto(item.value)" name="{{item.value}}">
-      {{item.label}}
+      <md-icon md-font-icon="material-icons">{{item.icon}}</md-icon>{{item.label}}
     </md-nav-item>
   </md-nav-bar>
 </div>
@@ -28,46 +28,43 @@
           <md-content layout="column" layout-gt-sm="row" layout-padding="" ng-cloak="" class="datepickerdemoCalendar" ng-app="MyApp">
             <div layout="column" flex-order="1" flex-order-gt-sm="0">
               <md-subheader>Check in</md-subheader>
-              <md-calendar ng-model="request.interval.startDate"></md-calendar>
+              <md-calendar ng-model="request.checkin_date" md-min-date="minDate"></md-calendar>
             </div>
             <div layout="column" flex-order="1" flex-order-gt-sm="1">
               <md-subheader>Check out</md-subheader>
-              <md-calendar ng-model="request.interval.endDate"></md-calendar>
+              <md-calendar ng-model="request.checkout_date" md-min-date="minDate"></md-calendar>
             </div>
             <div layout="column" flex-order="0" flex-order-gt-sm="2">
               <md-subheader>Dates</md-subheader>
               <div>
                 <label>Check in</label>
-                <div>{{request.interval.startDate | date:shortDate}}</div>
+                <div>{{request.checkin_date | date:shortDate}}</div>
               </div>
               <div><label>Check out</label>
-                <div>{{request.interval.endDate | date:shortDate}}</div>
+                <div>{{request.checkout_date | date:shortDate}}</div>
               </div>
             </div>
           </md-content>
 
           <div layout-gt-sm="row">
-            <md-input-container class="md-block">
-              <label>Destination City</label>
-              <input ng-model="request.destination.city">
+            <md-input-container class="md-block" flex-gt-xs>
+              <label>Destination City (optional)</label>
+              <input ng-model="request.city">
             </md-input-container>
-
             <md-input-container class="md-block">
-              <label>number of people</label>
-              <input ng-model="request.people">
+              <label>Country (optional)</label>
+              <input ng-model="request.country">
             </md-input-container>
-
-            <!--<md-input-container class="md-block">-->
-              <!--<label>Destination Country</label>-->
-              <!--<input ng-model="request.destination.country">-->
-            <!--</md-input-container>-->
-
-            <!--<md-input-container class="md-block">-->
-              <!--<label>Street (optional)</label>-->
-              <!--<input ng-model="request.street" size="30">-->
-            <!--</md-input-container>-->
+            <md-input-container class="md-block">
+              <label>Province (optional)</label>
+              <input ng-model="request.province">
+            </md-input-container>
           </div>
 
+          <md-input-container class="md-block" flex-gt-xs>
+            <label>Number of Rooms</label>
+            <input ng-model="request.rooms">
+          </md-input-container>
         </form>
       </div>
       <button type="submit" class="btn btn-primary" ng-click="bookRequest()">Search</button>

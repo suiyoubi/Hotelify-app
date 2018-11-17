@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>Distribute Coupon</title>
 </head>
 <body>
 
@@ -16,9 +16,11 @@
   </md-nav-bar>
 </div>
 
-<div ng-controller="reviewsController" >
-  <div>
+<div data-ng-init="initCouponType()"></div>
 
+<div ng-controller="couponController">
+
+  <div>
     <md-content md-theme="docs-dark" layout-padding="">
       <b> Search for hotel:</b>
       <div class="form-group" layout-gt-sm="row">
@@ -45,7 +47,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr ng-repeat="hotel in hotels" ng-click="changeReviews(hotel)">
+          <tr ng-repeat="hotel in hotels" ng-click="selectHotel(hotel)">
             <td>{{hotel.brand_name}}</td>
             <td>{{hotel.branch_name}}</td>
             <td>{{hotel.street}}</td>
@@ -56,25 +58,48 @@
     </div>
   </div>
 
-
-
-  <div ng-cloak layout-gt-sm="row" layout="column" ng-show="selectedRow">
-
-    <div flex-gt-sm="50">
-      <md-toolbar layout="row" class="md-hue-3">
-        <div class="md-toolbar-tools">
-          <span>Reviews</span>
-        </div>
-      </md-toolbar>
-      <md-subheader class="md-no-sticky">{{rawList.length}} reviews about {{selectedRow.branch_name}}</md-subheader>
-      <md-list-item ng-repeat="row in rawList" class="md-3-line md-long-text">
-        <div class="md-list-item-text">
-          <b><h3>{{row.username}}</h3></b>
-          <h4>Rating: {{row.rating}}</h4>
-          <p>{{row.comment}}</p>
-        </div>
-      </md-list-item>
+  <md-content ng-show="selectedHotel" layout-padding="">
+    <div>
+      <h3>You have selected {{selectedHotel.brand_name}}</h3>
     </div>
-  </div>
+
+    Distribute coupon to:
+    <div>
+      <md-checkbox ng-model="toEveryUser" aria-label="Checkbox 1">
+        Every User
+      </md-checkbox>
+    </div>
+    <div>
+      <md-checkbox ng-model="!toEveryUser" aria-label="Checkbox 1">
+        Specific User
+      </md-checkbox>
+      <input ng-model="coupon.username" placeholder="username">
+      <button ng-click="checkCustomer()" class="btn btn-sm btn-primary">Check Customer</button>
+    </div>
+
+
+    <md-content layout-gt-sm="row" layout-padding="">
+      <div layout-gt-sm="row">
+        <md-input-container>
+          <label>Expired Date</label>
+          <md-datepicker ng-model="coupon.expire_date"></md-datepicker>
+        </md-input-container>
+
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>Type</label>
+          <md-select ng-model="coupon.coupon_type_id">
+            <md-option ng-repeat="type in couponTypes" value="{{type.id}}">
+              {{ generateCouponTypeValue(type) }}
+            </md-option>
+          </md-select>
+        </md-input-container>
+      </div>
+    </md-content>
+
+    <button ng-click="distributeCoupon()" class="btn btn-sm btn-success">Distribute Coupon!</button>
+  </md-content>
+</div>
+
+
 </body>
 </html>

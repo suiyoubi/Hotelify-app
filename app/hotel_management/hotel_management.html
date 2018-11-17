@@ -11,19 +11,25 @@
   <md-nav-bar md-no-ink-bar="disableInkBar" md-selected-nav-item="currentNavItem"
               nav-bar-aria-label="navigation links">
     <md-nav-item ng-repeat="item in navItems" md-nav-click="goto(item.value)" name="{{item.value}}">
-      {{item.label}}
+      <md-icon md-font-icon="material-icons">{{item.icon}}</md-icon>{{item.label}}
     </md-nav-item>
   </md-nav-bar>
 </div>
 
 <div ng-controller="hotelManagementController">
 
-  <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="">
+  <md-content md-theme="docs-dark" layout-padding="">
     <b> Search for hotel:</b>
     <div class="form-group" layout-gt-sm="row">
-      <input type="text" placeholder="brand name" ng-model="searchObj.brandName">
-      <input type="text" placeholder="branch name" ng-model="searchObj.branchName">
-      <button ng-click="searchHotel()">Search</button>
+      <md-input-container>
+        <label>Brand Name</label>
+        <input ng-model="searchObj.brandName">
+      </md-input-container>
+      <md-input-container>
+        <label>Branch Name</label>
+        <input ng-model="searchObj.branchName">
+      </md-input-container>
+      <button ng-click="searchHotel()" class="searchBtn">Search</button>
     </div>
   </md-content>
 
@@ -32,26 +38,184 @@
       <table class="table table-striped table-bordered">
         <thead>
         <tr>
-          <th>Brand Name</th>
+          <th>Hotel (Brand) Name</th>
           <th>Branch Name</th>
           <th>street</th>
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="employee in hotels">
-          <td>{{employee.brand_name}}</td>
-          <td>{{employee.branch_name}}</td>
-          <td>{{employee.street}}</td>
+        <tr ng-repeat="hotel in hotels" ng-click="manageHotel(hotel)">
+          <td>{{hotel.brand_name}}</td>
+          <td>{{hotel.branch_name}}</td>
+          <td>{{hotel.street}}</td>
         </tr>
         </tbody>
       </table>
     </div>
-  </div>>
+  </div>
+
+  <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="" ng-show="selectedHotel">
+    <div>
+      <md-content>
+        <b>Basic Info</b>
+        <br><br>
+      </md-content>
+
+      <md-input-container>
+        <label>Hotel Name</label>
+        <input ng-model="selectedHotel.branch_name">
+      </md-input-container>
+
+      <md-input-container>
+        <label>Brand Name</label>
+        <input ng-model="selectedHotel.brand_name" type="email">
+      </md-input-container>
+
+      <md-input-container class="md-block">
+        <label>Description</label>
+        <textarea ng-model="selectedHotel.description" rows="5" md-select-on-focus=""></textarea>
+      </md-input-container>
+    </div>
+  </md-content>
+
+  <md-content layout-padding="" ng-show="selectedHotel">
+    <div>
+      <md-content>
+        <b>Address Info</b>
+        <br><br>
+      </md-content>
+
+      <md-input-container class="md-block">
+        <label>Street</label>
+        <input ng-model="selectedHotel.street">
+      </md-input-container>
+
+      <div layout-gt-sm="row" >
+        <md-input-container class="md-block" flex-gt-sm="">
+          <label>City</label>
+          <input ng-model="selectedHotel.city">
+        </md-input-container>
+
+        <md-input-container class="md-block" flex-gt-sm="">
+          <label>Province</label>
+          <input ng-model="selectedHotel.province">
+        </md-input-container>
+
+        <md-input-container class="md-block" flex-gt-sm="">
+          <label>Postal Code</label>
+          <input ng-model="selectedHotel.postal_code">
+        </md-input-container>
+
+        <md-input-container class="md-block" flex-gt-sm="">
+          <label>Country</label>
+          <input ng-model="selectedHotel.country">
+        </md-input-container>
+      </div>
+    </div>
+  </md-content>
+
+  <button type="button" ng-click="updateHotel()" class="btn btn-sm btn-success" ng-show="selectedHotel">
+    <i class="glyphicon glyphicon-plus">
+    </i> Update the Hotel
+  </button>
+
+  <md-content layout-padding="" ng-show="selectedHotel">
+    <div>
+      <md-content>
+        <b>Room Info</b>
+        <br><br>
+      </md-content>
+    </div>
+  </md-content>
+
+  <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped" ng-show="selectedHotel">
+    <thead>
+    <tr>
+      <th>Room Type</th>
+      <th>Occupancy</th>
+      <th>Number of Rooms</th>
+      <th>Price</th>
+      <th>Description</th>
+      <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="row in roomTypes">
+      <td>{{row.type_name}}</td>
+      <td>{{row.occupancy}}</td>
+      <td>{{row.slots || row.total_slots}}</td>
+      <td>{{row.price}}</td>
+      <td>{{row.description}}</td>
+      <td><md-icon md-font-icon="material-icons" ng-click="deleteRoomType(row)">delete</md-icon></td>
+    </tr>
+    </tbody>
+  </table>
+  <button type="button" ng-click="addRoom(row)" class="btn btn-sm btn-success" ng-show="selectedHotel">
+    <i class="glyphicon glyphicon-plus">
+    </i> Add a Room Type
+  </button>
+
+
 </div>
->
 
+<script type="text/ng-template" id="dialog2.tmpl.html"><md-dialog aria-label="Room Type">
+<form ng-cloak>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>Add a Room Type</h2>
+    </div>
+  </md-toolbar>
 
-<button ng-click="addrow()">add row</button>
-HOTEL MANAGEMENT
+  <md-dialog-content>
+
+    <md-content layout-gt-sm="row" layout-padding="">
+      <div>
+        <md-content>
+          <b>Basic Info</b>
+          <br><br>
+        </md-content>
+
+        <md-input-container>
+          <label>Type Name</label>
+          <input ng-model="roomType.type_name">
+        </md-input-container>
+
+        <md-input-container>
+          <label>Occupancy</label>
+          <input ng-model="roomType.occupancy">
+        </md-input-container>
+
+        <md-input-container>
+          <label>Number of Rooms</label>
+          <input ng-model="roomType.slots">
+        </md-input-container>
+
+        <md-input-container>
+          <label>Price</label>
+          <input ng-model="roomType.price">
+        </md-input-container>
+
+        <md-input-container class="md-block">
+          <label>Description</label>
+          <textarea ng-model="roomType.description" rows="5" md-select-on-focus=""></textarea>
+        </md-input-container>
+      </div>
+    </md-content>
+
+  </md-dialog-content>
+
+  <md-dialog-actions layout="row">
+    <span flex></span>
+    <md-button ng-click="cancel()">
+      Back
+    </md-button>
+    <md-button ng-click="addIt()">
+      Add it
+    </md-button>
+  </md-dialog-actions>
+</form>
+</md-dialog>
+</script>
+
 </body>
 </html>

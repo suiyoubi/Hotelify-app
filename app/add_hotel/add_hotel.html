@@ -11,7 +11,7 @@
   <md-nav-bar md-no-ink-bar="disableInkBar" md-selected-nav-item="currentNavItem"
               nav-bar-aria-label="navigation links">
     <md-nav-item ng-repeat="item in navItems" md-nav-click="goto(item.value)" name="{{item.value}}">
-      {{item.label}}
+      <md-icon md-font-icon="material-icons">{{item.icon}}</md-icon>{{item.label}}
     </md-nav-item>
   </md-nav-bar>
 </div>
@@ -27,13 +27,13 @@
       </md-content>
 
       <md-input-container>
-        <label>Hotel Name</label>
-        <input ng-model="hotel.branch_name">
+        <label>Hotel (Brand) Name</label>
+        <input ng-model="hotel.brand_name">
       </md-input-container>
 
       <md-input-container>
-        <label>Brand Name</label>
-        <input ng-model="hotel.brand_name" type="text">
+        <label>Branch Name</label>
+        <input ng-model="hotel.branch_name" type="text">
       </md-input-container>
 
       <md-input-container>
@@ -48,8 +48,19 @@
 
       <md-input-container class="md-block">
         <label>Description</label>
-        <textarea ng-model="hotel.description" md-maxlength="150" rows="5" md-select-on-focus=""></textarea>
+        <textarea ng-model="hotel.description" rows="5" md-select-on-focus=""></textarea>
       </md-input-container>
+
+      <div>
+        <md-content>
+          <b>Add a Fancy Picture For The Hotel</b>
+          <br><br>
+        </md-content>
+        <button type="file" ngf-select="selectFile($file)" accept="image/*" class="btn-primary btn">
+          Select File
+        </button>
+        <div ng-show="file">You have selected {{file.name}}</div>
+      </div>
     </div>
   </md-content>
 
@@ -96,12 +107,13 @@
         <br><br>
       </md-content>
     </div>
+
+    <button type="button" ng-click="addRoom(row)" class="btn btn-sm btn-success">
+      <i class="glyphicon glyphicon-plus">
+      </i> Add a Room Type
+    </button>
   </md-content>
 
-  <button type="button" ng-click="addRoom(row)" class="btn btn-sm btn-success">
-    <i class="glyphicon glyphicon-plus">
-    </i> Add a Room Type
-  </button>
   <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped">
     <thead>
     <tr>
@@ -129,10 +141,12 @@
     </tbody>
   </table>
 
-  <button type="button" ng-click="addHotel()" class="btn btn-sm btn-success">
-    <i class="glyphicon glyphicon-plus">
-    </i> Add the Hotel
-  </button>
+  <md-content layout-padding="">
+    <button type="button" ng-click="addHotel()" class="btn btn-sm btn-primary">
+      <i class="glyphicon glyphicon-plus">
+      </i> Add the Hotel
+    </button>
+  </md-content>
 </div>
 
 
@@ -175,7 +189,7 @@
 
         <md-input-container class="md-block">
           <label>Description</label>
-          <textarea ng-model="roomType.description" md-maxlength="150" rows="5" md-select-on-focus=""></textarea>
+          <textarea ng-model="roomType.description" rows="5" md-select-on-focus=""></textarea>
         </md-input-container>
       </div>
     </md-content>

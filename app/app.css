@@ -171,9 +171,26 @@ input:checked + .slider:before {
   font-size: x-small; }
 
 .fullScreenDialog{
-  max-width: 80%;
-  max-height: 80%;
-  width: 80%;
-  height: 80%;
+  max-width: 90%;
+  max-height: 90%;
+  width: 90%;
+  height: 90%;
   border-radius: 0;
+}
+
+.searchBtn {
+  background: #00adf0 none repeat scroll 0 0;
+  border-color: #00adf0;
+  color: #ffffff;
+  font-size: 14px;
+  width: 55px;
+  height: 50px;
+  line-height: 50px;
+  padding: 0;
+}
+
+
+#reservationWarning{
+  visibility: hidden;
+  color: red;
 }

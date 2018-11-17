@@ -10,32 +10,88 @@
   <md-nav-bar md-no-ink-bar="disableInkBar" md-selected-nav-item="currentNavItem"
               nav-bar-aria-label="navigation links">
     <md-nav-item ng-repeat="item in navItems" md-nav-click="goto(item.value)" name="{{item.value}}">
+      <md-icon md-font-icon="material-icons">{{item.icon}}</md-icon>
       {{item.label}}
     </md-nav-item>
   </md-nav-bar>
 </div>
 
+<div data-ng-init="initHistory()"></div>
+
 <div>
-  <table st-table="history" class="table table-striped">
+  <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="">
+    <div>
+      <b>Pending Reservations:</b>
+      <div ng-show="!pendingReservations.length"><br>You do not have any pending reservation.</div>
+    </div>
+  </md-content>
+  <table st-table="history" class="table table-striped" ng-show="pendingReservations.length">
+    <thead>
+    <tr>
+      <th>Hotel Name</th>
+      <th st-sort-default="true">Check-in Date</th>
+      <th>Check-out Date</th>
+      <th>Estimate Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="row in pendingReservations" ng-click="paymentSubPage(row)">
+      <td>{{row[0].brand_name}}-{{row[0].branch_name}}</td>
+      <td>{{row[0].checkin_date}}</td>
+      <td>{{row[0].checkout_date}}</td>
+      <td>{{calculatePrice(row)}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<div>
+  <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="">
+    <div>
+      <b>Upcoming Reservations:</b>
+      <div ng-show="!upcomingReservations.length"><br>You do not have any upcoming reservation.</div>
+    </div>
+  </md-content>
+  <table st-table="history" class="table table-striped" ng-show="upcomingReservations.length">
     <thead>
     <tr>
       <th st-sort="hotelName">Hotel Name</th>
-      <th>checkin date</th>
-      <th>checkout date</th>
-      <th>price</th>
+      <th>Check-in Date</th>
+      <th>Check-out date</th>
+      <th>Paid Price</th>
     </tr>
-    <!--<tr>-->
-      <!--<th>-->
-        <!--<input st-search="hotelName" placeholder="search for Hotel Name" class="input-sm form-control" type="search"/>-->
-      <!--</th>-->
-    <!--</tr>-->
     </thead>
     <tbody>
-    <tr ng-repeat="row in history" ng-click="leaveReview(row.hotelId)">
-      <td>{{row.hotelName}}</td>
-      <td>{{row.checkinDate}}</td>
-      <td>{{row.checkoutDate}}</td>
-      <td>{{row.price}}</td>
+    <tr ng-repeat="row in upcomingReservations" ng-click="showReservation(row)">
+      <td>{{row[0].brand_name}}-{{row[0].branch_name}}</td>
+      <td>{{row[0].checkin_date}}</td>
+      <td>{{row[0].checkout_date}}</td>
+      <td>{{paidPrice[row[0].id]}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<div>
+  <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="">
+    <div>
+      <b>Past Reservations:</b>
+      <div ng-show="!historyReservations.length"><br>You do not have any past reservation.</div>
+    </div>
+  </md-content>
+  <table st-table="history" class="table table-striped" ng-show="historyReservations.length">
+    <thead>
+    <tr>
+      <th st-sort="hotelName">Hotel Name</th>
+      <th>Check-in Date</th>
+      <th>Check-out Date</th>
+      <th>Paid Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="row in historyReservations" ng-click="leaveReview(row)">
+      <td>{{row[0].brand_name}}-{{row[0].branch_name}}</td>
+      <td>{{row[0].checkin_date}}</td>
+      <td>{{row[0].checkout_date}}</td>
+      <td>{{paidPrice[row[0].id]}}</td>
     </tr>
     </tbody>
   </table>
@@ -46,56 +102,204 @@ Use of this source code is governed by an MIT-style license that can be foundin 
 -->
 
 <script type="text/ng-template" id="leaveReview.tmpl.html">
-<md-dialog aria-label="Hotel Detail" class="fullScreenDialog">
-  <form name="commentForm">
+
+  <div data-ng-init="retrieveTag()"></div>
+
+  <md-dialog aria-label="Hotel Detail" class="fullScreenDialog">
+    <form name="commentForm">
+      <md-toolbar>
+        <div class="md-toolbar-tools">
+          <h2>Reviews</h2>
+        </div>
+      </md-toolbar>
+
+      <md-input-container class = "md-block" style="margin-top: 50px">
+        <md-icon md-font-icon="material-icons">comment</md-icon>
+        <label>Comments</label>
+        <textarea md-maxlength = "300" name="comment" ng-model = "comment"></textarea>
+        <div ng-messages = "commentForm.comment.$error">
+          <div ng-message = "md-maxlength">The comments has to be less
+            than 300 characters long.</div>
+        </div>
+      </md-input-container>
+
+        <md-input-container max-width="30px">
+          <md-icon md-font-icon="material-icons">star</md-icon>
+          <label>Ratings (0-5)</label>
+          <md-select ng-model="rating" required="">
+            <md-option value="5">5</md-option>
+            <md-option value="4">4</md-option>
+            <md-option value="3">3</md-option>
+            <md-option value="2">2</md-option>
+            <md-option value="1">1</md-option>
+            <md-option value="0">0</md-option>
+          </md-select>
+        </md-input-container>
+
+
+      <div>
+        Leave Your Tags:
+        <md-chips ng-model="selectedTags"  md-removable="true">
+          <md-chip-template>
+            <strong>{{$chip}}</strong>
+          </md-chip-template>
+        </md-chips>
+      </div>
+
+      <div ng-show = "displayTags.length">
+        <p>Popular tags</p>
+        <md-chips ng-model="displayTags" md-removable="false" readonly="true" flex="90%" >
+          <md-chip-template ng-click="clickOnTag($chip)">
+            <strong>{{$chip.tag_name}}</strong>
+            <em>({{$chip.popularity}})</em>
+          </md-chip-template>
+        </md-chips>
+      </div>
+
+      <md-dialog-actions layout="row">
+        <p id="reservationWarning">please fill out comment and rating</p>
+        <span flex></span>
+        <md-button ng-click="submit(comment, rating)">
+          Submit
+        </md-button>
+        <md-button ng-click="cancel()">
+          Back
+        </md-button>
+      </md-dialog-actions>
+    </form>
+  </md-dialog>
+</script>
+
+
+<script type="text/ng-template" id="payment.tmpl.html">
+
+  <md-dialog aria-label="Hotel Detail">
+    <form ng-cloak>
     <md-toolbar>
       <div class="md-toolbar-tools">
-        <h2>Comments</h2>
+        <h2>Payment</h2>
       </div>
     </md-toolbar>
 
-    <md-input-container class = "md-block">
-      <label>Comments</label>
-      <textarea md-maxlength = "300" name="comment" ng-model = "comment"></textarea>
-      <div ng-messages = "commentForm.comment.$error">
-        <div ng-message = "md-maxlength">The comments has to be less
-          than 300 characters long.</div>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Room type</th>
+        <th>Number of Rooms</th>
+        <th>Nightly Price</th>
+        <th>Total Price ({{nights}} {{nights > 1 ? 'Nights' : 'Night'}})</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="room in roomType">
+        <td>{{room.type_name}}</td>
+        <td>{{room.count}}</td>
+        <td>${{room.price}}</td>
+        <td>{{room.price * room.count * nights}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div>
+      <div  layout-padding="">
+        <b> You have {{coupons.length}} {{coupons.length > 1 ? 'coupons' : 'coupon'}} for this hotel:</b>
       </div>
-    </md-input-container>
 
-    <md-input-container>
-      <label>Ratings (0-5)</label>
-      <md-select ng-model="rating" required="">
-        <md-option value="5">5</md-option>
-        <md-option value="4">4</md-option>
-        <md-option value="3">3</md-option>
-        <md-option value="2">2</md-option>
-        <md-option value="1">1</md-option>
-        <md-option value="0">0</md-option>
-      </md-select>
-    </md-input-container>
+      <table class="table table-striped" ng-show="coupons.length">
+        <thead>
+        <tr>
+          <th>Discount</th>
+          <th>Expired Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="coupon in coupons" ng-click="selectCoupon(coupon)">
+          <td>{{calculateDiscountType(coupon)}}</td>
+          <td>{{coupon.expire_date | date:shortDate}} </td>
+        </tr>
+        </tbody>
+      </table>
 
-    <md-input-container class = "md-block">
-      <label>Add a tag</label>
-      <textarea md-maxlength = "20" name="tag" ng-model = "tag"></textarea>
-      <div ng-messages = "commentForm.tag.$error">
-        <div ng-message = "md-maxlength">The comments has to be less
-          than 20 characters long.</div>
+      <div  layout-padding="" ng-show="selectedCoupon">
+        <b> You have selected a {{calculateDiscountType(selectedCoupon)}} coupon.</b>
       </div>
-    </md-input-container>
+    </div>
 
-    <md-dialog-actions layout="row">
-      <span flex></span>
-      <md-button ng-click="submit(comment, rating)">
-        Submit
-      </md-button>
-      <md-button ng-click="cancel()">
-        Back
-      </md-button>
-    </md-dialog-actions>
-  </form>
-</md-dialog>
+    <div  layout-padding="">
+      <b> Your Final Price will be: ${{calculateTotalPrice()}}</b>
+    </div>
+    <div  layout-padding="">
+      <b> Please choose your payment method:</b>
+    </div>
+
+    <table class="table table-striped table-bordered">
+      <thead>
+      <tr>
+        <th>Card Number</th>
+        <th>Card Holder Name</th>
+        <th>Expired Date</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="card in cards" ng-click="selectCard(card)">
+        <td><md-icon md-font-icon="material-icons">credit_card</md-icon>{{ maskCard(card.card_number) }}</td>
+        <td>{{card.card_holder_name}}</td>
+        <td>{{card.expire_date}}</td>
+      </tr>
+      </tbody>
+    </table>
+    <div layout-padding="" ng-show="selectedCard">
+      <b> Your payment will be via {{ maskCard(selectedCard.card_number) }} card. ${{calculateTotalPrice()}} will be charged.</b>
+    </div>
+
+      <md-dialog-actions layout="row">
+        <p id="reservationWarning">Please Select Your Rooms</p>
+        <span flex></span>
+        <md-button ng-click="makePayment()">
+          Make The Payment
+        </md-button>
+        <md-button ng-click="cancel()">
+          Not Now
+        </md-button>
+      </md-dialog-actions>
+    </form>
+  </md-dialog>
 </script>
 
+
+<script type="text/ng-template" id="showReservation.tmpl.html">
+
+  <md-dialog aria-label="Hotel Detail">
+    <form ng-cloak>
+      <md-toolbar>
+        <div class="md-toolbar-tools">
+          <h2>Upcoming Reservation</h2>
+        </div>
+      </md-toolbar>
+
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Room type</th>
+          <th>Number of Rooms</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="room in roomType">
+          <td>{{room.type_name}}</td>
+          <td>{{room.count}}</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div  layout-padding="">
+        <b> Your paid ${{payment.amount}} for this reservation. </b><br><br>
+        <b> Your rooms will be ready for you from {{startDate}} to {{endDate}}</b> <br><br>
+        <b> Wish you have a pleasant journey!</b>
+      </div>
+
+    </form>
+  </md-dialog>
+</script>
 </body>
 </html>

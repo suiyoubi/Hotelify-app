@@ -3,6 +3,7 @@
 angular.module('myApp.browse', [
   'ngMaterial',
   'ngMessages',
+  'firebase',
   'ngRoute'])
   .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/browse', {
@@ -20,6 +21,11 @@ angular.module('myApp.browse', [
         method: "GET"
       }).then(function (res) {
         $scope.hotels = res.data;
+        $scope.hotels.forEach(function (value) {
+          if(value.address_id!=null){
+            value.address = value.street + ", " + value.city + ", " + value.province;
+          }
+        });
         console.log($scope.hotels);
       }, function (err) {
         console.error(err);
@@ -38,40 +44,80 @@ angular.module('myApp.browse', [
         params: $scope.searchObj,
       }).then(function (res) {
 
-        console.error(res);
+        console.log(res);
         $scope.hotels = res.data;
+        $scope.hotels.forEach(function (value) {
+          if(value.address_id!=null){
+            value.address = value.street + ", " + value.city + ", " + value.province;
+          }
+        });
       }, function (err) {
         console.error(err);
       });
     };
 
     $scope.hotelDetail = function(hotel) {
-      $mdDialog.show({
-        controller: 'browseHotelController',
-        templateUrl: 'browse.tmpl.html',
-        parent: angular.element(document.body),
-        clickOutsideToClose:true,
-        locals:{ hotel },
-        fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+
+      const storage = firebase.storage();
+      const storageRef = storage.ref(`${hotel.id}/image.png`);
+
+      storageRef.getDownloadURL().then(function (url) {
+        $scope.imageUrl = url;
+        console.log(url);
+
+        $mdDialog.show({
+          controller: 'browseHotelController',
+          templateUrl: 'browse.tmpl.html',
+          parent: angular.element(document.body),
+          clickOutsideToClose:true,
+          locals:{ hotel, url },
+          fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+        });
+
+      }, function (err) {
+
+        $mdDialog.show({
+          controller: 'browseHotelController',
+          templateUrl: 'browse.tmpl.html',
+          parent: angular.element(document.body),
+          clickOutsideToClose:true,
+          locals:{ hotel, url:null },
+          fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+        });
       });
     };
 
   })
-.controller('browseHotelController', function ($scope, $mdDialog, $http, $rootScope, hotel) {
+.controller('browseHotelController', function ($location, $scope, $mdDialog, $http, $rootScope, hotel, url) {
   var hotelId = hotel.id;
-  //$http.get
-  $scope.selected = [];
-  this.startDate = new Date();
-  this.endDate = new Date();
 
   $scope.hotelInfo = hotel;
+  $scope.url = url;
+  $scope.reviews = [];
 
-  $scope.makeReservation = function(){
-    //$http.post
-    // search specific hotel in given interval
-    console.log($scope.startDate,$scope.endDate, $scope.hotelInfo.id);
-    // redirect to reservation page if successed
-  };
+  // get tags
+  var tagUrl = $rootScope.url + "/tags/hotel/" + hotel.id;
+  $http({
+    url: tagUrl,
+    method: "GET"
+  }).then(function (res) {
+    $scope.displayTags = res.data;
+  }, function (err) {
+    // handle error here
+    console.log(err);
+  });
+
+  //get reviews
+  var reviewUrl = $rootScope.url + "/reviews/hotel/" + hotel.id;
+  $http({
+    url: reviewUrl,
+    method: "GET"
+  }).then(function (res) {
+    $scope.reviews = res.data;
+  }, function (err) {
+    // handle error here
+    console.log(err);
+  });
 
   $scope.cancel = function() {
     console.log('cancel');

@@ -5,6 +5,7 @@ var app = angular.module('myApp', [
   'ngMaterial',
   'ngRoute',
   "ngTable",
+  'firebase',
   'myApp.login',
   'myApp.register',
   'myApp.dashboard',
@@ -16,6 +17,8 @@ var app = angular.module('myApp', [
   'myApp.addHotel',
   'myApp.hotelManagement',
   'myApp.history',
+  'myApp.reservation',
+  'myApp.coupon',
   'myApp.reservation',
   'myApp.statistics',
 ]).
@@ -37,5 +40,4 @@ run(function($rootScope, $mdDialog) {
         .ok(confirmMessage)
     );
   };
-})
-;
+});
