@@ -20,7 +20,6 @@ angular.module('myApp.dashboard', [
       $scope.navItems = [
         {value: "hotelify", label: "Hotelify"},
         {value: "quick-book", label: "Quick Book", icon: "date_range"},
-        {value: "browse-hotels", label: "Browse", icon: "hotel"},
         {value: "reviews", label: "Reviews", icon: "rate_review"},
         {value: "account-info", label: "Account Info", icon: "account_box"},
         {value: "book-history", label: "Book History", icon: "history"},
@@ -31,6 +30,8 @@ angular.module('myApp.dashboard', [
         {value: "hotelify", label: "Hotelify"},
         {value: 'addHotel', label: 'add hotel', icon: "library_add"},
         {value: 'hotelManagement', label: 'hotel management', icon: "explore"},
+        {value: "browse-hotels", label: "Browse", icon: "hotel"},
+        {value: 'coupon', label:'Distribute Coupon', icon: "attach_money"},
         {value: "logout", label: "logout", icon: "exit_to_app"},
       ];
     } else {
@@ -49,9 +50,20 @@ angular.module('myApp.dashboard', [
       if(page == 'addHotel') $location.path('/add_hotel');
       if(page == 'hotelManagement') $location.path('/hotel_management');
       if(page == 'book-history') $location.path('history');
+      if(page == 'coupon') $location.path('/coupon');
     };
   })
    .controller('dsController', function ($scope, $http, $rootScope, $location) {
+
+     // Light-weight coupon type eager fetch here.
+     const couponTypeUrl = `${$rootScope.url}/coupon-types`;
+
+     $http.get(couponTypeUrl).then(function (res) {
+       $rootScope.couponTypes = res.data;
+     }, function (err) {
+       console.error(err);
+     });
+
 
      // if($rootScope.userType=='customer') {
      //   $location.path('/quick-book');
