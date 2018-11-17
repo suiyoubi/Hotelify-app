@@ -26,10 +26,10 @@ angular.module('myApp.dashboard', [
       ];
     } else if($rootScope.userType == 'administrator') {
       $scope.navItems = [
+        {value: "browse-hotels", label: "Browse", icon: "hotel"},
         {value: "hotelify", label: "Hotelify"},
         {value: 'addHotel', label: 'add hotel', icon: "library_add"},
         {value: 'hotelManagement', label: 'hotel management', icon: "explore"},
-        {value: "browse-hotels", label: "Browse", icon: "hotel"},
         {value: 'coupon', label:'Distribute Coupon', icon: "attach_money"},
         {value: "logout", label: "logout", icon: "exit_to_app"},
       ];
