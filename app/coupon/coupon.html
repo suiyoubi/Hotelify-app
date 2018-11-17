@@ -87,7 +87,7 @@
 
         <md-input-container class="md-block" flex-gt-sm>
           <label>Type</label>
-          <md-select ng-model="coupon.type_id">
+          <md-select ng-model="coupon.coupon_type_id">
             <md-option ng-repeat="type in couponTypes" value="{{type.id}}">
               {{ generateCouponTypeValue(type) }}
             </md-option>

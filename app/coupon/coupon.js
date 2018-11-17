@@ -64,7 +64,7 @@ angular.module('myApp.coupon', [
       if(!coupon) {
         $rootScope.popUp('Please input coupon information');
         return false;
-      } else if(!coupon.type_id || !coupon.expire_date) {
+      } else if(!coupon.coupon_type_id || !coupon.expire_date) {
         $rootScope.popUp('Please provide all the information');
         return false;
       }
