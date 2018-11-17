@@ -12,7 +12,7 @@ angular.module('myApp.register', ['ngRoute'])
 .controller('RegisterCtrl', function($scope, $location, $rootScope, $http, $mdDialog) {
 
   $scope.registerCustomer = () => {
-    const { username, password, last_name, first_name, repeatPassword, email, phone } = $scope;
+    const { username, password, last_name, first_name, repeatPassword, email, phone_number } = $scope;
     const { popUp, url } = $rootScope;
 
     if(!username || !password || !email) {

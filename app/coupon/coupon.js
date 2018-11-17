@@ -15,6 +15,10 @@ angular.module('myApp.coupon', [
     $scope.coupon = {};
     $scope.couponTypes = $rootScope.couponTypes;
 
+    $http.get(`${$rootScope.url}/hotels`).then(function (res) {
+      $scope.hotels = res.data;
+    });
+
     $scope.checkCustomer = function() {
 
       if(!$scope.coupon.username) return;

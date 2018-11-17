@@ -15,6 +15,7 @@ angular.module('myApp.quickBook', [
     $scope.request = {};
     $scope.request.startDate = new Date();
     $scope.request.endDate = new Date();
+    $scope.minDate = new Date();
 
     $scope.inputCheck = function(request) {
 

@@ -13,8 +13,6 @@ angular.module('myApp.reservation', [
   .controller('reservationController', function ($scope, $http, $rootScope, $mdDialog, $location) {
     $scope.initHotelInfo = function () {
 
-      $rootScope.popUp(`Hotelify has found ${$rootScope.reservation.hotels.length} hotels that satisfy your need!`, 'Awesome');
-
       $scope.hotels = $rootScope.reservation.hotels;
       $scope.hotels.forEach(function (value) {
         if (value.address_id != null) {
