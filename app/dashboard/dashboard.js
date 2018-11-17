@@ -26,13 +26,13 @@ angular.module('myApp.dashboard', [
       ];
     } else if($rootScope.userType == 'administrator') {
       $scope.navItems = [
-        {value: "browse-hotels", label: "Browse", icon: "hotel"},
         {value: "hotelify", label: "Hotelify"},
+        {value: "browse-hotels", label: "Browse", icon: "hotel"},
         {value: 'addHotel', label: 'add hotel', icon: "library_add"},
         {value: 'hotelManagement', label: 'hotel management', icon: "explore"},
         {value: 'coupon', label:'Distribute Coupon', icon: "attach_money"},
+        {value: 'statistics', label: 'statistics', icon: "bar_chart"},
         {value: "logout", label: "logout", icon: "exit_to_app"},
-        {value: 'statistics', label: 'statistics'},
       ];
     } else {
       $location.path('/login');
