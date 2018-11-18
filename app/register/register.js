@@ -33,7 +33,7 @@ angular.module('myApp.register', ['ngRoute'])
       last_name,
       first_name,
       email,
-      phone
+      phone_number,
     };
 
     console.log(user);
