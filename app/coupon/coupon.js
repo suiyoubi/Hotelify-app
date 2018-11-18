@@ -78,7 +78,7 @@ angular.module('myApp.coupon', [
       }
 
       const distributeCouponUrl = $scope.toEveryUser ?
-        `${$rootScope.url}/coupons/createAll` :
+        `${$rootScope.url}/coupons/create-all-for-hotel` :
         `${$rootScope.url}/coupons/create`;
 
       if(!$scope.toEveryUser && !$scope.coupon.username) {
@@ -93,6 +93,7 @@ angular.module('myApp.coupon', [
         console.log(res);
         $rootScope.popUp('You have successfully distributed coupons!');
       }, function (err) {
+        $rootScope.popUp('Failed to distribute coupons, please try again');
         console.error(err);
       });
     };
