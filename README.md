@@ -4,7 +4,7 @@ Hotelify-app is the Front-end of the Hotelify, which uses the AngularJS as the f
 
 ### How to Run it
 * Make sure you have installed [npm](https://github.com/npm/cli)
-* Make sure you have the Hotelify-php hosted as well
+* Make sure you have the [Hotelify-php](https://github.com/suiyoubi/hotelify-php) hosted as well
 * ```npm install```
 * ```npm start```
 * You are good to go!
