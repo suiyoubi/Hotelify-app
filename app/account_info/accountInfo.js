@@ -155,6 +155,7 @@ angular.module('myApp.accountInfo', [
     };
 
     $scope.calculateHotelNumber = function() {
+      if(!$scope.coupons) return;
       return $scope.coupons.map((review)=>review.brand_name)
         .filter(function(item, i, ar){ return ar.indexOf(item) === i; }).length;
     }
@@ -171,7 +172,7 @@ angular.module('myApp.accountInfo', [
         // update user info
         console.log($scope.user);
         $http.put(updateUrl, $scope.user).then((res) => {
-          console.log('update user info success');
+          $rootScope.popUp('You have successfully updated your information!', 'Success');
         }, (err) => {
             console.error('error updating user info');
           });
@@ -188,7 +189,7 @@ angular.module('myApp.accountInfo', [
           // update user info
           console.log($scope.user);
           $http.put(updateUrl, $scope.user).then((res) => {
-            console.log('update user info success');
+            $rootScope.popUp('You have successfully updated your information!', 'Success');
           }, (err) => {
             console.error('error updating user info');
           });
