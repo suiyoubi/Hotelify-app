@@ -65,11 +65,13 @@ angular.module('myApp.dashboard', [
      });
 
 
-     // if($rootScope.userType=='customer') {
-     //   $location.path('/quick-book');
-     // } else if($rootScope.userType == 'administrator') {
-     //   $location.path('/account-info');
-     // } else {
-     //   $location.path('login');
-     // }
+     if($rootScope.userType=='customer') {
+       $rootScope.nextNavItem = 'quick-book';
+       $location.path('/quick-book');
+     } else if($rootScope.userType == 'administrator') {
+       $rootScope.nextNavItem = 'browse-hotels';
+       $location.path('/browse');
+     } else {
+       $location.path('login');
+     }
    });
