@@ -120,10 +120,28 @@ angular.module('myApp.hotelManagement', [
       const updateHotelUrl = `${$rootScope.url}/hotels/update`;
       $http.put(updateHotelUrl, $scope.selectedHotel).then(function (res) {
         console.log(res);
-        $rootScope.popUp('You have updated the info!', 'success', 'great');
+
+        const updateAddressUrl = `${$rootScope.url}/addresses/update`;
+        const hotel = $scope.selectedHotel;
+        const addressBody = {
+          //'a.id as address_id, a.country, a.province, a.city, a.postal_code, a.street';
+          id: hotel.address_id,
+          country: hotel.country,
+          province: hotel.province,
+          city: hotel.city,
+          postal_code: hotel.postal_code,
+          street: hotel.street,
+        };
+        console.log(addressBody);
+        $http.put(updateAddressUrl, addressBody).then(function (res) {
+          $rootScope.popUp('You have updated the info!', 'success', 'great');
+        }, function (err) {
+          $rootScope.popUp('Failed to update the info!');
+          console.error(err);
+        });
       }, function (err) {
         console.error(err);
         $rootScope.popUp('update failed! please check your input');
       });
-    }
+    };
   });
