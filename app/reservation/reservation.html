@@ -83,7 +83,7 @@ Use of this source code is governed by an MIT-style license that can be foundin 
                 </md-chip-template>
               </md-chips>
 
-              <img ng-show="url" ng-src="{{url}}" alt="Description"/>
+              <img ng-show="url" ng-src="{{url}}" width="90%" alt="Description"/>
               <md-tabs>
                 <md-tab label="Available Rooms">
                   <table class="table table-striped">
@@ -142,6 +142,7 @@ Use of this source code is governed by an MIT-style license that can be foundin 
             </md-tab>
             <md-tab label="reviews">
               <table st-table="rowCollection" class="table table-striped">
+                <div ng-show="!reviews.length">There is no Hotelify review about this hotel.</div>
                 <tbody>
                 <tr ng-repeat="review in reviews">
                   <td>
@@ -157,6 +158,7 @@ Use of this source code is governed by an MIT-style license that can be foundin 
             </md-tab>
             <md-tab label="yelp reviews">
               <table st-table="rowCollection" class="table table-striped">
+                <div ng-show="!yelpReviews.length">There is no Yelp Review found for this hotel.</div>
                 <tbody>
                 <tr ng-repeat="yelp in yelpReviews">
                   <td>

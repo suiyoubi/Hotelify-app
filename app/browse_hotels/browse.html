@@ -68,8 +68,6 @@ Use of this source code is governed by an MIT-style license that can be foundin 
       </md-toolbar>
 
       <md-dialog-content>
-        <img ng-show="url" ng-src="{{url}}" alt="Description"/>
-        <div ng-show="!url"><h4>No Image Provided</h4></div>
         <div class="md-dialog-content">
           <div id="hotelInfo">
             <h3>
@@ -86,6 +84,8 @@ Use of this source code is governed by an MIT-style license that can be foundin 
             </p>
           </div>
 
+          <img ng-show="url" ng-src="{{url}}" alt="Description" width="80%"/>
+
           <div>
             <md-chips ng-model="displayTags" md-removable="false" readonly="true">
               <md-chip-template>
@@ -98,6 +98,7 @@ Use of this source code is governed by an MIT-style license that can be foundin 
           <md-tabs md-dynamic-height="" md-border-bottom="">
             <md-tab label="Hotelify reviews">
               <table st-table="rowCollection" class="table table-striped">
+                <div ng-show="!reviews.length">There is no review in Hotelify for this hotel currently.</div>
                 <tbody>
                 <tr ng-repeat="review in reviews">
                   <td>

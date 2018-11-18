@@ -12,6 +12,10 @@ angular.module('myApp.coupon', [
   }])
   .controller('couponController', function ($scope, $mdDialog, $rootScope, $http) {
 
+    $scope.change = function() {
+      $scope.toEveryUser = !$scope.toEveryUser;
+    };
+
     $scope.coupon = {};
     $scope.couponTypes = $rootScope.couponTypes;
 
