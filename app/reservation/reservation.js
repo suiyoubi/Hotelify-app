@@ -104,6 +104,31 @@ angular.module('myApp.reservation', [
         console.error(err);
       });
 
+      //get reviews
+      const reviewUrl = `${$rootScope.url}/reviews/hotel/${hotel.id}`;
+      $http({
+        url: reviewUrl,
+        method: "GET"
+      }).then(function (res) {
+        $scope.reviews = res.data;
+      }, function (err) {
+        // handle error here
+        console.log(err);
+      });
+
+      // get yelp review
+      const yelpUrl = `${$rootScope.url}/reviews/yelp/hotel/${hotel.id}`;
+      $http({
+        url: yelpUrl,
+        method: "GET"
+      }).then(function (res) {
+        $scope.yelpReviews = res.data.reviews;
+        console.log($scope.yelpReviews);
+      }, function (err) {
+        // handle error here
+        console.log(err);
+      });
+
 
     };
 
