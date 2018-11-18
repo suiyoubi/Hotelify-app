@@ -154,11 +154,16 @@ angular.module('myApp.accountInfo', [
       });
     };
 
-    $scope.calculateHotelNumber = function() {
+    $scope.calculateHotelNumberForCoupon = function() {
       if(!$scope.coupons) return;
-      return $scope.coupons.map((review)=>review.brand_name)
+      return $scope.coupons.map((coupon)=>coupon.brand_name)
         .filter(function(item, i, ar){ return ar.indexOf(item) === i; }).length;
-    }
+    };
+    $scope.calculateHotelNumberForReview = function() {
+      if(!$scope.reviews) return;
+      return $scope.reviews.map((review)=>review.brand_name)
+        .filter(function(item, i, ar){ return ar.indexOf(item) === i; }).length;
+    };
     $scope.updateUserInfo = () => {
       console.log($scope.address);
 
