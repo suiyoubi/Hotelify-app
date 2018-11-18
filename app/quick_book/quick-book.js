@@ -56,8 +56,8 @@ angular.module('myApp.quickBook', [
         $rootScope.reservation = {};
 
         $rootScope.reservation.hotels = res.data;
-        $rootScope.reservation.checkin_date = $scope.request.checkin_date;
-        $rootScope.reservation.checkout_date = $scope.request.checkout_date;
+        $rootScope.reservation.checkin_date = $scope.request.checkin_date.toISOString().substring(0, 10);
+        $rootScope.reservation.checkout_date = $scope.request.checkout_date.toISOString().substring(0, 10);
         $rootScope.reservation.nights =
           Math.floor(($scope.request.checkout_date - $scope.request.checkin_date) / (1000*60*60*24));
 
