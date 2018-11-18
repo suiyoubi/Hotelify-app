@@ -155,7 +155,7 @@ angular.module('myApp.accountInfo', [
     };
 
     $scope.calculateHotelNumber = function() {
-      return $scope.reviews.map((review)=>review.brand_name)
+      return $scope.coupons.map((review)=>review.brand_name)
         .filter(function(item, i, ar){ return ar.indexOf(item) === i; }).length;
     }
     $scope.updateUserInfo = () => {
