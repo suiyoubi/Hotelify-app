@@ -97,8 +97,8 @@ Use of this source code is governed by an MIT-style license that can be foundin 
 
           <md-tabs md-dynamic-height="" md-border-bottom="">
             <md-tab label="Hotelify reviews">
+              <div ng-show="!reviews.length">There is no review in Hotelify for this hotel currently.</div>
               <table st-table="rowCollection" class="table table-striped">
-                <div ng-show="!reviews.length">There is no review in Hotelify for this hotel currently.</div>
                 <tbody>
                 <tr ng-repeat="review in reviews">
                   <td>
@@ -113,8 +113,22 @@ Use of this source code is governed by an MIT-style license that can be foundin 
               </table>
             </md-tab>
             <md-tab label="yelp reviews">
-              <p>displaying yelp reviews</p>
+              <table st-table="rowCollection" class="table table-striped">
+                <tbody>
+                <tr ng-repeat="yelp in yelpReviews">
+                  <td>
+                    <md-icon md-font-icon="material-icons">account_box</md-icon>
+                    {{yelp.user.name}}<br>
+                    <md-icon md-font-icon="material-icons">star</md-icon>
+                    {{yelp.rating}}<br>
+                    <md-icon md-font-icon="material-icons">alarm</md-icon>{{yelp.time_created}}
+                  </td>
+                  <td>{{yelp.text}}</td>
+                </tr>
+                </tbody>
+              </table>
             </md-tab>
+          </md-tabs>
           </md-tabs>
 
         </div>
