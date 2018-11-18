@@ -1,5 +1,5 @@
 # Hotelify-app
-Hotelify is a hotel booking platform that allows not user to have the best booking experiences but also hotel managers to mange their hotel better.
+Hotelify is a hotel booking platform that not only allows user to have the best booking experiences, but also provides hotel managers with a better way to mange their hotel.
 Hotelify-app is the Front-end of the Hotelify, which uses the AngularJS as the framework.
 
 ### How to Run it
