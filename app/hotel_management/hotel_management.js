@@ -13,6 +13,10 @@ angular.module('myApp.hotelManagement', [
   }])
   .controller('hotelManagementController', function ($scope, $http, $rootScope, $mdDialog) {
 
+    $scope.calculateAddress = function(value) {
+      return `${value.street}, ${value.city}, ${value.province}`;
+    };
+
     $http.get(`${$rootScope.url}/hotels`).then(function (res) {
       $scope.hotels = res.data;
     });

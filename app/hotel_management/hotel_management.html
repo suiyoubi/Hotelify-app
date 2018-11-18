@@ -40,14 +40,14 @@
         <tr>
           <th>Hotel (Brand) Name</th>
           <th>Branch Name</th>
-          <th>street</th>
+          <th>Address</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="hotel in hotels" ng-click="manageHotel(hotel)">
           <td>{{hotel.brand_name}}</td>
           <td>{{hotel.branch_name}}</td>
-          <td>{{hotel.street}}</td>
+          <td>{{calculateAddress(hotel)}}</td>
         </tr>
         </tbody>
       </table>
