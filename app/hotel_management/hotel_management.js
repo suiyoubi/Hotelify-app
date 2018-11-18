@@ -22,7 +22,7 @@ angular.module('myApp.hotelManagement', [
         $scope.listStatus.isHide = false;
         $scope.listStatus.msg = 'Hide The Hotel List';
       }
-    }
+    };
     $scope.calculateAddress = function(value) {
       return `${value.street}, ${value.city}, ${value.province}`;
     };
@@ -53,6 +53,7 @@ angular.module('myApp.hotelManagement', [
 
     $scope.manageHotel = function (hotel) {
       console.error(hotel);
+      $scope.changeListStatus();
       $scope.selectedHotel = hotel;
 
       //get all rooms for the hotel
