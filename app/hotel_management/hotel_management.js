@@ -13,6 +13,16 @@ angular.module('myApp.hotelManagement', [
   }])
   .controller('hotelManagementController', function ($scope, $http, $rootScope, $mdDialog) {
 
+    $scope.listStatus = {msg:'Hide The Hotel List', isHide:false};
+    $scope.changeListStatus = function() {
+      if($scope.listStatus.isHide == false) {
+        $scope.listStatus.isHide = true;
+        $scope.listStatus.msg = 'Show The Hotel List';
+      } else {
+        $scope.listStatus.isHide = false;
+        $scope.listStatus.msg = 'Hide The Hotel List';
+      }
+    }
     $scope.calculateAddress = function(value) {
       return `${value.street}, ${value.city}, ${value.province}`;
     };
