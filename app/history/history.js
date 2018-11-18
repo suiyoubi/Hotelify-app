@@ -84,8 +84,9 @@ angular.module('myApp.history', [
 
       $scope.calculatePrice = function (reservation) {
         var totalPrice = 0;
+        const nights = (new Date(reservation[0].checkout_date) - new Date(reservation[0].checkin_date)) / (1000 * 60 * 60 * 24);
         reservation.forEach(r => {
-          totalPrice += Number(r.price);
+          totalPrice += Number(r.price) * nights;
         });
         return totalPrice;
       };
@@ -161,9 +162,22 @@ angular.module('myApp.history', [
   })
   .controller('paymentController', function ($rootScope, $scope, $http, $mdDialog, reservation, reservationId) {
 
-    $scope.cancel = function () {
-      console.log('cancel');
-      $mdDialog.cancel();
+    $scope.cancelReservation = function () {
+
+      const confirm = $mdDialog.confirm()
+        .title('Are you sure')
+        .textContent('Your reservation will be cancelled and the rooms will not be reserved for you')
+        .ok('Confirm')
+        .cancel('I change my mind');
+
+      $mdDialog.show(confirm).then(function(){
+
+        const cancelReservationURl = `${$rootScope.url}/reservations/delete/${reservationId}`;
+
+        $http.delete(cancelReservationURl).then(function (res) {
+          $rootScope.popUp('You have cancelled your reservation.', 'Success');
+        });
+      });
     };
     $scope.makePayment = function () {
       if (!$scope.selectedCard) {
