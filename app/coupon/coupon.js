@@ -12,6 +12,17 @@ angular.module('myApp.coupon', [
   }])
   .controller('couponController', function ($scope, $mdDialog, $rootScope, $http) {
 
+    $scope.listStatus = {msg:'Hide The Hotel List', isHide:false};
+    $scope.changeListStatus = function() {
+      if($scope.listStatus.isHide == false) {
+        $scope.listStatus.isHide = true;
+        $scope.listStatus.msg = 'Show The Hotel List';
+      } else {
+        $scope.listStatus.isHide = false;
+        $scope.listStatus.msg = 'Hide The Hotel List';
+      }
+    };
+
     $scope.change = function() {
       $scope.toEveryUser = !$scope.toEveryUser;
     };
@@ -60,6 +71,7 @@ angular.module('myApp.coupon', [
     $scope.selectHotel = function (hotel) {
       $scope.selectedHotel = hotel;
       $scope.coupon.hotel_id = hotel.id;
+      $scope.changeListStatus();
     };
 
     $scope.inputCheck = function() {

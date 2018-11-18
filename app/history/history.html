@@ -47,7 +47,7 @@
 <div>
   <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding="">
     <div>
-      <b>Upcoming Reservations:</b>
+      <b>On-going Reservations:</b>
       <div ng-show="!upcomingReservations.length"><br>You do not have any upcoming reservation.</div>
     </div>
   </md-content>
@@ -258,7 +258,7 @@ Use of this source code is governed by an MIT-style license that can be foundin 
         <md-button ng-click="makePayment()">
           Make The Payment
         </md-button>
-        <md-button ng-click="cancelReservation()" >
+        <md-button ng-click="cancelReservation()" style="color:red">
           Cancel Reservation
         </md-button>
       </md-dialog-actions>

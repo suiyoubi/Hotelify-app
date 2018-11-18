@@ -151,7 +151,7 @@
           <md-tab label="My Coupons">
             <md-content class="md-padding">
               <div flex-gt-sm="50">
-                <md-subheader class="md-no-sticky">You have {{coupons.length}} coupons about {{calculateHotelNumber(coupons)}} hotels</md-subheader>
+                <md-subheader class="md-no-sticky">You have {{coupons.length}} coupons about {{calculateHotelNumberForCoupon(coupons)}} hotels</md-subheader>
                 <md-divider ></md-divider>
                 <table class="table table-striped table-bordered">
                   <thead>
@@ -175,7 +175,7 @@
           <md-tab label="My Reviews">
             <md-content class="md-padding">
               <div flex-gt-sm="50">
-                <md-subheader class="md-no-sticky">You have written {{reviews.length}} reviews about {{calculateHotelNumber(reviews)}} hotels</md-subheader>
+                <md-subheader class="md-no-sticky">You have written {{reviews.length}} reviews about {{calculateHotelNumberForReview(reviews)}} hotels</md-subheader>
                 <md-divider ></md-divider>
                 <md-list-item ng-repeat="row in reviews" class="md-3-line md-long-text">
                   <div class="md-list-item-text">

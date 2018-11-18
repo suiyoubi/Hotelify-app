@@ -33,21 +33,26 @@
     </div>
   </md-content>
 
-  <div class="row">
+  <button type="button" ng-click="changeListStatus()" class="btn btn-sm btn-success" >
+    <i class="glyphicon glyphicon-plus">
+    </i> {{listStatus.msg}}
+  </button>
+
+  <div class="row" ng-show="!listStatus.isHide">
     <div class='col-sm-12'>
       <table class="table table-striped table-bordered">
         <thead>
         <tr>
           <th>Hotel (Brand) Name</th>
           <th>Branch Name</th>
-          <th>street</th>
+          <th>Address</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="hotel in hotels" ng-click="manageHotel(hotel)">
           <td>{{hotel.brand_name}}</td>
           <td>{{hotel.branch_name}}</td>
-          <td>{{hotel.street}}</td>
+          <td>{{calculateAddress(hotel)}}</td>
         </tr>
         </tbody>
       </table>

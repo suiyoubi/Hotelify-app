@@ -13,6 +13,20 @@ angular.module('myApp.hotelManagement', [
   }])
   .controller('hotelManagementController', function ($scope, $http, $rootScope, $mdDialog) {
 
+    $scope.listStatus = {msg:'Hide The Hotel List', isHide:false};
+    $scope.changeListStatus = function() {
+      if($scope.listStatus.isHide == false) {
+        $scope.listStatus.isHide = true;
+        $scope.listStatus.msg = 'Show The Hotel List';
+      } else {
+        $scope.listStatus.isHide = false;
+        $scope.listStatus.msg = 'Hide The Hotel List';
+      }
+    };
+    $scope.calculateAddress = function(value) {
+      return `${value.street}, ${value.city}, ${value.province}`;
+    };
+
     $http.get(`${$rootScope.url}/hotels`).then(function (res) {
       $scope.hotels = res.data;
     });
@@ -39,6 +53,7 @@ angular.module('myApp.hotelManagement', [
 
     $scope.manageHotel = function (hotel) {
       console.error(hotel);
+      $scope.changeListStatus();
       $scope.selectedHotel = hotel;
 
       //get all rooms for the hotel
