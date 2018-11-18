@@ -19,6 +19,17 @@ angular.module('myApp.statistics', [
 
     $http.get(`${$rootScope.url}/hotels`).then(function (res) {
       $scope.hotels = res.data;
+
+      res.data.forEach(hotel => {
+        $http.get(`${$rootScope.url}/stats/hotel/${hotel.id}/revenue`).then(function (res) {
+          if($scope.hotelIdMap[hotel.id]) {
+            $scope.hotelIdMap[hotel.id].revenue = res.data.result;
+          } else {
+            $scope.hotelIdMap[hotel.id] = {};
+            $scope.hotelIdMap[hotel.id].revenue = res.data.result;
+          }
+        });
+      });
     });//
 
     $scope.hotelIdMap = {};
