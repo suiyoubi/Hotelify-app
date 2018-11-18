@@ -13,8 +13,9 @@ angular.module('myApp.quickBook', [
   .controller('quickBookController', function ($rootScope, $scope, $mdDialog, $location, $http) {
 
     $scope.request = {};
-    $scope.request.startDate = new Date();
-    $scope.request.endDate = new Date();
+    $scope.request.checkin_date = new Date();
+    $scope.request.checkout_date = new Date();
+    $scope.request.checkout_date.setDate($scope.request.checkin_date.getDate() + 1);
     $scope.minDate = new Date();
 
     $scope.inputCheck = function(request) {
@@ -25,7 +26,7 @@ angular.module('myApp.quickBook', [
       } else if(!request.rooms) {
         $rootScope.popUp('Please specify how many rooms you wanna book');
         return false;
-      } else if(!request.checkin_date || !request.checkout_date || request.checkin_date > request.checkout_date) {
+      } else if(!request.checkin_date || !request.checkout_date || request.checkin_date >= request.checkout_date) {
         $rootScope.popUp('Please specify correct date information');
         return false;
       }

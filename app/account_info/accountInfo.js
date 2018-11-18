@@ -154,10 +154,16 @@ angular.module('myApp.accountInfo', [
       });
     };
 
-    $scope.calculateHotelNumber = function() {
-      return $scope.coupons.map((review)=>review.brand_name)
+    $scope.calculateHotelNumberForCoupon = function() {
+      if(!$scope.coupons) return;
+      return $scope.coupons.map((coupon)=>coupon.brand_name)
         .filter(function(item, i, ar){ return ar.indexOf(item) === i; }).length;
-    }
+    };
+    $scope.calculateHotelNumberForReview = function() {
+      if(!$scope.reviews) return;
+      return $scope.reviews.map((review)=>review.brand_name)
+        .filter(function(item, i, ar){ return ar.indexOf(item) === i; }).length;
+    };
     $scope.updateUserInfo = () => {
       console.log($scope.address);
 
@@ -171,7 +177,7 @@ angular.module('myApp.accountInfo', [
         // update user info
         console.log($scope.user);
         $http.put(updateUrl, $scope.user).then((res) => {
-          console.log('update user info success');
+          $rootScope.popUp('You have successfully updated your information!', 'Success');
         }, (err) => {
             console.error('error updating user info');
           });
@@ -188,7 +194,7 @@ angular.module('myApp.accountInfo', [
           // update user info
           console.log($scope.user);
           $http.put(updateUrl, $scope.user).then((res) => {
-            console.log('update user info success');
+            $rootScope.popUp('You have successfully updated your information!', 'Success');
           }, (err) => {
             console.error('error updating user info');
           });
