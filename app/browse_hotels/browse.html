@@ -38,15 +38,15 @@
   <table st-table="rowCollection" class="table table-striped">
     <thead>
     <tr>
-      <th st-sort="hotelName">Hotel Name</th>
-      <th>Brand Name</th>
+      <th st-sort="hotelName">Hotel (Brand) Name</th>
+      <th>Branch Name</th>
       <th>Address</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="row in hotels" ng-click="hotelDetail(row)">
-      <td>{{row.branch_name}}</td>
       <td>{{row.brand_name}}</td>
+      <td>{{row.branch_name}}</td>
       <td>{{row.address}}</td>
     </tr>
     </tbody>
