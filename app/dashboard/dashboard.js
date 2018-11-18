@@ -31,6 +31,7 @@ angular.module('myApp.dashboard', [
         {value: 'addHotel', label: 'add hotel', icon: "library_add"},
         {value: 'hotelManagement', label: 'hotel management', icon: "explore"},
         {value: 'coupon', label:'Distribute Coupon', icon: "attach_money"},
+        {value: 'statistics', label: 'statistics', icon: "bar_chart"},
         {value: "logout", label: "logout", icon: "exit_to_app"},
       ];
     } else {
@@ -49,6 +50,7 @@ angular.module('myApp.dashboard', [
       if(page == 'hotelManagement') $location.path('/hotel_management');
       if(page == 'book-history') $location.path('history');
       if(page == 'coupon') $location.path('/coupon');
+      if(page == 'statistics') $location.path('/statistics');
     };
   })
    .controller('dsController', function ($scope, $http, $rootScope, $location) {

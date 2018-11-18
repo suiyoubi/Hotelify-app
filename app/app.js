@@ -19,6 +19,8 @@ var app = angular.module('myApp', [
   'myApp.history',
   'myApp.reservation',
   'myApp.coupon',
+  'myApp.reservation',
+  'myApp.statistics',
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
