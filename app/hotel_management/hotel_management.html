@@ -46,6 +46,7 @@
           <th>Hotel (Brand) Name</th>
           <th>Branch Name</th>
           <th>Address</th>
+          <th>Delete</th>
         </tr>
         </thead>
         <tbody>
@@ -53,6 +54,7 @@
           <td>{{hotel.brand_name}}</td>
           <td>{{hotel.branch_name}}</td>
           <td>{{calculateAddress(hotel)}}</td>
+          <td><md-icon md-font-icon="material-icons" ng-click="deleteThisHotel(hotel)">delete</md-icon></td>
         </tr>
         </tbody>
       </table>
