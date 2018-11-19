@@ -3,7 +3,7 @@ Hotelify is a hotel booking platform that not only allows user to have the best 
 Hotelify-app is the Front-end of the Hotelify, which uses the AngularJS as the framework.
 
 ### How to Run it
-* Make sure you have installed [npm](https://github.com/npm/cli), you can use npm -v to check it
+* Make sure you have installed [npm](https://github.com/npm/cli), you can use ```npm -v``` to check it
 * Make sure you have the [Hotelify-php](https://github.com/suiyoubi/hotelify-php) hosted as well
 * ```npm install```
 * ```npm start```
