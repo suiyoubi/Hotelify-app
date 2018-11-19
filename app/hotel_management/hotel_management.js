@@ -114,6 +114,32 @@ angular.module('myApp.hotelManagement', [
           $rootScope.popUp('Failed to delete this room type');
         })
       });
+    };
+
+    $scope.deleteThisHotel = function(hotel) {
+
+      $scope.changeListStatus();
+      const confirm = $mdDialog.confirm()
+        .title('Would you like to delete this hotel?')
+        .textContent('All the hotel information will be deleted from Hotelify')
+        .ok('Confirm')
+        .cancel('I change my mind');
+
+      $mdDialog.show(confirm).then(function() {
+        const url = `${$rootScope.url}/hotels/delete/${hotel.id}`;
+        $http.delete(url).then(function (res) {
+          $rootScope.popUp('You have successfully delted this hotel');
+
+          const index = $scope.hotels.indexOf(hotel);
+
+          if(index != -1) {
+            $scope.hotels.splice(index, 1);
+          };
+        }, function (err) {
+          console.error(err);
+          $rootScope.popUp('Some thing wrong, please try again later');
+        });
+      });
     }
     $scope.updateHotel = function () {
 
